@@ -8,13 +8,15 @@ Welcome to PHPLucidFrame's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Table of Contents:
 
+   about
+   installation
 
+This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
