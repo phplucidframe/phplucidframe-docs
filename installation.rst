@@ -3,7 +3,7 @@ Installation
 
 You can get a fresh copy of PHPLucidFrame on `the official website <http://www.phplucidframe.com>`_. You can also fork and clone `the GitHub repository <http://github.com/phplucidframe/phplucidframe>`_ using `git <https://git-scm.com>`_. Alternatively, you can install it using Composer with the command::
 
-    composer create-project --prefer-dist phplucidframe/phplucidframe
+    composer create-project --prefer-dist phplucidframe/phplucidframe [your-project-name]
 
 Regardless of how you downloaded it, place the code inside of your DocumentRoot.
 In **production**, your directory setup may look something like the following so that it can be accessible via ``http://www.example.com`` ::
@@ -57,3 +57,4 @@ In this case, the configuration variable ``baseURL`` in ``/inc/parameter/develop
         // ....
     );
 
+**Note**: ``phplucidframe`` would be your project name.
