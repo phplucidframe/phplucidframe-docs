@@ -12,6 +12,7 @@ Welcome to PHPLucidFrame's documentation!
 
    about
    installation
+   application-structure
 
 This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
