@@ -97,3 +97,109 @@ Application Structure
 | vendors       | This directory should be used to place downloaded and custom modules and third party      |
 |               | libraries which are common to all sites.                                                  |
 +---------------+-------------------------------------------------------------------------------------------+
+
+Page Structure
+--------------
+
+PHPLucidFrame encourages a uniform and structural page organization. In brief, a page in LucidFrame is represented by a folder containing at least two files: ``index.php`` and ``view.php``. As an example, you can see the directory ``/app/home/`` of the LucidFrame release you downloaded. ::
+
+    /path_to_webserver_document_root
+        /phplucidframe
+            /app
+                /home
+                    |-- action.php
+                    |-- index.php
+                    |-- query.php
+                    |-- view.php
+
+1. The **index.php** (required) serves as the front controller for the requested page, initializing the base resources needed to run the page.
+2. The **action.php** (optional) handles form submission. It should perform form validation, create, update, delete of data manipulation to database. By default, a form is initiated for AJAX and ``action.php`` is automatically invoked if the action attribute is not given in the ``<form>`` tag.
+3. The **query.php** (optional) should retrieve and process data from database and make it available to view.php.
+4. The **view.php** (required) is a visual output representation to user using data provided by query.php. It generally should contain HTML between ``<body>`` and ``</body>``.
+5. The **list.php** (optional) is a server page requested by AJAX, which retrieves data and renders HTML to the client. It is normally implemented for listing with pagination.
+
+PHPLucidFrame is not bound to any specific directory structure, these are simply a baseline for you to work from.
+
+Page Workflow
+-------------
+
+This illustration demonstrates a request to ``http://www.example.com`` or ``http://localhost/phplucidframe``.
+
+.. image:: images/page-workflow.jpg
+
+Layout Mode
+-----------
+
+By default, PHPLucidFrame has two template files - ``header.php`` and ``footer.php``. They will have to include in every ``view.php``. Some developers may not want to have header and footer templates separately and not want to include the files in all views. They usually create a site layout file.
+
+Since version 1.14, PHPLucidFrame provides a new feature to enable/disable layout mode globally or for a particular page.
+
+Create a Layout File
+^^^^^^^^^^^^^^^^^^^^
+
+Create your layout file in ``/inc/tpl/`` or ``/app/inc/tpl/``. Default layout file name is ``layout.php``. ``<?php include _view(); ?>`` has to be called in the layout file. Here is an example layout file content: ::
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title><?php echo _title(); ?></title>
+        <?php include _i('inc/tpl/head.php'); ?>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="page-container">
+                <div id="header">
+                    <div class="container clearfix">
+                        <!-- header content -->
+                    </div>
+                </div>
+                <div id="page">
+                    <div class="container">
+                        <?php include _view(); ?> <!-- page view -->
+                    </div> <!-- .container -->
+                </div> <!-- #page -->
+                <div id="footer">
+                    <div class="container">
+                        <!-- footer content -->
+                     </div>
+                </div>
+            </div> <!-- #page-container -->
+        </div> <!-- #wrapper -->
+    </body>
+    </html>
+
+Enable Layout Mode globally
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To enable layout mode globally, set true to ``$lc_layoutMode`` in ``/inc/config.php``. ::
+
+    # $lc_layoutMode: Enable layout mode or not
+    $lc_layoutMode = true;
+    # $lc_layoutMode: Default layout file name
+    $lc_layoutName = 'layout'; // layout.php
+
+You can also configure ``$lc_layoutName`` using a custom file name other than ``layout.php``. Now that you have enabled the layout mode globally, ``query.php`` and ``view.php`` are automatically included for every page. ::
+
+    /app
+        /home
+        |-- action.php
+        |-- index.php
+        |-- query.php (this file will be automatically included when layout mode is enabled)
+        |-- view.php (this file will be automatically included when layout mode is enabled)
+
+Enable Layout Mode for a Page
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Assuming that you have ``$lc_layoutMode = false`` that makes layout mode disabled globally. If you want to enable it for a particular page. You can call ``_cfg('layoutMode', true);`` at the top of ``index.php`` of the page folder.
+
+In addition, you can create a new layout for a particular page or a group of pages. You just need to call ``_cfg('layoutName', 'another-layout-file-name');`` for the pages. Check the example at ``/app/example/layout/index.php``.
+
+Savant Integration
+------------------
+
+Savant is a powerful but lightweight object-oriented template system for PHP. Unlike other template systems, Savant by default does not compile your templates into PHP; instead, it uses PHP itself as its template language so you don't need to learn a new markup system. You can easily integrate it into LucidFame.
+
+Check `the integration guide in the PHPLucidFrame wiki <https://github.com/phplucidframe/phplucidframe/wiki/Integration-of-Savant,-The-Simple-Template-System>`_.
+
+.. note:: ❖ PHPLucidFrame does not tie to any template system.
+
