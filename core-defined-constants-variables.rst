@@ -88,4 +88,3 @@ You can also extend any global variable from LC by using a hook ``__script()`` i
     <?php
     }
     ?>
-

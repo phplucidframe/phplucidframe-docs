@@ -9,4 +9,4 @@ The ``/app`` directory is auto-bootstrapped with PHPLucidFrame environment. If y
 
     // Do something here …
 
-Then the script has been bootstrapped with PHPLucidFrame environment.
+Then the script has been bootstrapped in PHPLucidFrame environment.

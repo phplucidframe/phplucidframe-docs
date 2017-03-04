@@ -15,6 +15,7 @@ Welcome to PHPLucidFrame's documentation!
    application-structure
    bootstrapping
    core-defined-constants-variables
+   url-routing
 
 .. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
