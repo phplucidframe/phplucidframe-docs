@@ -14,8 +14,9 @@ Welcome to PHPLucidFrame's documentation!
    installation
    application-structure
    bootstrapping
+   core-defined-constants-variables
 
-This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
+.. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
 Indices and tables
 ==================

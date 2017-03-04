@@ -197,9 +197,8 @@ In addition, you can create a new layout for a particular page or a group of pag
 Savant Integration
 ------------------
 
+.. note:: ❖ PHPLucidFrame does not tie to any template system.
+
 Savant is a powerful but lightweight object-oriented template system for PHP. Unlike other template systems, Savant by default does not compile your templates into PHP; instead, it uses PHP itself as its template language so you don't need to learn a new markup system. You can easily integrate it into LucidFame.
 
 Check `the integration guide in the PHPLucidFrame wiki <https://github.com/phplucidframe/phplucidframe/wiki/Integration-of-Savant,-The-Simple-Template-System>`_.
-
-.. note:: ❖ PHPLucidFrame does not tie to any template system.
-
