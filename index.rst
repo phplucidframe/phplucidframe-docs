@@ -16,6 +16,8 @@ Welcome to PHPLucidFrame's documentation!
    bootstrapping
    core-defined-constants-variables
    url-routing
+   file-inclusion
+   database-configuration-and-data-manipulation
 
 .. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
