@@ -41,14 +41,14 @@ Nonetheless, you don’t need to worry about them if you write your own custom q
 Retrieving Your Data
 --------------------
 
-If you know how to write SQL language, you can write your own queries for create, read, update, delete using db helper functions. You can use the following function to retrieve your data:
+PHPLucidFrame provides several db helper functions to retrieve data from your database. You can use the following functions to retrieve your data:
 
-- `db_query() <http://www.phplucidframe.com/api-doc/latest/function-db_query.html>`_ which reflects to `mysqli_query() <http://php.net/manual/en/mysqli.query.php>`_.
-- `db_fetchAssoc() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchassoc.html>`_ which reflects to `mysqli_fetch_assoc() <http://php.net/manual/en/mysqli.fetch-assoc.php>`_.
-- `db_fetchArray() <http://www.phplucidframe.com/api-doc/latest/function-db_fetcharray.html>`_ which reflects to `mysqli_fetch_array() <http://php.net/manual/en/mysqli.fetch-array.php>`_.
-- `db_fetchObject() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchobject.html>`_ which reflects to `mysqli_fetch_object() <http://php.net/manual/en/mysqli.fetch-object.php>`_.
+- `db_query() <http://www.phplucidframe.com/api-doc/latest/function-db_query.html>`_ which reflects to `mysqli_query() <http://php-.net/manual/en/mysqli.query.php>`_.
+- `db_fetchAssoc() <http://www.phplucidframe.com/api-doc/latest/function-db_fetcAassoc.html>`_ which reflects to `mysqli_fetch_assoc() <http://php.net/manual/en/mysqli-result.fetch-assoc.php>`_.
+- `db_fetchArray() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchArray.html>`_ which reflects to `mysqli_fetch_array() <http://php.net/manual/en/mysqli-result.fetch-array.php>`_.
+- `db_fetchObject() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchObject.html>`_ which reflects to `mysqli_fetch_object() <http://php.net/manual/en/mysqli-result.fetch-object.php>`_.
 - `db_fetch() <http://www.phplucidframe.com/api-doc/latest/function-db_fetch.html>`_ which retrieves the only first field data
-- `db_fetchResult() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchresult.html>`_ which retrieves the one result in object.
+- `db_fetchResult() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchResult.html>`_ which retrieves the one result in object.
 - `db_extract() <http://www.phplucidframe.com/api-doc/latest/function-db_extract.html>`_ which retrieves the result in array or array of objects.
 
 .. note:: Instead of using native query to fetch data, QueryBuilder is recommended. See `Query Builder <#query-builder>`_ usage.
@@ -119,8 +119,8 @@ You can also provide a custom slug in the ``$data`` array. ::
         'postBody' => 'Updated post complete description here'
     ));
 
-- `db_insertId() <http://www.phplucidframe.com/api-doc/latest/function-db_insertid.html>`_ which reflects to `mysqli_insert_id() <http://php.net/manual/en/mysqli.insert-id.php>`_.
-- `db_insertSlug() <http://www.phplucidframe.com/api-doc/latest/function-db_insertslug.html>`_ returns the generated slug used in the last query.
+- `db_insertId() <http://www.phplucidframe.com/api-doc/latest/function-db_insertId.html>`_ which reflects to `mysqli_insert_id() <http://php.net/manual/en/mysqli.insert-id.php>`_.
+- `db_insertSlug() <http://www.phplucidframe.com/api-doc/latest/function-db_insertSlug.html>`_ returns the generated slug used in the last query.
 
 .. note::
     - The first field in data array will be used to insert into the slug field.
@@ -158,7 +158,7 @@ You can also provide a custom slug in the `$data`` array. ::
         'postBody'  => 'Updated post complete description here'
     ));
 
-You can provide the third or fourth parameter ``$condition``. See `Query Conditions <#query-conditions>`_. ::
+You can provide the third or fourth parameter ``$condition``. See `Query Conditions <#id2>`_. ::
 
     $condition = array(
         'fieldName1'    => 'value1',
@@ -175,7 +175,7 @@ Deleting Your Data
         $success = true;
     }
 
-``db_delete_multi()` is useful for batch record deletion for the given condition, but it does not check foreign key constraints. ::
+``db_delete_multi()`` is useful for batch record deletion for the given condition, but it does not check foreign key constraints. ::
 
     db_delete_multi('table_name', $condition=array(
         'fieldName1'    => $value1,
@@ -183,4 +183,336 @@ Deleting Your Data
         'fieldName3'    => null,
     ))
 
-See next section for `query conditions <#query-conditions>`_ with ``db_delete()`` and ``db_delete_multi()``.
+See next section for `query conditions <#id2>`_ with ``db_delete()`` and ``db_delete_multi()``.
+
+Query Conditions
+----------------
+
+You can provide a condition array to third or fourth parameter to ``db_update()`` and second parameter to ``db_delete()`` or ``db_delete_multi()``. You can also use ``db_and()`` and ``db_or()``. The following are some examples.
+
+Updating with simple condition: ::
+
+    db_update('post', array(
+        'postTitle' => 'Updated Title',
+    ), array(
+        'postId' => 1
+    ));
+    // UPDATE post SET
+    //   slug = "updated-title",
+    //   postTitle = "Updated Title",
+    //   updated = "....."
+    // WHERE postId = 1
+
+Updating using AND condition: ::
+
+    db_update('post', array(
+            'catId' => 1,
+        ),
+        false, // slug field is not updated
+        db_and(array(
+            'id' => 1,
+            'delete !=' => NULL
+        ))
+    );
+    // UPDATE post SET
+    //   catId = 1,
+    //   updated = "....."
+    // WHERE id = 1 AND deleted IS NOT NULL
+
+Updating using IN condition: ::
+
+    db_update('post', array(
+            'catId' => 1,
+        ),
+        false, // slug field is not updated
+        array(
+            'postId' => array(1, 2, 3)
+        ))
+    );
+    // UPDATE post SET
+    //   catId = 1,
+    //   updated = "....."
+    // WHERE postId IN (1, 2, 3)
+
+Updating using OR condition: ::
+
+    db_update('post', array(
+        'catId' => 1,
+        ),
+        false, // slug field is not updated,
+        db_or(
+            array('postId' => 1),
+            array('postId' => 2)
+        )
+    );
+    // UPDATE post SET
+    //   catId = 1,
+    //   updated = "....."
+    // WHERE postId = 1 OR postId = 2
+
+Updating using IN and OR condition: ::
+
+    db_update('post', array(
+            'catId' => 1,
+        ),
+        false, // slug field is not updated
+        db_or(array(
+            'id' => array(1, 2, 3),
+            'id >' => 10,
+        ))
+    );
+    // UPDATE post SET
+    //   catId = 1,
+    //   updated = "....."
+    // WHERE id IN (1, 2, 3) OR id > 10
+
+Updating with complex AND/OR condition: ::
+
+    db_update('post', array(
+            'catId' => 1,
+        ),
+        false, // slug field is not updated
+        db_and(array(
+            'postTitle' => 'a project',
+            'catId' => 2,
+            db_or(array(
+                'id' => array(1, 2, 3),
+                'id >=' => 10,
+            ))
+        ))
+    );
+    // UPDATE post SET
+    //   catId = 1,
+    //   updated = "....."
+    // WHERE postTitle = "a project"
+    // AND catId= 2
+    // AND ( id IN (1, 2, 3) OR id >= 10 )
+
+Condition Operators
+-------------------
+
++---------------+-----------------------------------------------+---------------------------------------------+
+| Operator      | Usage Example                                 | Equivalent SQL Condition                    |
++===============+===============================================+=============================================+
+| ``=``         | ``array('postId' => 1)``                      | ``WHERE postId = 1``                        |
+|               | ``array('postId' => array(1, 2, 3))``         | ``WHERE postId IN (1, 2, 3)``               |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``!=``        | ``array('postId !=' => 1)``                   | ``WHERE postId != 1``                       |
+|               | ``array('postId !=' => array(1, 2, 3))``      | ``WHERE postId NOT IN (1, 2, 3)``           |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``>``         | ``array('postId >' => 1)``                    | ``WHERE postId > 1``                        |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``>=``        | ``array('postId >=' => 1)``                   | ``WHERE postId >= 1``                       |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``<``         | ``array('postId <' => 1)``                    | ``WHERE postId < 1``                        |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``<=``        | ``array('postId <=' => 1)``                   | ``WHERE postId <= 1``                       |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``between``   | ``array('postId between' => array(1, 10))``   | ``WHERE postId BETWEEN 1 and 10``           |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``nbetween``  | ``array('postId nbetween' => array(1, 10))``  | ``WHERE postId NOT BETWEEN 1 and 10``       |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``like``      | ``array('postTitle like' => 'a project')``    | ``WHERE postTitle LIKE "%a project%"``      |
+| ``like%%``    | ``array('postTitle like%%' => 'a project')``  |                                             |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``like%~``    | ``array('postTitle like%~' => 'a project')``  | ``WHERE postTitle LIKE "%a project"``       |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``like~%``    | ``array('postTitle like~%' => 'a project')``  | ``WHERE postTitle LIKE "a project%"``       |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``nlike``     | ``array('postTitle nlike' => 'a project')``   | ``WHERE postTitle NOT LIKE "%a project%"``  |
+| ``nlike%%``   | ``array('postTitle nlike%%' => 'a project')`` |                                             |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``nlike%~``   | ``array('postTitle nlike%~' => 'a project')`` | ``WHERE postTitle NOT LIKE "%a project"``   |
++---------------+-----------------------------------------------+---------------------------------------------+
+| ``nlike~%``   | ``array('postTitle nlike~%' => 'a project')`` | ``WHERE postTitle NOT LIKE "a project%"``   |
++---------------+-----------------------------------------------+---------------------------------------------+
+
+Connecting to Multiple Databases
+--------------------------------
+
+Sometimes, we need to connect multiple databases in our app. . In ``/inc/config.php`` (copy of ``/inc/config.default.php``), ``$lc_databases`` is an array composed of multiple database connection strings. Here’s the default syntax, specifying a single connection: ::
+
+    $lc_databases = array(
+        'default' => array( // default database; you could also have other database settings here
+              'engine'    => _p('db.default.engine'),
+              'host'      => _p('db.default.host'),
+              'port'      => _p('db.default.port'),
+              'database'  => _p('db.default.database'),
+              'username'  => _p('db.default.username'),
+              'password'  => _p('db.default.password'),
+              'prefix'    => _p('db.default.prefix'),
+              'collation' => _p('db.default.collation')
+        )
+    );
+
+As an example, you might have two databases, the default database and a legacy database and the syntax would be as below: ::
+
+    $lc_databases = array(
+        'default' => array( // default database; you could also have other database settings here
+              'engine'    => _p('db.default.engine'),
+              'host'      => _p('db.default.host'),
+              'port'      => _p('db.default.port'),
+              'database'  => _p('db.default.database'),
+              'username'  => _p('db.default.username'),
+              'password'  => _p('db.default.password'),
+              'prefix'    => _p('db.default.prefix'),
+              'collation' => _p('db.default.collation')
+        )
+        'legacy' => array(
+              'engine'    => _p('db.legacy.engine'),
+              'host'      => _p('db.legacy.host'),
+              'port'      => _p('db.legacy.port'),
+              'database'  => _p('db.legacy.database'),
+              'username'  => _p('db.legacy.username'),
+              'password'  => _p('db.legacy.password'),
+              'prefix'    => _p('db.legacy.prefix'),
+              'collation' => _p('db.legacy.collation')
+        )
+    );
+
+The next step is to define the parameters in ``/inc/parameter/development.php`` or ``/inc/parameter/production.php`` for your two databases in the configuration db. Here is any example. ::
+
+    return array(
+        // ...
+        # Database connection information
+        'db' => array(
+            'default' => array(
+                'engine'    => 'mysql', // database engine
+                'host'      => 'localhost', // database host
+                'port'      => '', // database port
+                'database'  => 'lucid_blog', // database name
+                'username'  => 'yourusername', // database username
+                'password'  => 'yourpassword', // database password
+                'prefix'    => '', // table name prefix
+                'collation' => 'utf8_general_ci' // database collation
+            ),
+            'legacy' => array(
+                'engine'    => 'mysql',
+                'host'      => 'localhost',
+                'port'      => '',
+                'database'  => 'legacy_db',
+                'username'  => 'legacyusername',
+                'password'  => 'legacypassword',
+                'prefix'    => '', // table name prefix
+                'collation' => 'utf8_general_ci'
+            )
+        ),
+        // ...
+    );
+
+When you need to connect to one of the other databases, you activate it by its key name and switch back to the default connection when finished: ::
+
+    # Get some information from the legacy database.
+    db_switch('legacy');
+    # Fetching data from the `user` table of the legacy database
+    $result = db_select('user')
+        ->where('uid', $uid)
+        ->getSingleResult()
+
+    # Switch back to the default connection when finished.
+    db_switch(); // or db_switch('default');
+
+Database Session
+----------------
+
+Since version 1.5, PHPLucidFrame supports database session management. It is useful when your site is set up with load balancer that distributes workloads across multiple resources. Here’s the minimum table schema requirement for database session. ::
+
+    CREATE TABLE `lc_sessions` (
+      `sid` varchar(64) NOT NULL DEFAULT '',
+      `host` varchar(128) NOT NULL DEFAULT '',
+      `timestamp` int(11) unsigned DEFAULT NULL,
+      `session` longblob NOT NULL DEFAULT '',
+      `useragent` varchar(255) NOT NULL DEFAULT '',
+      PRIMARY KEY (`sid`)
+    );
+
+Once you have the table created, you just need to configure ``$lc_session['type'] = 'database'`` in ``/inc/config.php`` (copy of ``/inc/config.default.php``) such as ::
+
+    $lc_session = array(
+        'type' => 'database',
+        'options' => array(
+            /* you can configure more options here, see the comments in /inc/config.default.php */
+        )
+    );
+
+Query Builder
+-------------
+
+As of version 1.9, PHPLucidFrame added a new feature called query builder using ``db_select()``. Here are some examples: ::
+
+    $result = db_select('post')->getResult();
+    // SELECT * FROM `post`
+    _pr($result); // array of results
+
+    $result = db_select('post')->getSingleResult();
+    // SELECT * FROM `post`
+    _pr($result); // the result object
+
+    $postTitle = db_select('post', 'p')
+        ->field('postTitle')
+        ->fetch();
+    // SELECT `p`.`postTitle` FROM `post`
+    echo $postTitle;
+
+    $result = db_select('post', 'p')
+        ->fields('p', array('postId', 'postTitle', 'created'))
+        ->orderBy('p.created', 'desc')
+        ->getResult();
+    // SELECT `p`.`postId`, `p`.`postTitle`, `p`.`created` FROM `post` `p` ORDER BY `p`.`created` DESC
+    _pr($result); // array of results
+
+    $result = db_select('post', 'p')
+        ->join('category', 'c', 'p.catId = c.catId')
+        ->fields('p', array('postId', 'postTitle', 'created'))
+        ->fields('c', array('catName'))
+        ->where()
+        ->condition('p.postId', 1)
+        ->getSingleResult();
+    // SELECT `p`.`postId`, `p`.`postTitle`, `p`.`created`, `c`.`catName`
+    // FROM `post` `p`
+    // INNER JOIN `category` `c` ON `p`.`catId` = `c`.`catId`
+    // WHERE `p`.`postId` = 1
+    _pr($result); // the result object
+
+    $rowCount = db_count('post')
+        ->where()->condition('deleted', null)
+        ->fetch();
+    // SELECT COUNT(*) count FROM `post` WHERE deleted IS NULL
+    echo $rowCount;
+
+    $qb = db_select('post', 'p')
+        ->join('category', 'c', 'p.catId = c.catId')
+        ->join('user', 'u', 'p.uid = u.uid')
+        ->fields('p', array(
+            'postId', 'created', 'postTitle', 'postBody',
+            array('postTitle_en', 'postTitle_i18n'),
+            array('postBody_en', 'postBody_i18n')
+        ))
+        ->fields('c', array(
+            'catName',
+            array('catName_en', 'catName_i18n')
+        ))
+        ->fields('u', array('fullName'))
+        ->where()->condition('deleted', null)
+        ->orderBy('p.created', 'DESC')
+        ->orderBy('u.fullName')
+        ->limit(0, 20);
+
+    // SELECT `p`.`postId`, `p`.`created`, `p`.`postTitle`, `p`.`postBody`, `p`.`postTitle_en` `postTitle_i18n`, `p`.`postBody_en` `postBody_i18n`, `c`.`catName`, `c`.`catName_en` `catName_i18n`, `u`.`fullName` FROM `post` `p`
+    // INNER JOIN `category` `c` ON `p`.`catId` = `c`.`catId`
+    // INNER JOIN `user` `u` ON `p`.`uid` = `u`.`uid`
+    // WHERE `p`.`deleted` IS NULL
+    // ORDER BY `p`.`created` DESC, `u`.`fullName` ASC
+    // LIMIT 0, 20
+
+    if ($qb->getNumRows()) {
+        while ($row = $qb->fetchRow()) {
+            // do something with result
+        }
+    } else {
+        // no result
+    }
+
+.. note::
+    - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/core/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/core/query_builder.test.php>`_.
+    - You may also check `how to retrieve data using native SQL <#retrieving-your-data>`_.
