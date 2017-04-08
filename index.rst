@@ -18,6 +18,7 @@ Welcome to PHPLucidFrame's documentation!
    url-routing
    file-inclusion
    database-configuration-and-data-manipulation
+   schema-manager
 
 .. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 

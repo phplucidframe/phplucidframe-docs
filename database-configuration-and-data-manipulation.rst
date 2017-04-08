@@ -514,5 +514,5 @@ As of version 1.9, PHPLucidFrame added a new feature called query builder using 
     }
 
 .. note::
-    - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/core/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/core/query_builder.test.php>`_.
+    - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php>`_.
     - You may also check `how to retrieve data using native SQL <#retrieving-your-data>`_.
