@@ -20,6 +20,14 @@ Welcome to PHPLucidFrame's documentation!
    database-configuration-and-data-manipulation
    schema-manager
    database-seeding
+   forms
+   file-helper
+   create-your-listings-with-pagination
+   user-authentication
+   creating-a-multilingual-site
+   the-lucidframe-console
+   ajax-and-javascript-api
+   hooks-and-overrides
 
 .. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
