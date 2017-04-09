@@ -19,6 +19,7 @@ Welcome to PHPLucidFrame's documentation!
    file-inclusion
    database-configuration-and-data-manipulation
    schema-manager
+   database-seeding
 
 .. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
 
