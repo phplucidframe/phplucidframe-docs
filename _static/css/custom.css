@@ -5,3 +5,7 @@
 .wy-table-responsive table td p.first {
     font-size: 100%;
 }
+
+.wy-side-nav-search {
+    background-color: #1a7903;
+}
