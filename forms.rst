@@ -240,7 +240,7 @@ This checks the field is a valid email address. ::
     $validations = array(
         'txtEmail' => array(
             'caption'   => _t('Email');
-            'value'     => $postedValueToCheck,
+            'value'     => $valueToChecck,
             'rules'     => array('mandatory', 'email'),
         ),
     ); // The error message will be shown as "'Email' should be a valid format, e.g., username@example.com".
@@ -487,3 +487,66 @@ The rule checks the field is a positive integer starting from ``0``. No decimal 
             'rules'     => array('mandatory', 'wholeNumber'),
         ),
     ); // The error message will be shown as "'Price' should be a positive integer.".
+
+Custom Validation Rules
+-----------------------
+
+In addition to the core validation rules, you could also define your own custom validation functions in ``/app/helpers/validation_helper.php``. They will be auto-loaded. The custom validation rule must start with ``validate_``. ::
+
+For example, ::
+
+    $validations = array(
+        'txtUsername' => array(
+            'caption'   => _t('Username');
+            'value'     => $valueToCheck,
+            'rules'     => array('mandatory', 'username', 'validate_duplicateUsername'),
+            'parameters' => array(
+                'validate_duplicateUsername' => array($theEditId), // $theEditId will be the second argument to validate_duplicateUsername()
+            ),
+            'messages' => array(
+                'validate_duplicateUsername' => _t('Username already exists. Please try another one.'),
+            ),
+        ),
+    );
+
+Then, you must define a function ``validate_duplicateUsername()`` in ``/app/helpers/validation_helper.php``, for example, ::
+
+    /**
+     * Custom validation function to check username is duplicate
+     * @param string $value Username to be checked
+     * @param integer $id The edit id if any
+     * @return boolean TRUE for no duplicate; FALSE for duplicate
+     */
+    function validate_duplicateUsername($value, $id = 0) {
+        $value = strtolower($value);
+        if (empty($value)) {
+            return true;
+        }
+
+        $qb = db_count('user')
+            ->where()
+            ->condition('LOWER(username)', strtolower($value));
+        if ($id) {
+            $qb->condition('id <>', $id);
+        }
+
+        return $qb->fetch() ? false, true;
+    }
+
+Alternatively, if you don't want to define a function, you could add it right in your form action handling as the code snippet below. In this case, you have to call ``Validation::addError('htmlIdOrName', 'Error message to be shown')``, but it is not recommended. ::
+
+    if (form_validate($validations) == true) {
+        $qb = db_count('user')
+            ->where()
+            ->condition('LOWER(username)', strtolower($value));
+
+        if ($id) {
+            $qb->condition('id <>', $id);
+        }
+
+        if ($qb->fetch()) {
+            validation_addError('txtUsername', _t('Username already exists. Please try another one.'));
+        } else {
+            // No duplicate && success
+        }
+    }
