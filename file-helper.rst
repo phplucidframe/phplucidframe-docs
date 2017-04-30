@@ -336,7 +336,7 @@ This hook is to do database operation regarding to the deleted files. It runs wh
 +---------------+-----------+-------------------------------------------------------------------------------------------------------------------------------+
 
 .. note::
-    - See `the example code <https://github.com/phplucidframe/phplucidframe/blob/master/app/helpers/file_helper.php>`_ at ``/app/helpers/file-helper.php``.
+    - See `the example code at /app/helpers/file-helper.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/helpers/file_helper.php>`_.
 
 Javascript Hooks for AsynFileUploader
 -------------------------------------
@@ -423,3 +423,7 @@ The hook runs when the file upload fails with error. It can be defined using ``L
 +---------------+-----------+-------------------------------------------------------------------------------------------------------------------------------+
 | error.html    | mixed     | The error message in HTML format                                                                                              |
 +---------------+-----------+-------------------------------------------------------------------------------------------------------------------------------+
+
+.. note::
+    - If you defined this, the error message will not be shown until you code to show the error message in the callback function.
+    - See `the example code in /app/example/asyn-file-uploader/index.php <https://github.com/phplucidfram/phplucidframe/blob/master/app/example/asyn-file-uploader/index.php>`_

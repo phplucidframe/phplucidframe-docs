@@ -22,7 +22,7 @@ Welcome to PHPLucidFrame's documentation!
    database-seeding
    forms
    file-helper
-   create-your-listings-with-pagination
+   pagination
    user-authentication
    creating-a-multilingual-site
    the-lucidframe-console
