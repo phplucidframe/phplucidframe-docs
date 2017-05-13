@@ -28,11 +28,3 @@ Welcome to PHPLucidFrame's documentation!
    the-lucidframe-console
    ajax-and-javascript-api
    hooks-and-overrides
-
-.. note:: This documentation is still migrating from `PDF documentation <http://www.phplucidframe.com/cookbook>`_.
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
