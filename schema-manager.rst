@@ -280,7 +280,7 @@ Managing Schema Changes
 
 As of version 1.17.0, PHPLucidFrame provides a way to manage schema changes. It helps you to programmatically deploy new versions of your database schema easily in a standardized way.
 
-Let’s say an example, we use the sample database as our default and we are adding a new field ``wechatUrl`` in the table ``social_profile``. ::
+Let’s say an example, we use the sample database as our default and we are adding a new field ``wechatUrl`` in the table ``social_profile``. Let's edit the file ``/db/schema.sample.php`` ::
 
     'social_profile' => array(
         'facebookUrl'  => array('type' => 'string', 'length' => 100, 'null' => true),
