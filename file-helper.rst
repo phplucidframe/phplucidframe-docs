@@ -189,7 +189,7 @@ Create an instance of the class **AsynFileUploader** and call its method ``html(
                 <?php
                 # The constructor argument
                 # string/array The input file name or The array of property/value pairs
-                $file = new _asynFileUploader('photo');
+                $file = _asynFileUploader('photo');
 
                 # Button caption; default to "Choose File"
                 $file->setCaption('Choose Image');
