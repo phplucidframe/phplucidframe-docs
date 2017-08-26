@@ -127,7 +127,7 @@ Finally, you need the form upload process handling in ``/app/photo/action.php`` 
         ),
 
         if (Validation::check($validations) == true) {
-            $file = new _fileHelper();
+            $file = _fileHelper();
             // set image dimension to resize
             $file->set('dimensions', _cfg('photoDimension'));
             // set file upload directory; default to `/files/tmp/`

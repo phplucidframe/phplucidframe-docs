@@ -24,7 +24,7 @@ The instance looks for the number of records per page ``$lc_itemsPerPage`` and t
 To incorporate AJAX functionality into pagination, you can make it easily by setting the ajax property to true. The ``calculate()`` method has to be invoked to calculate offset. ::
 
     # Prerequisite for the Pager
-    $pager = new _pager();
+    $pager = _pager();
     $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
     $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
     $pager->set('total', $totalCount);                 // the total record count
@@ -217,7 +217,7 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
         ->fetch();
 
     # Prerequisite for the Pager
-    $pager = new _pager();
+    $pager = _pager();
     $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
     $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
     $pager->set('total', $totalCount);                 // the total record count
@@ -295,7 +295,7 @@ In ``query.php``, retrieve and paginate your data. ::
         ->fetch();
 
     # Prerequisite for the Pager
-    $pager = new _pager();
+    $pager = _pager();
     $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
     $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
     $pager->set('total', $totalCount);                 // the total record count
