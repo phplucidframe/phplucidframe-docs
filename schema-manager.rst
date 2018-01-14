@@ -172,7 +172,7 @@ The following describes the rule explanation of table schema array.
 +-------------------------------+-------------------------------+-----------------------------------------------------------------------+
 | ``m:m.{table_name}.name``     | table_name + "_id"            | The reference field name in the pivot table                           |
 +-------------------------------+-------------------------------+-----------------------------------------------------------------------+
-| ``m:m.{table_name}.cascade``  | false                         | - ``true`` for ``ON DELETE CASCADE``                  -                |
+| ``m:m.{table_name}.cascade``  | false                         | - ``true`` for ``ON DELETE CASCADE``                                  |
 |                               |                               | - ``false`` for ``ON DELETE RESTRICT``                                |
 |                               |                               | - ``null`` for ``ON DELETE SET NULL``                                 |
 +-------------------------------+-------------------------------+-----------------------------------------------------------------------+

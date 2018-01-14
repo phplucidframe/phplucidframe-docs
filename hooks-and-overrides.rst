@@ -42,7 +42,7 @@ Customize database delete operation of **a single record** for a specific table,
 It can be defined in ``/app/helpers/db_helper.php`` and executed when ``db_delete()`` in ``/lib/helpers/db_helper.mysqli.php`` is called.
 
 db_delete_multi_<table_name>($table, $data=array(), $useSlug=true)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Customize database delete operation of **multiple records** for a specific table, for example, if you define ``db_delete_multi_post()`` for the ``post`` table, it will be automatically executed when you call ``db_delete('post', …)``.
 
@@ -54,7 +54,7 @@ Overrides
 **Overrides** allow you to rewrite some functionalities of the LucidFrame core. An override is a PHP function which has a defined set of parameters and a specified result type. The available override to implement are explained here.
 
 __flush($buffer, $mode)
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^
 Overrides the core ``ob_start`` callback function ``_flush()`` in ``/lib/helpers/utility_helpers.php``. You can use this function to manipulate the output buffer before sending it to browser. It can be defined in ``/app/helpers/utility_helper.php``.
 
 __metaSeoTags($tags)
