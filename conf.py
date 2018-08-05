@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PHPLucidFrame'
-copyright = '2017, Sithu K.'
+copyright = '2018, Sithu K.'
 author = 'Sithu K.'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -84,7 +84,7 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
-html_theme_path = ["_themes", ]
+html_theme_path = ["_themes"]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -153,6 +153,3 @@ texinfo_documents = [
      author, 'PHPLucidFrame', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
