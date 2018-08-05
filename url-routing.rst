@@ -61,8 +61,8 @@ Here is the custom routing configuration syntax: ::
 Accessing URL
 -------------
 
-You can get the current routing path using a function ``_r()`` and you can get a component of the current path using ``_arg()``.
-x
+You can get the current routing path using a function ``_r()`` and you can get a component of the current path using ``_arg()``. ::
+
     // url is www.example.com
     echo _r();    // home
     echo _arg(0); // home
