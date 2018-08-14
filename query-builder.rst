@@ -371,4 +371,4 @@ This generates: ::
 
 .. note::
     - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php>`_.
-    - You may also check `how to retrieve data using native SQL <#retrieving-your-data>`_.
+    - You may also check `how to retrieve data using native SQL <database-configuration-and-data-manipulation.html#retrieving-your-data>`_.
