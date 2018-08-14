@@ -18,6 +18,7 @@ Welcome to PHPLucidFrame's documentation!
    url-routing
    file-inclusion
    database-configuration-and-data-manipulation
+   query-builder
    schema-manager
    database-seeding
    forms

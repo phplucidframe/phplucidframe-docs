@@ -426,4 +426,4 @@ The hook runs when the file upload fails with error. It can be defined using ``L
 
 .. note::
     - If you defined this, the error message will not be shown until you code to show the error message in the callback function.
-    - See `the example code in /app/example/asyn-file-uploader/index.php <https://github.com/phplucidfram/phplucidframe/blob/master/app/example/asyn-file-uploader/index.php>`_
+    - See `the example code in /app/example/asyn-file-uploader/index.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/index.php>`_

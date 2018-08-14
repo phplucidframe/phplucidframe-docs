@@ -51,7 +51,7 @@ PHPLucidFrame provides several db helper functions to retrieve data from your da
 - `db_fetchResult() <http://www.phplucidframe.com/api-doc/latest/function-db_fetchResult.html>`_ which retrieves the one result in object.
 - `db_extract() <http://www.phplucidframe.com/api-doc/latest/function-db_extract.html>`_ which retrieves the result in array or array of objects.
 
-.. note:: Instead of using native query to fetch data, QueryBuilder is recommended. See `Query Builder <#query-builder>`_ usage.
+.. note:: Instead of using native query to fetch data, QueryBuilder is recommended. See `Query Builder <query-builder>`_ usage.
 
 The following is an example to retrieve multiple result rows: ::
 
@@ -434,85 +434,3 @@ Once you have the table created, you just need to configure ``$lc_session['type'
             /* you can configure more options here, see the comments in /inc/config.default.php */
         )
     );
-
-Query Builder
--------------
-
-As of version 1.9, PHPLucidFrame added a new feature called query builder using ``db_select()``. Here are some examples: ::
-
-    $result = db_select('post')->getResult();
-    // SELECT * FROM `post`
-    _pr($result); // array of results
-
-    $result = db_select('post')->getSingleResult();
-    // SELECT * FROM `post`
-    _pr($result); // the result object
-
-    $postTitle = db_select('post', 'p')
-        ->field('postTitle')
-        ->fetch();
-    // SELECT `p`.`postTitle` FROM `post`
-    echo $postTitle;
-
-    $result = db_select('post', 'p')
-        ->fields('p', array('postId', 'postTitle', 'created'))
-        ->orderBy('p.created', 'desc')
-        ->getResult();
-    // SELECT `p`.`postId`, `p`.`postTitle`, `p`.`created` FROM `post` `p` ORDER BY `p`.`created` DESC
-    _pr($result); // array of results
-
-    $result = db_select('post', 'p')
-        ->join('category', 'c', 'p.catId = c.catId')
-        ->fields('p', array('postId', 'postTitle', 'created'))
-        ->fields('c', array('catName'))
-        ->where()
-        ->condition('p.postId', 1)
-        ->getSingleResult();
-    // SELECT `p`.`postId`, `p`.`postTitle`, `p`.`created`, `c`.`catName`
-    // FROM `post` `p`
-    // INNER JOIN `category` `c` ON `p`.`catId` = `c`.`catId`
-    // WHERE `p`.`postId` = 1
-    _pr($result); // the result object
-
-    $rowCount = db_count('post')
-        ->where()->condition('deleted', null)
-        ->fetch();
-    // SELECT COUNT(*) count FROM `post` WHERE deleted IS NULL
-    echo $rowCount;
-
-    $qb = db_select('post', 'p')
-        ->join('category', 'c', 'p.catId = c.catId')
-        ->join('user', 'u', 'p.uid = u.uid')
-        ->fields('p', array(
-            'postId', 'created', 'postTitle', 'postBody',
-            array('postTitle_en', 'postTitle_i18n'),
-            array('postBody_en', 'postBody_i18n')
-        ))
-        ->fields('c', array(
-            'catName',
-            array('catName_en', 'catName_i18n')
-        ))
-        ->fields('u', array('fullName'))
-        ->where()->condition('deleted', null)
-        ->orderBy('p.created', 'DESC')
-        ->orderBy('u.fullName')
-        ->limit(0, 20);
-
-    // SELECT `p`.`postId`, `p`.`created`, `p`.`postTitle`, `p`.`postBody`, `p`.`postTitle_en` `postTitle_i18n`, `p`.`postBody_en` `postBody_i18n`, `c`.`catName`, `c`.`catName_en` `catName_i18n`, `u`.`fullName` FROM `post` `p`
-    // INNER JOIN `category` `c` ON `p`.`catId` = `c`.`catId`
-    // INNER JOIN `user` `u` ON `p`.`uid` = `u`.`uid`
-    // WHERE `p`.`deleted` IS NULL
-    // ORDER BY `p`.`created` DESC, `u`.`fullName` ASC
-    // LIMIT 0, 20
-
-    if ($qb->getNumRows()) {
-        while ($row = $qb->fetchRow()) {
-            // do something with result
-        }
-    } else {
-        // no result
-    }
-
-.. note::
-    - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php>`_.
-    - You may also check `how to retrieve data using native SQL <#retrieving-your-data>`_.
