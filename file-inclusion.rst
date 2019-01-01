@@ -52,11 +52,11 @@ For ``js()`` and ``_css()``, you don’t need to include the directory path as i
         |-- /css
         |-- /js
 
-When you use ``_js('site.js')`` and if you are at admin, it will look for the file as the following priority and it will stop where the file is found.
+When you use ``_js('app.js')`` and if you are at admin, it will look for the file as the following priority and it will stop where the file is found.
 
-1. ``/app/admin/assets/js/site.js``
-2. ``/app/assets/js/site.js``
-3. ``/assets/js/site.js``
+1. ``/app/admin/assets/js/app.js``
+2. ``/app/assets/js/app.js``
+3. ``/assets/js/app.js``
 
 It is same processing for the usage of ``_css('base.css')``:
 

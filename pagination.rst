@@ -173,9 +173,9 @@ In you ``/app/post/view.php`` you need to create an empty HTML container which A
 
     <?php include( _i('inc/footer.php') ); ?>
 
-Create a small javascript snippet in your ``/app/js/site.js``. ::
+Create a small javascript snippet in your ``/app/js/app.js``. ::
 
-    /** app/js/site.js */
+    /** app/js/app.js */
     LC.Page.Post = {
         url : LC.Page.url('post'), /* mapping directory */
         /* Initialization of the Post page */

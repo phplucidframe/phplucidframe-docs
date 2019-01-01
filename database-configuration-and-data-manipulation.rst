@@ -4,6 +4,7 @@ Database Configuration and Data Manipulation
 You can configure your database settings in three files according to your deployment environments:
 
 - ``/inc/parameter/development.php`` for development environment
+- ``/inc/parameter/staging.php`` for staging environment
 - ``/inc/parameter/production.php`` for production environment
 - ``/inc/parameter/test.php`` for test environment
 
@@ -37,6 +38,48 @@ If you enable ``$lc_useDBAutoFields`` in ``/inc/config.php``, each of tables in 
 Nonetheless, you don’t need to worry about them if you write your own custom queries. They are also flaggable when you use more handy functions like ``db_insert()`` or ``db_update()``.
 
 .. note:: As of version 1.14, Schema Manager will manage those slug and timestamp fields for you. Just ignore ``$lc_useDBAutoFields``.
+
+Make Your Credentials Secret
+----------------------------
+
+As of version 2.0, PHPLucidFrame includes a file ``/inc/parameter/parameter.env.example.inc``. You can copy and rename it to ``parameter.env.inc`` which is already ignored from version control. So, in the file, you can define your important information that needs to be secret and to not share with others. For example, you can define your production database credentials in ``/inc/parameter/parameter.env.inc`` like below:
+
+::
+
+    return array(
+        'prod' => array( # either prod or production as you like
+            'db' => array(
+                'default' => array(
+                    'database'  => 'your_prod_db',
+                    'username'  => 'your_prod_user',
+                    'password'  => 'your_prod_pwd',
+                    'prefix'    => '',
+                )
+            )
+        )
+    );
+
+then, you can call those parameters from ``/inc/parameter/production.php`` using ``_env()``.
+
+::
+
+    return array(
+        // ...
+        # Database connection information
+        'db' => array(
+            'default' => array(
+                'engine'    => 'mysql', // database engine
+                'host'      => 'localhost', // database host
+                'port'      => '', // database port
+                'database'  => _env('prod.db.default.database')
+                'username'  => _env('prod.db.default.username')
+                'password'  => _env('prod.db.default.password')
+                'prefix'    => _env('prod.db.default.prefix')
+                'collation' => 'utf8_unicode_ci' // database collation
+            )
+        )
+        // ...
+    );
 
 Retrieving Your Data
 --------------------

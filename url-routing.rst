@@ -58,6 +58,25 @@ Here is the custom routing configuration syntax: ::
 | ``$pattern``    | array|null  | Array of the regex patterns for variables in $path such as ``array('id' => '\d+')``           |
 +-----------------+-------------+-----------------------------------------------------------------------------------------------+
 
+Route Groups
+------------
+
+PHPLucidFrame 2.0 supports route groups using prefix which allows you to prepend a URI prefix to a large number of routes. In the following example, the URI prefix ``/api/posts`` is added to all routes defined inside ``route_group()``: ::
+
+    route_group('/api/posts', function () {
+        route('lc_post')->map('/', '/example/api/post', 'GET');
+        route('lc_post_create')->map('/', '/example/api/post/create', 'POST');
+        route('lc_post_update')->map('/{id}', '/example/api/post/update', 'PUT', array('id' => '\d+'));
+        route('lc_post_delete')->map('/{id}', '/example/api/post/delete', 'DELETE', array('id' => '\d+'));
+    });
+
+The above route groups definition is equal to these individual route definitions: ::
+
+    route('lc_post')->map('/api/posts', '/example/api/post', 'GET');
+    route('lc_post_create')->map('/api/posts', '/example/api/post/create', 'POST');
+    route('lc_post_update')->map('/api/posts/{id}', '/example/api/post/update', 'PUT', array('id' => '\d+'));
+    route('lc_post_delete')->map('/api/posts/{id}', '/example/api/post/delete', 'DELETE', array('id' => '\d+'));
+
 Accessing URL
 -------------
 

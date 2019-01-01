@@ -21,6 +21,7 @@ Welcome to PHPLucidFrame's documentation!
    query-builder
    schema-manager
    database-seeding
+   middleware
    forms
    file-helper
    pagination
