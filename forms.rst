@@ -137,7 +137,7 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
         ),
     );
 
-The validation array should be passed to ``form_validate()` to be processed. ::
+The validation array should be passed to ``form_validate()`` to be processed. ::
 
     if (form_validate($validations) === true) { // or validation_check($validations)
         // ...
@@ -491,7 +491,7 @@ The rule checks the field is a positive integer starting from ``0``. No decimal 
 Custom Validation Rules
 -----------------------
 
-In addition to the core validation rules, you could also define your own custom validation functions in ``/app/helpers/validation_helper.php``. They will be auto-loaded. The custom validation rule must start with ``validate_``. ::
+In addition to the core validation rules, you could also define your own custom validation functions in ``/app/helpers/validation_helper.php``. They will be auto-loaded. The custom validation rule must start with ``validate_``.
 
 For example, ::
 

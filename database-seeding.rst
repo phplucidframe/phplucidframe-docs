@@ -35,7 +35,7 @@ The record key ``record-1`` should be unique for each record and is to be used f
 Seeding Example
 ---------------
 
-Let’s say we have 4 tables to be populated with a set of data - ``category``, ``post``, ``tag`` and ``post_to_tag``. The relationship between category and post is one-to-many relationship; ``post`` and ``tag` have many-to-many relationship. So, there must be 4 seeding PHP files with the names of respective table names. ::
+Let's say we have 4 tables to be populated with a set of data - ``category``, ``post``, ``tag`` and ``post_to_tag``. The relationship between category and post is one-to-many relationship; ``post`` and ``tag`` have many-to-many relationship. So, there must be 4 seeding PHP files with the names of respective table names. ::
 
     /db
         /default
