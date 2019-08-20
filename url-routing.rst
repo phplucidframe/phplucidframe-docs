@@ -6,10 +6,6 @@ PHPLucidFrame typically requires ``mod_rewrite`` enabled on web server. As per t
     // inc/route.config.php
     /**
      * The named route example `lc_home`
-     * This will be overridden to `$lc_homeRouting` in /inc/config.php
-     * If this is not defined here, `$lc_homeRouting` will be used
-     * However, `$lc_homeRouting` is deprecated in 1.10 and it will be removed in 2.0
-     * This is a recommended place to define routings if necessary
      */
     route('lc_home')->map('/', '/home');
 
