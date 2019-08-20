@@ -28,7 +28,6 @@ Application Structure
 +---------------+-------------------------------------------------------------------------------------------+
 | app/inc       | The directory can include the site template files and site configuration file.            |
 |               |                                                                                           |
-|               | * ``/site.config.php`` (inherited by ``/inc/site.config.php``)                            |
 |               | * ``/tpl/head.php`` (overridable by ``/inc/tpl/head.php``)                                |
 |               | * ``/tpl/401.php`` (overridable by ``/inc/tpl/401.php``)                                  |
 |               | * ``/tpl/403.php`` (overridable by ``/inc/tpl/403.php``)                                  |
@@ -79,7 +78,6 @@ Application Structure
 |               | The following files are overwritable or inherited by the ``app/inc`` or                   |
 |               | ``app/subsite/inc`` directory.                                                            |
 |               |                                                                                           |
-|               | * ``/site.config.php`` (inherited by ``/app/inc/site.config.php``)                        |
 |               | * ``/tpl/head.php`` (overridable by ``/app/inc/tpl/head.php``)                            |
 |               | * ``/tpl/401.php`` (overridable by ``/app/inc/tpl/401.php``)                              |
 |               | * ``/tpl/403.php`` (overridable by ``/app/inc/tpl/403.php``)                              |
