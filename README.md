@@ -19,4 +19,4 @@ Generate HTML from rst files with:
 
     make html
 
-The generated HTML pages are in _build\html
+The generated HTML pages are in `_build\html`
