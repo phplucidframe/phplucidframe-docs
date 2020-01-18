@@ -28,17 +28,6 @@ You can configure your database settings in three files according to your deploy
         // ...
     );
 
-If you enable ``$lc_useDBAutoFields`` in ``/inc/config.php``, each of tables in your database should have the following four fields:
-
-- ``slug varchar(xxx)``
-- ``created datetime``
-- ``updated datetime``
-- ``deleted datetime``
-
-Nonetheless, you don’t need to worry about them if you write your own custom queries. They are also flaggable when you use more handy functions like ``db_insert()`` or ``db_update()``.
-
-.. note:: As of version 1.14, Schema Manager will manage those slug and timestamp fields for you. Just ignore ``$lc_useDBAutoFields``.
-
 Make Your Credentials Secret
 ----------------------------
 
