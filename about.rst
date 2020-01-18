@@ -7,7 +7,7 @@ Prerequisites
 -------------
 
 * Web Server (Apache with mod_rewrite enabled)
-* PHP version 5.3.0 or newer (optional mcrypt extension enabled, but recommended)
+* PHP version 5.3.0 or newer
 * MySQL 5.0 or newer with MySQLi enabled.
 
 License
