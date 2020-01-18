@@ -97,3 +97,37 @@ You can also use the ``--yell`` option to make everything uppercase. ::
 This prints: ::
 
     HELLO SITHU!
+
+As of version 2.2, it supports class to add command definition. You can create a class in ``/app/cmd/classes/``. Let's say ``/app/cmd/classes/Greet.php`` ::
+
+    <?php
+
+    use LucidFrame\Console\CommandInterface;
+    use LucidFrame\Console\Command;
+
+    class Greet implements CommandInterface
+    {
+        public function execute(Command $cmd)
+        {
+            $name = $cmd->getArgument('name');
+            $msg = $name ? 'Hello ' . $name : 'Hello';
+            $msg .= '!';
+
+            if ($cmd->getOption('yell')) {
+                $msg = strtoupper($msg);
+            }
+
+            _writeln($msg);
+        }
+    }
+
+Then you need to connect that class to the command definition. Set class name to ``setDefinition()`` in ``/app/cmd/GreetCommand.php`` you created above. ::
+
+    _consoleCommand('demo:hello')
+        ->setDescription('Greet someone')
+        ->addArgument('name', 'Who do you want to greet?')
+        ->addOption('yell', 'y', 'If set, the task will yell in uppercase letters', null, LC_CONSOLE_OPTION_NOVALUE)
+        ->setDefinition('Greet')
+        ->register();
+
+It is useful when your command has more complicated functions and you can write logic neatly in your class.
