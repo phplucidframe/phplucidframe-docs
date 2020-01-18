@@ -47,8 +47,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PHPLucidFrame'
-copyright = '2019, Sithu K.'
-author = 'Sithu K.'
+copyright = '2020, Sithu Kyaw'
+author = 'Sithu Kyaw'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
