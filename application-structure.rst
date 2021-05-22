@@ -14,6 +14,7 @@ Application Structure
 |               |                                                                                           |
 |               | * ``auth_helper.php``                                                                     |
 |               | * ``db_helper.php``                                                                       |
+|               | * ``file_helper.php``                                                                     |
 |               | * ``pager_helper.php``                                                                    |
 |               | * ``session_helper.php``                                                                  |
 |               | * ``utility_helper.php``                                                                  |
@@ -28,12 +29,13 @@ Application Structure
 +---------------+-------------------------------------------------------------------------------------------+
 | app/inc       | The directory can include the site template files and site configuration file.            |
 |               |                                                                                           |
-|               | * ``/tpl/head.php`` (overridable by ``/inc/tpl/head.php``)                                |
+|               | * ``/tpl/layout.php``                                                                     |
 |               | * ``/tpl/401.php`` (overridable by ``/inc/tpl/401.php``)                                  |
 |               | * ``/tpl/403.php`` (overridable by ``/inc/tpl/403.php``)                                  |
 |               | * ``/tpl/404.php`` (overridable by ``/inc/tpl/404.php``)                                  |
-|               | * ``/tpl/header.php`` (overridable by ``/inc/tpl/header.php`` if you have)                |
-|               | * ``/tpl/footer.php`` (overridable by ``/inc/tpl/footer.php`` if you have)                |
+|               | * ``/tpl/head.php`` (when layoutMode is disabled)                                         |
+|               | * ``/tpl/header.php`` (when layoutMode is disabled)                                       |
+|               | * ``/tpl/footer.php`` (when layoutMode is disabled)                                       |
 +---------------+-------------------------------------------------------------------------------------------+
 | app/js        | The application javascript files should be placed in this directory.                      |
 +---------------+-------------------------------------------------------------------------------------------+
@@ -44,10 +46,7 @@ Application Structure
 | assets/images | This directory contains the images of the application.                                    |
 +---------------+-------------------------------------------------------------------------------------------+
 | assets/js     | This directory contains the system core javascript files which should not be hacked.      |
-|               | Your application javascript files should be placed in ``/app/js``.                        |
-+---------------+-------------------------------------------------------------------------------------------+
-| business      | **[Deprecated]** This directory is deprecated and it is replaced by the directory         |
-|               | ``/app/entity``                                                                           |
+|               | Your application javascript files should be placed in ``/app/assets/js``.                 |
 +---------------+-------------------------------------------------------------------------------------------+
 | db            | This directory contains the database-related stuffs such as schema files,                 |
 |               | seeding files, etc.                                                                       |
@@ -75,15 +74,12 @@ Application Structure
 |               |       * ``privacy-policy.zh-CN``                                                          |
 +---------------+-------------------------------------------------------------------------------------------+
 | inc           | This directory structure contains the settings and configuration files of the application.|
-|               | The following files are overwritable or inherited by the ``app/inc`` or                   |
+|               | The following files are overridable or inherited by the ``app/inc`` or                    |
 |               | ``app/subsite/inc`` directory.                                                            |
 |               |                                                                                           |
-|               | * ``/tpl/head.php`` (overridable by ``/app/inc/tpl/head.php``)                            |
 |               | * ``/tpl/401.php`` (overridable by ``/app/inc/tpl/401.php``)                              |
 |               | * ``/tpl/403.php`` (overridable by ``/app/inc/tpl/403.php``)                              |
 |               | * ``/tpl/404.php`` (overridable by ``/app/inc/tpl/404.php``)                              |
-|               | * ``/tpl/header.php`` (overridable by ``/app/inc/tpl/header.php`` if you have)            |
-|               | * ``/tpl/footer.php`` (overridable by ``/app/inc/tpl/footer.php`` if you have)            |
 +---------------+-------------------------------------------------------------------------------------------+
 | lib           | This directory is reserved for core library files. Custom and overwritten helpers should  |
 |               | be placed in their own subdirectory of the ``app/helpers`` or ``app/{subsite}/helpers``   |
@@ -99,104 +95,97 @@ Application Structure
 Page Structure
 --------------
 
-PHPLucidFrame encourages a uniform and structural page organization. In brief, a page in LucidFrame is represented by a folder containing at least two files: ``index.php`` and ``view.php``. As an example, you can see the directory ``/app/home/`` of the LucidFrame release you downloaded. ::
+PHPLucidFrame encourages a uniform and structural page organization. In brief, a web page in LucidFrame is represented by a folder containing at least one file: ``view.php`` or two files: ``index.php`` and ``view.php``. ::
 
     /path_to_webserver_document_root
-        /phplucidframe
+        /acme
             /app
                 /home
-                    |-- action.php
-                    |-- index.php
-                    |-- query.php
-                    |-- view.php
+                    |-- view.php (required)
+                    |-- index.php (optional)
+                    |-- action.php (optional)
+                    |-- list.php (optional)
 
-1. The **index.php** (required) serves as the front controller for the requested page, initializing the base resources needed to run the page.
-2. The **action.php** (optional) handles form submission. It should perform form validation, create, update, delete of data manipulation to database. By default, a form is initiated for AJAX and ``action.php`` is automatically invoked if the action attribute is not given in the ``<form>`` tag.
-3. The **query.php** (optional) should retrieve and process data from database and make it available to view.php.
-4. The **view.php** (required) is a visual output representation to user using data provided by query.php. It generally should contain HTML between ``<body>`` and ``</body>``.
-5. The **list.php** (optional) is a server page requested by AJAX, which retrieves data and renders HTML to the client. It is normally implemented for listing with pagination.
+1. The **view.php** (required) is a visual output representation to user using data provided by query.php. It generally should contain HTML between ``<body>`` and ``</body>``.
+2. The **index.php** (optional) serves as the front controller for the requested page, initializing some basic resources and business logic needed to run the page. This is optional. ``view.php`` will be served as the front controller if ``index.php`` doesn't exist.
+3. The **action.php** (optional) handles form submission. It should perform form validation, create, update, delete of data manipulation to database. By default, a form is initiated for AJAX and ``action.php`` is automatically invoked if the action attribute is not given in the ``<form>`` tag.
+4. The **list.php** (optional) is a server page requested by AJAX, which retrieves data and renders HTML to the client. It is normally implemented for listing with pagination.
 
-PHPLucidFrame is not bound to any specific directory structure, these are simply a baseline for you to work from.
+As an example, you can see the directory ``/app/home/`` and the directories under ``/app/example/`` of the PHPLucidFrame release you downloaded.
+
+Directory and File Precedence
+-----------------------------
+
+PHPLucidFrame has directory and file precedence to look for when a page request is made. For example, a request to ``http://www.example.com/post`` or ``http://localhost/acme/post`` will look for the directory and file as the following order:
+
++----+--------------------------+-------------------------------------------------------------------------------------------+
+|    | File                     | Description                                                                               |
++====+==========================+===========================================================================================+
+| 1. | /app/post/view.php       | when ``index.php`` doesn't exist in the ``post`` directory                                |
++----+--------------------------+-------------------------------------------------------------------------------------------+
+| 2. | /app/post/index.php      | when ``index.php`` and ``view.php`` eixst in the post directory                           |
++----+--------------------------+-------------------------------------------------------------------------------------------+
+| 3. | /app/post.php            | when there is no ``post`` directory with ``view.php``;                                    |
+|    |                          | It is good for implementation without view presentation such API response with json.      |
+|    |                          | ``post.php`` may end up with ``_json(array(...));``                                       |
++----+--------------------------+-------------------------------------------------------------------------------------------+
 
 Page Workflow
 -------------
 
-This illustration demonstrates a request to ``http://www.example.com`` or ``http://localhost/phplucidframe``.
+This illustration demonstrates a request to ``http://www.example.com/post`` or ``http://localhost/acme/post``.
 
-.. image:: images/page-workflow.jpg
+.. image:: images/page-workflow.png
 
 Layout Mode
 -----------
 
-By default, PHPLucidFrame has two template files - ``header.php`` and ``footer.php``. They will have to include in every ``view.php``. Some developers may not want to have header and footer templates separately and not want to include the files in all views. They usually create a site layout file.
-
-Since version 1.14, PHPLucidFrame provides a new feature to enable/disable layout mode globally or for a particular page.
-
-Create a Layout File
-^^^^^^^^^^^^^^^^^^^^
-
-Create your layout file in ``/inc/tpl/`` or ``/app/inc/tpl/``. Default layout file name is ``layout.php``. ``<?php include _view(); ?>`` has to be called in the layout file. Here is an example layout file content: ::
-
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title><?php echo _title(); ?></title>
-        <?php include _i('inc/tpl/head.php'); ?>
-    </head>
-    <body>
-        <div id="wrapper">
-            <div id="page-container">
-                <div id="header">
-                    <div class="container clearfix">
-                        <!-- header content -->
-                    </div>
-                </div>
-                <div id="page">
-                    <div class="container">
-                        <?php include _view(); ?> <!-- page view -->
-                    </div> <!-- .container -->
-                </div> <!-- #page -->
-                <div id="footer">
-                    <div class="container">
-                        <!-- footer content -->
-                     </div>
-                </div>
-            </div> <!-- #page-container -->
-        </div> <!-- #wrapper -->
-    </body>
-    </html>
-
-Enable Layout Mode globally
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-To enable layout mode globally, set true to ``$lc_layoutMode`` in ``/inc/config.php``. ::
+Since version 3.0, layout mode is enabled by default with the following two configurations in ``/inc/config.php``. ::
 
     # $lc_layoutMode: Enable layout mode or not
     $lc_layoutMode = true;
     # $lc_layoutMode: Default layout file name
-    $lc_layoutName = 'layout'; // layout.php
+    $lc_layoutName = 'layout'; // default layout file name pointed to app/inc/tpl/layout.php
 
-You can also configure ``$lc_layoutName`` using a custom file name other than ``layout.php``. Now that you have enabled the layout mode globally, ``query.php`` and ``view.php`` are automatically included for every page. ::
+You can see the default layout file ``app/inc/tpl/layout.php`` which contains the whole page HTML layout and its load the particular page view (``view.php``) by calling ``_app('view')->load()``.
 
-    /app
-        /home
-        |-- action.php
-        |-- index.php
-        |-- query.php (this file will be automatically included when layout mode is enabled)
-        |-- view.php (this file will be automatically included when layout mode is enabled)
+You may have a separate layout file for a particular page, let's say for example, you have a login page which have a different layout other than the rest pages of the site. You can create a new layout file ``app/inc/tpl/layout_login.php``. ::
 
-Enable Layout Mode for a Page
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    /path_to_webserver_document_root
+        /acme
+            /app
+                /inc
+                    /tpl
+                        |-- layout.php
+                        |-- layout_login.php
+                /login
+                    |-- action.php
+                    |-- index.php
+                    |-- view.php
 
-Assuming that you have ``$lc_layoutMode = false`` that makes layout mode disabled globally. If you want to enable it for a particular page. You can call ``_cfg('layoutMode', true);`` at the top of ``index.php`` of the page folder.
+You can set the new layout name for login page in ``app/login/index.php`` such as ::
 
-In addition, you can create a new layout for a particular page or a group of pages. You just need to call ``_cfg('layoutName', 'another-layout-file-name');`` for the pages. Check the example at ``/app/example/layout/index.php``.
+    _app('view')->layout = 'layout_login';
 
-Savant Integration
-------------------
+Then, the login page will use ``layout_login.php`` whereas the other pages use ``layout.php``.
 
-.. note:: ❖ PHPLucidFrame does not tie to any template system.
+Disabling Layout Mode
+^^^^^^^^^^^^^^^^^^^^^
 
-Savant is a powerful but lightweight object-oriented template system for PHP. Unlike other template systems, Savant by default does not compile your templates into PHP; instead, it uses PHP itself as its template language so you don't need to learn a new markup system. You can easily integrate it into LucidFame.
+By disabling layout mode, you can have two template files - ``header.php`` and ``footer.php`` in ``app/inc/tpl``, and they will have to be included in every ``view.php`` explicitly. You can disable layout mode by adding the setting in ``app/inc/site.config.php``. ::
 
-Check `the integration guide in the PHPLucidFrame wiki <https://github.com/phplucidframe/phplucidframe/wiki/Integration-of-Savant,-The-Simple-Template-System>`_.
+    # $lc_layoutMode: Enable layout mode or not
+    $lc_layoutMode = false;
+
+Then, you can include header and footer files by using ``_app('view')->block('fileName')`` in each ``view.php``. ::
+
+    <?php _app('view')->block('header') ?>
+
+    <!--- page stuffs here -->
+
+    <?php _app('view')->block('footer') ?>
+
+If you want to disable layout mode for a particular page only. You can add ``_cfg('layoutMode', false);`` at the top of ``index.php`` of the page folder.
+
+.. note::
+    - Layout mode disabled is a legacy way and not recommended since version 3.0. You can check the version 2 documentation about application structure at `<https://phplucidframe.readthedocs.io/en/v2.2.0/application-structure.html>`_

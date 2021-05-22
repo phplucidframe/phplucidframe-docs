@@ -11,7 +11,6 @@ In **production**, your directory setup may look something like the following so
     /path_to_webserver_document_root
         /app
         /assets
-        /business
         /db
         /files
         /i18n
@@ -19,7 +18,6 @@ In **production**, your directory setup may look something like the following so
         /lib
         /tests
         /vendor
-        .htaccess
         index.php
 
 In this case, the configuration variable ``baseURL`` in ``/inc/parameter/production.php`` should look like this: ::
@@ -31,30 +29,29 @@ In this case, the configuration variable ``baseURL`` in ``/inc/parameter/product
         // ....
     );
 
-In **development**, you could have a directory name, for example, ``phplucidframe``. Then your directory setup may look something like the following so that it can be accessible via ``http://localhost/phplucidframe``. ::
+In **development**, you could have a directory name, for example, ``acme``. Then your directory setup may look something like the following so that it can be accessible via ``http://localhost/acme``. ::
 
     /path_to_webserver_document_root
-        /phplucidframe
-        /app
-        /assets
-        /business
-        /db
-        /files
-        /i18n
-        /inc
-        /lib
-        /tests
-        /vendor
-        .htaccess
-        index.php
+        /acme
+            /app
+            /assets
+            /db
+            /files
+            /i18n
+            /inc
+            /lib
+            /tests
+            /vendor
+            .htaccess
+            index.php
 
 In this case, the configuration variable ``baseURL`` in ``/inc/parameter/development.php`` should look like this: ::
 
     return array(
         # No trailing slash (only if it is located in a sub-directory of the document root)
         # Leave blank if it is located in the document root
-        'baseURL' => 'phplucidframe',
+        'baseURL' => 'acme',
         // ....
     );
 
-**Note**: ``phplucidframe`` would be your project name.
+**Note**: ``acme`` would be your project name.

@@ -131,7 +131,7 @@ You can use the function ``_redirect()`` to redirect to a URL. ::
     _redirect('user', array(1));
 
     // redirect to http://www.example.com/posts/-page/1/-sort/title/asc
-    _redirect('posts', array('page' => 1, 'sort' => array('title','asc'));
+    _redirect('posts', array('page' => 1, 'sort' => array('title','asc')));
 
     // assuming that the current URL is http://www.example.com/posts/-page/1/-sort/title/asc
     // you can redirect to the current page itself by updating the query strings 'page' and 'sort'

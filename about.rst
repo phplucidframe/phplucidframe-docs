@@ -6,9 +6,9 @@ PHPLucidFrame (a.k.a LucidFrame) is a mini application development framework - a
 Prerequisites
 -------------
 
-* Web Server (Apache with mod_rewrite enabled)
-* PHP version 5.3.0 or newer
-* MySQL 5.0 or newer with MySQLi enabled.
+* Web Server (Apache with ``mod_rewrite`` enabled)
+* PHP version 5.6 or newer is recommended. It should work on 5.3 as well, but we strongly advise you NOT to run such old versions of PHP.
+* MySQL 5.0 or newer
 
 License
 -------
