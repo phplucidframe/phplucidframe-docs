@@ -17,8 +17,10 @@ Welcome to PHPLucidFrame's documentation!
    core-defined-constants-variables
    url-routing
    file-inclusion
-   database-configuration-and-data-manipulation
+   database-configuration
+   data-manipulation
    query-builder
+   native-queries
    schema-manager
    database-seeding
    middleware

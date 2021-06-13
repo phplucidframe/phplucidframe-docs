@@ -46,25 +46,25 @@ This generates the following query: ::
 If you want field alias, you can use nested array in ``fields()``, for example, ::
 
     $result = db_select('post', 'p')
-        ->fields('p', array('id', array('title', 'postTitle'), 'created'))
+        ->fields('p', array('id', array('title', 'title'), 'created'))
         ->getResult();
 
     _pr($result); // array of results
 
 In this case, ``post_title`` is alias for ``title``. This generates the following query: ::
 
-    SELECT `p`.`id`, `p`.`title` `postTitle`, `p`.`created` FROM `post` `p`
+    SELECT `p`.`id`, `p`.`title` `title`, `p`.`created` FROM `post` `p`
 
 Selecting Data for Single Field
 -------------------------------
 
 To fetch a single field, you can use ``field('field_name')`` and then ``fetch()``. ::
 
-    $postTitle = db_select('post', 'p')
+    $title = db_select('post', 'p')
         ->field('title')
         ->fetch();
 
-    echo $postTitle;
+    echo $title;
 
 This generates the following query: ::
 
@@ -85,7 +85,7 @@ If you want to join multiple tables, you can use ``join($table, $alias, $conditi
         ->fields('u', array(array('name', 'author')))
         ->fields('c', array(array('name', 'categoryName')))
         ->join('user', 'u', 'p.uid = u.uid')
-        ->leftJoin('category', 'c', 'p.catId = c.catId')
+        ->leftJoin('category', 'c', 'p.cat_id = c.cat_id')
         ->getResult();
     _pr($result); // array of results
 

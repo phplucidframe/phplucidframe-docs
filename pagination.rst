@@ -235,11 +235,11 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
         <?php while ($row = $qb->fetchRow()) { ?>
             <p class="post">
                 <h5>
-                    <a href="<?php echo _url('post', array($row->postId, $row->slug)); ?>"><?php echo $row->title; ?></a>
+                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>"><?php echo $row->title; ?></a>
                 </h5>
                 <p><?php echo $b->body; ?></p>
                 <p>
-                    <a href="<?php echo _url('post', array($row->postId, $row->slug)); ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
+                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
                 </p>
             </p>
         <?php } // while end ?>
@@ -319,11 +319,11 @@ Finally, your ``view.php`` will look like this: ::
         <?php while ($row = $qb->fetchRow()) { ?>
             <p class="post">
                 <h5>
-                    <a href="<?php echo _url('post', array($row->postId, $row->slug)); ?>"><?php echo $row->title; ?></a>
+                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>"><?php echo $row->title; ?></a>
                 </h5>
                 <p><?php echo $b->body; ?></p>
                 <p>
-                    <a href="<?php echo _url('post', array($row->postId, $row->slug)); ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
+                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
                 </p>
             </p>
         <?php } // while end ?>

@@ -29,7 +29,7 @@ After then, each table can be defined using table name as key and value as an ar
         'catName_en'    => array('type' => 'string', 'length' => 200, 'null' => true),
         'catName_my'    => array('type' => 'string', 'length' => 200, 'null' => true),
         'options' => array(
-            'pk'  => array('catId'),     // type: integer, autoinc: true, null: false, unsigned: true
+            'pk'  => array('cat_id'),     // type: integer, autoinc: true, null: false, unsigned: true
             'timestamps' => true,        // created, updated, deleted; override to _options.timestamps
             'charset'    => 'utf8',      // override to _options.charset
             'collate'    => 'utf8_unicode_ci',  // override to _options.collate
@@ -39,7 +39,7 @@ After then, each table can be defined using table name as key and value as an ar
             // one-to-many relation between `category` and `post`
             // there must also be 'm:1' definition at the side of `post`
             'post' => array(
-                'name' => 'catId', // FK field name in the other table (defaults to "table_name + _id")
+                'name' => 'cat_id', // FK field name in the other table (defaults to "table_name + _id")
                 //'unique'  => false,   // Unique index for FK; defaults to false
                 //'default' => null,    // default value for FK; defaults to null
                 'cascade'   => true,    // true for ON DELETE CASCADE; false for ON DELETE RESTRICT
@@ -48,20 +48,20 @@ After then, each table can be defined using table name as key and value as an ar
     ),
     'post' => array(
         'slug'          => array('type' => 'string', 'length' => 255, 'null' => false, 'unique' => true),
-        'postTitle'     => array('type' => 'string', 'null' => false),
-        'postTitle_en'  => array('type' => 'string', 'null' => true),
-        'postTitle_my'  => array('type' => 'string', 'null' => true),
-        'postBody'      => array('type' => 'text', 'null' => false),
-        'postBody_en'   => array('type' => 'text', 'null' => true),
-        'postBody_my'   => array('type' => 'text', 'null' => true),
+        'title'     => array('type' => 'string', 'null' => false),
+        'title_en'  => array('type' => 'string', 'null' => true),
+        'title_my'  => array('type' => 'string', 'null' => true),
+        'body'      => array('type' => 'text', 'null' => false),
+        'body_en'   => array('type' => 'text', 'null' => true),
+        'body_my'   => array('type' => 'text', 'null' => true),
         'options' => array(
-            'Pk' => array('postId'), // if this is not provided, default field name to `id`
+            'Pk' => array('id'), // if this is not provided, default field name to `id`
         ),
         '1:m' => array(
             // one-to-many relation between `post` and `post_image`
             // there must also be 'm:1' definition at the side of `post_image`
             'post_image' => array(
-                'name'      => 'postId',
+                'name'      => 'id',
                 'cascade'   => true,
             ),
         ),
@@ -73,7 +73,7 @@ After then, each table can be defined using table name as key and value as an ar
             // many-to-many relation between `post` and `tag`
             // there must also be 'm:m' definition at the side of `tag`
             'tag' => array(
-                'name'      => 'postId',
+                'name'      => 'id',
                 'cascade'   => true,
             ),
         ),
@@ -143,7 +143,7 @@ The following describes the rule explanation of table schema array.
 +-------------------------------+-------------------------------+-----------------------------------------------------------------------+
 | ``options.unique``            |                               | Unique index for composite fields                                     |
 |                               |                               |                                                                       |
-|                               |                               | ``array('keyName' => array('fieldName1', 'fieldName2'))``             |
+|                               |                               | ``array('keyName' => array('field_name1', 'field_name2'))``           |
 +-------------------------------+-------------------------------+-----------------------------------------------------------------------+
 | ``1:m``                       |                               | One-to-Many relationship; if you define this, there must be ``m:1``   |
 |                               |                               | definition at the many-side table                                     |
@@ -287,11 +287,10 @@ As of version 2.2.0, PHPLucidFrame provides a way to manage schema changes. It h
 Let’s say an example, we use the sample database as our default and we are adding a new field ``wechatUrl`` in the table ``social_profile``. Let's edit the file ``/db/schema.sample.php`` ::
 
     'social_profile' => array(
-        'facebookUrl'  => array('type' => 'string', 'length' => 100, 'null' => true),
-        'twitterUrl'   => array('type' => 'string', 'length' => 100, 'null' => true),
-        'gplusUrl'     => array('type' => 'string', 'length' => 100, 'null' => true),
-        'linkedinUrl'  => array('type' => 'string', 'length' => 100, 'null' => true),
-        'wechatUrl'    => array('type' => 'string', 'length' => 100, 'null' => true), // <- add this
+        'facebook_url'  => array('type' => 'string', 'null' => true),
+        'twitter_url'   => array('type' => 'string', 'null' => true),
+        'instagram_url' => array('type' => 'string', 'null' => true),
+        'linkedin_url'  => array('type' => 'string', 'null' => true),
         '1:1' => array(
             // one-to-one relation between `social_profile` and `user`
             // no need to define 1:1 at the side of `user`
@@ -305,7 +304,7 @@ Let’s say an example, we use the sample database as our default and we are add
 Then, run ``schema:diff sample`` and it will generate a file with extension **sqlc** in ``/db/version/sample`` ::
 
     $ php lucidframe schema:diff sample
-    PHPLucidFrame 2.2.0 by Sithu K.
+    PHPLucidFrame 3.0.0 by Sithu K.
 
     ./db/version/sample/20170406223436.sqlc is exported.
     Check the file and run `php lucidframe schema:update sample`
@@ -314,7 +313,7 @@ Then, run ``schema:diff sample`` and it will generate a file with extension **sq
 You can open that **sqlc** file and check its content. Finally, you can run ``schema:update sample`` to apply this changes in your underlying database. ::
 
     $ php lucidframe schema:update sample
-    PHPLucidFrame 2.2.0 by Sithu K.
+    PHPLucidFrame 3.0.0 by Sithu K.
 
     IMPORTANT! Backup your database before executing this command.
     Some of your data may be lost. Type "y" or "yes" to continue: y
@@ -327,11 +326,10 @@ You can open that **sqlc** file and check its content. Finally, you can run ``sc
 The following example will show you in another scenario where renaming the fields. Let’s say we are remove ``Url`` from all field names of the table ``social_profile`` such as ::
 
     'social_profile' => array(
-        'facebook'  => array('type' => 'string', 'length' => 100, 'null' => true),
-        'twitter'   => array('type' => 'string', 'length' => 100, 'null' => true),
-        'gplus'     => array('type' => 'string', 'length' => 100, 'null' => true),
-        'linkedin'  => array('type' => 'string', 'length' => 100, 'null' => true),
-        'wechat'    => array('type' => 'string', 'length' => 100, 'null' => true),
+        'facebook'  => array('type' => 'string', 'null' => true),
+        'twitter'   => array('type' => 'string', 'null' => true),
+        'instagram' => array('type' => 'string', 'null' => true),
+        'linkedin'  => array('type' => 'string', 'null' => true),
         '1:1' => array(
             // one-to-one relation between `social_profile` and `user`
             // no need to define 1:1 at the side of `user`
@@ -345,16 +343,15 @@ The following example will show you in another scenario where renaming the field
 Again, run ``schema:diff sample`` and you will be confirmed for renaming fields. ::
 
     $ php lucidframe schema:diff sample
-    PHPLucidFrame 2.2.0 by Sithu K.
+    PHPLucidFrame 3.0.0 by Sithu K.
 
 
     Type "y" to rename or type "n" to drop/create for the following fields:
 
-    Field renaming from `facebookUrl` to `social_profile.facebook`: y
-    Field renaming from `twitterUrl` to `social_profile.twitter`: y
-    Field renaming from `gplusUrl` to `social_profile.gplus`: y
-    Field renaming from `linkedinUrl` to `social_profile.linkedin`: y
-    Field renaming from `wechatUrl` to `social_profile.wechat`: y
+    Field renaming from `facebook_url` to `social_profile.facebook`: y
+    Field renaming from `twitter_url` to `social_profile.twitter`: y
+    Field renaming from `instagram_url` to `social_profile.instagrams`: y
+    Field renaming from `linkedin_url` to `social_profile.linkedin`: y
 
     ./db/version/sample/20170406224852.sqlc is exported.
     Check the file and run `php lucidframe schema:update sample`
@@ -363,7 +360,7 @@ Again, run ``schema:diff sample`` and you will be confirmed for renaming fields.
 Now you can see there are two **sqlc** files in the directory ``/db/version/sample``. Then, as suggested above, you just need to run ``schema:update sample`` to update your database schema. ::
 
     $ php lucidframe schema:update sample
-    PHPLucidFrame 2.2.0 by Sithu K.
+    PHPLucidFrame 3.0.0 by Sithu K.
 
     IMPORTANT! Backup your database before executing this command.
     Some of your data may be lost. Type "y" or "yes" to continue: y

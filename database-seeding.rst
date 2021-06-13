@@ -54,12 +54,12 @@ The followings are example contents for each seeding file.
         'order' => 1, // Execution order: this file will be executed firstly
         'category-1' => array( // a record is an array of field and value
             // field => value
-            'slug'     => 'technology',
-            'catName'  => 'Technology',
+            'slug' => 'technology',
+            'name' => 'Technology',
         ),
         'category-2' => array(
-            'slug'     => 'framework',
-            'catName'  => 'Framework',
+            'slug' => 'framework',
+            'name' => 'Framework',
         ),
     );
 
@@ -72,10 +72,10 @@ The followings are example contents for each seeding file.
     return array(
         'order' => 2, // this file will be executed after seeding is executed for the table "category"
         'post-1' => array(
-            'catId'     => Seeder::setReference('category-1'), // reference field that will be inserted with category id that will be created by the previous category seeding execution
+            'cat_id'    => Seeder::setReference('category-1'), // reference field that will be inserted with category id that will be created by the previous category seeding execution
             'slug'      => 'welcome-to-the-lucidframe-blog',
-            'postTitle' => 'Welcome to the LucidFrame Blog',
-            'postBody'  => 'LucidFrame is a mini application development framework - a toolkit for PHP developers. It provides logical structure and several helper utilities for web application development. It uses a module architecture to make the development of complex applications simplified.',
+            'title'     => 'Welcome to the LucidFrame Blog',
+            'body'      => 'LucidFrame is a mini application development framework - a toolkit for PHP developers. It provides logical structure and several helper utilities for web application development. It uses a module architecture to make the development of complex applications simplified.',
         ),
     );
 
@@ -86,12 +86,12 @@ The followings are example contents for each seeding file.
     return array(
         'order' => 3, // this file will be executed in third
         'tag-1' => array(
-            'slug'    => 'php',
-            'tagName' => 'PHP',
+            'slug' => 'php',
+            'name' => 'PHP',
         ),
         'tag-2' => array(
-            'slug'    => 'mysql',
-            'tagName' => 'MySQL',
+            'slug' => 'mysql',
+            'name' => 'MySQL',
         ),
     );
 
@@ -104,12 +104,12 @@ The followings are example contents for each seeding file.
     return array(
         'order' => 4, // this file will be executed lastly in all of four files
         'post-to-tag-1' => array(
-            'postId'    => Seeder::setReference('post-1'), // reference field to the table "post"
-            'tagId'     => Seeder::setReference('tag-1'),  // reference field to the table "tag"
+            'post_id'   => Seeder::setReference('post-1'), // reference field to the table "post"
+            'tag_id'    => Seeder::setReference('tag-1'),  // reference field to the table "tag"
         ),
         'post-to-tag-2' => array(
-            'postId'    => Seeder::setReference('post-1'),
-            'tagId'     => Seeder::setReference('tag-2'),
+            'post_id'   => Seeder::setReference('post-1'),
+            'tag_id'    => Seeder::setReference('tag-2'),
         ),
     );
 

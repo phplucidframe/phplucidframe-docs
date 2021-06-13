@@ -316,7 +316,7 @@ The hook is to do database operation regarding to the uploaded files and it runs
 |               |           | - ``{name}`` Array of the file names uploaded and saved in drive                                                              |
 |               |           | - ``{name}-id`` Optional array of the database value IDs (if a file have previously been uploaded)                            |
 |               |           | - ``{name}-dimensions`` Optional array of the file dimensions in WxH (it will not be available if it is not an image file)    |
-|               |           | - ``{name}-{fieldname}`` Optional hidden values                                                                               |
+|               |           | - ``{name}-{field_name}`` Optional hidden values                                                                              |
 |               |           |                                                                                                                               |
 |               |           | If you set the name "**photo**" to the **AsynFileUploader** constructor, the keys will be ``photo``, ``photo-id`` and         |
 |               |           | ``photo-dimensions``. If you set ``AsynFileUploader->setHidden('key', 'value')``, you can get it here using ``photo-key``.    |

@@ -210,16 +210,16 @@ This function is useful when passing data from PHP to Javascript in the form of 
         <?php
         $data = array();
         while ($row = $qb->fetchRow()) {
-            $data[$row->catId] = (array) _getTranslationStrings($row, 'catName'); // <== prepare data for js
+            $data[$row->cat_id] = (array) _getTranslationStrings($row, 'catName'); // <== prepare data for js
             ?>
             <tr>
                 <td class="tableLeft colAction">
-                    <a href="#" class="edit" title="Edit" rel="<?php echo $row->catId; ?>">
+                    <a href="#" class="edit" title="Edit" rel="<?php echo $row->cat_id; ?>">
                         <span><?php echo _t('Edit'); ?></span>
                     </a>
                 </td>
                 <td class="colAction">
-                    <a href="#" class="delete" title="Delete" rel="<?php echo $row->catId; ?>">
+                    <a href="#" class="delete" title="Delete" rel="<?php echo $row->cat_id; ?>">
                         <span><?php echo _t('Delete'); ?></span>
                     </a>
                 </td>
