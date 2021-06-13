@@ -8,17 +8,21 @@ Creating AJAX Form
 
 Create a form tag as usual. If you do not set the attribute ``action``, LucidFrame will look for ``action.php`` in the same directory and will submit to it. Until this time of writing, ``id="formId"`` must be used. Your form should also have a message container in which any error message can be shown. ::
 
-    <form name="yourFormName" id="yourFormId" method="post">
+    <form name="your-form-name" id="your-form-id" method="post">
         <div class="message error"></div>
+
         <!-- HTML input elements here as usual -->
+
         <?php form_token(); ?>
     </form>
 
 You can also provide the ``action`` attribute for your desired form handling file. ::
 
-    <form name="yourFormName" id="yourFormId" action="<?php echo _url('path/to/action.php'); ?>" method="post">
+    <form name="your-form-name" id="your-form-id" action="<?php echo _url('path/to/action.php'); ?>" method="post">
         <div class="message error"></div>
+
         <!-- HTML input elements here as usual -->
+
         <?php form_token(); ?>
     </form>
 
@@ -34,9 +38,11 @@ Creating A Generic Form Without AJAX
 
 You can make a generic form submission without AJAX using ``class="no-ajax"`` in the ``<form>`` tag. ::
 
-    <form name="yourFormName" id="yourFormId" method="post" class="no-ajax">
+    <form name="your-form-name" id="your-form-id" method="post" class="no-ajax">
         <div class="message error"></div>
+
         <!-- HTML input elements here as usual -->
+
         <?php form_token(); ?>
     </form>
 
@@ -53,24 +59,24 @@ The following is a scaffold of AJAX form handling and validation. You can check 
      */
     $success = false;
 
-    if (sizeof($_POST)) {
-        $post = _post($_POST); // Sanitize your inputs
+    if (_isHttpPost()) {
+        $post = _post(); // Sanitize your inputs
 
         /** Form validation prerequisites here, for example */
         $validations = array(
-            'txtTitle' => array(
+            'title' => array(
                 'caption'   => _t('Title'),
-                'value'     => $post['txtTitle'],
+                'value'     => $post['title'],
                 'rules'     => array('mandatory'),
             ),
-            'txtBody' => array(
+            'body' => array(
                 'caption'   => _t('Body'),
-                'value'     => $post['txtBody'],
+                'value'     => $post['body'],
                 'rules'     => array('mandatory'),
             ),
         );
 
-        if (form_validate($validations) == true) {
+        if (form_validate($validations)) {
             /**
             Database operations here
             */
@@ -88,16 +94,16 @@ The following is a scaffold of AJAX form handling and validation. You can check 
     }
 
     // Respond to the client
-    form_respond('yourFormId'); // HTML form ID must be used here
+    form_respond('your-form-id'); // HTML form ID must be used here
 
-If your form is a generic form without using AJAX, the last line in above code is not required in ``action.php``. Instead, you have to use ``form_respond('yourFormId', validation_get('errors'))`` at the end of the form in ``view.php`` in order to show error messages correctly. ::
+If your form is a generic form without using AJAX, the last line in above code is not required in ``action.php``. Instead, you have to use ``form_respond('your-form-id', validation_get('errors'))`` at the end of the form in ``view.php`` in order to show error messages correctly. ::
 
-    <form name="yourFormName" id="yourFormId" method="post" class="no-ajax">
+    <form name="your-form-name" id="your-form-id" method="post" class="no-ajax">
         <div class="message error"></div>
         <!-- HTML input elements here as usual -->
         <?php form_token(); ?>
     </form>
-    <?php form_respond('yourFormId', validation_get('errors')); ?>
+    <?php form_respond('your-form-id', validation_get('errors')); ?>
 
 Setting Data Validation
 -----------------------
@@ -120,6 +126,9 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
             'extensions' => '', // The required property for the rule 'fileExtension'
             'dateFormat' => '', // The required property for the rule 'date', 'datetime'
             'pattern'    => '', // The required property for the rule 'custom'
+            'table'      => '', // The required property for the rule 'unique'
+            'field'      => '', // The required property for the rule 'unique'
+            'id'         => '', // The optional property for the rule 'unique'
             'parameters' => array(
                 // The arguments (starting from the second) passing to the custom validation functions
                 // this may be needed when you set your custom rule in the property 'rules'
@@ -139,7 +148,7 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
 
 The validation array should be passed to ``form_validate()`` to be processed. ::
 
-    if (form_validate($validations) === true) { // or validation_check($validations)
+    if (form_validate($validations)) { // or validation_check($validations)
         // ...
     }
 
@@ -168,7 +177,7 @@ between
 This rule checks the data for the field is within a range. The required options - min, max. ::
 
     $validations = array(
-        'txtVote' => array( // txtVote is HTML input element name or id
+        'vote' => array( // vote is HTML input element name or id
             'caption' => _t('Vote');
             'value'   => $valueToCheck,
             'rules'   => array('mandatory', 'between'),
@@ -182,7 +191,7 @@ custom
 It is used when a custom regular expression is needed. The required option - ``pattern``. ::
 
     $validations = array(
-        'txtPhone' => array(
+        'phone' => array(
             'caption'  => _t('Phone');
             'value'    => $valueToCheck,
             'rules'    => array('custom'),
@@ -199,7 +208,7 @@ date
 This checks the field is a valid date. The option is ``dateFormat`` - ``y-m-d``, ``d-m-y`` or ``m-d-y`` where separators can be a period, dash, forward slash, but not allowed space. Default is ``y-m-d``. ::
 
     $validations = array(
-        'txtDate' => array(
+        'date' => array(
             'caption'   => _t('Date');
             'value'     => $valueToCheck,
             'rules'     => array('date'),
@@ -212,7 +221,7 @@ datetime
 This checks the field is a valid date and time. The option is ``dateFormat`` - ``y-m-d``, ``d-m-y`` or ``m-d-y`` where separators can be a period, dash, forward slash, but not allowed space. Default is ``y-m-d``. The option ``timeFormat`` can also given - ``12`` or ``24``. See `time <#id6>`_. ::
 
     $validations = array(
-        'txtDate' => array(
+        'date' => array(
             'caption'   => _t('Date');
             'value'     => $valueToCheck,
             'rules'     => array('datetime'),
@@ -225,9 +234,9 @@ domain
 ^^^^^^
 This checks the field is a valid domain (alpha-numeric and dash only). It must start with letters and end with letters or numbers. ::
 
-    $validations = array(
-        'txtSubDomain' => array(
-            'caption'   => _t('Sub-domain');
+    $domain = array(
+        'domain' => array(
+            'caption'   => _t('Domain');
             'value'     => $valueToCheck,
             'rules'     => array('mandatory', 'domain'),
         ),
@@ -238,7 +247,7 @@ email
 This checks the field is a valid email address. ::
 
     $validations = array(
-        'txtEmail' => array(
+        'email' => array(
             'caption'   => _t('Email');
             'value'     => $valueToChecck,
             'rules'     => array('mandatory', 'email'),
@@ -258,7 +267,7 @@ fileMaxDimension
 This rule checks the width and height of the uploaded image file to not exceed the maximum image dimension allowed. The required options are ``maxWidth`` and ``maxHeight`` in pixels. ::
 
     $validations = array(
-        'filLogo' => array(
+        'logo' => array(
             'caption'    => _t('Logo');
             'value'      => $valueToCheck, // $_FILES['logo']
             'rules'      => array('fileExtension', 'fileMaxSize', 'fileMaxDimension'),
@@ -290,8 +299,8 @@ ip
 This rule checks the field is a valid IPv4 or IPv6 address. The required property is ``protocol`` - ``v4``, ``ipv4``, ``v6``, ``ipv6`` or ``both`` (default). ::
 
     $validations = array(
-        'txtIP' => array(
-            'caption'  => _t('IP');
+        'ip_addr' => array(
+            'caption'  => _t('IP Address');
             'value'    => $valueToCheck,
             'rules'    => array('ip'),
             'protocol' => 'ipv4',
@@ -303,12 +312,12 @@ mandatory
 This checks the field is required. ``0`` is allowed. If you don’t want to allow ``0``, use the rule `notAllowZero <#id5>`_ in combination. ::
 
     $validations = array(
-        'txtName' => array(
+        'name' => array(
             'caption'   => _t('Name');
             'value'     => $nameValueToCheck,
             'rules'     => array('mandatory'),
         ),
-        'cboCountry' => array(
+        'country' => array(
             'caption'   => _t('Country');
             'value'     => $countryValueToCheck,
             'rules'     => array('mandatory'),
@@ -324,8 +333,8 @@ This checks at least one field of the field group is required. ::
 
     <!-- HTML -->
     <div id="phones">
-        <input type="text" name="txtPhones[]" />
-        <input type="text" name="txtPhones[]" />
+        <input type="text" name="phones[]" />
+        <input type="text" name="phones[]" />
     <div>
 
     ### PHP ###
@@ -334,7 +343,7 @@ This checks at least one field of the field group is required. ::
     $validations = array(
         'phones[]' => array( // HTML id of the group element
             'caption'   => _t('Phone(s)');
-            'value'     => $post['txtPhones'],
+            'value'     => $post['phones'],
             'rules'     => array('mandatoryOne'),
         ),
     );
@@ -345,8 +354,8 @@ This checks all fields of the field group is required. ::
 
     <!-- HTML -->
     <div id="phones">
-        <input type="text" name="txtPhones[]" />
-        <input type="text" name="txtPhones[]" />
+        <input type="text" name="phones[]" />
+        <input type="text" name="phones[]" />
     <div>
 
     ### PHP ###
@@ -355,7 +364,7 @@ This checks all fields of the field group is required. ::
     $validations = array(
         'phones[]' => array( // HTML id of the group element
             'caption'   => _t('Phone(s)');
-            'value'     => $post['txtPhones'],
+            'value'     => $post['phones'],
             'rules'     => array('mandatoryAll'),
 
 max
@@ -363,7 +372,7 @@ max
 This rule checks the data for the field is equal or less than a specific maximum number. The required option - ``max``. ::
 
     $validations = array(
-        'txtMaxVote' => array(
+        'max_vote' => array(
             'caption' => _t('Max. Vote');
             'value'   => $valueToCheck,
             'rules'   => array('mandatory', 'max'),
@@ -376,7 +385,7 @@ maxLength
 This rule checks the field string length is less than a specific length. The required option - ``max``. ::
 
     $validations = array(
-        'txtPassword' => array(
+        'password' => array(
             'caption' => _t('Password');
             'value'   => $valueToCheck,
             'rules'   => array('mandatory', 'minLength', 'maxLength'),
@@ -390,7 +399,7 @@ min
 This rule checks the data for the field is equal or greater than a specific minimum number. The required option - ``min``. ::
 
     $validations = array(
-        'txtNoOfPage' => array(
+        'no_of_page' => array(
             'caption' => _t('No. of Pages');
             'value'   => $valueToCheck,
             'rules'   => array('min'),
@@ -403,7 +412,7 @@ minLength
 This rule checks the field string length is greater than a specific length. The required option - ``min``. ::
 
     $validations = array(
-        'txtPassword' => array(
+        'password' => array(
             'caption' => _t('Password');
             'value'   => $valueToCheck,
             'rules'   => array('mandatory', 'minLength'),
@@ -444,7 +453,7 @@ time
 This checks the field is a valid 24-hr or 12-hr format. The optional option is ``timeFormat`` - ``12``, ``24`` or ``both`` where ``both`` is default. ::
 
     $validations = array(
-        'txtTime' => array(
+        'time' => array(
             'caption'   => _t('Time');
             'value'     => $valueToCheck,
             'rules'     => array('time'),
@@ -457,7 +466,7 @@ url
 This rule checks for valid URL formats. It supports **http**, **http(s)** and **ftp(s)**. "**www**" must be included. ::
 
     $validations = array(
-        'txtWebsite'  => array(
+        'website'  => array(
             'caption' => _t('Company Website');
             'value'   => $valueToCheck,
             'rules'   => array('url'),
@@ -469,10 +478,25 @@ username
 The rule is used to make sure that the field must not contain any special character, start with letters, end with letters and numbers. It can contain underscores (``_``), dashes (``-``) and periods (``.``) in the middle. ::
 
     $validations = array(
-        'txtUsername' => array(
+        'username' => array(
             'caption'   => _t('Username');
             'value'     => $valueToCheck,
             'rules'     => array('mandatory', 'username'),
+        ),
+    );
+
+unique
+^^^^^^
+The rule is used to check if any duplicate record exists for a specific field in the database. ::
+
+    $validations = array(
+        'username' => array(
+            'caption'   => _t('Username');
+            'value'     => $valueToCheck,
+            'rules'     => array('mandatory', 'username', 'unique'),
+            'table'     => 'user', // table name to check in
+            'field'     => 'username', // the field to be checked
+            'id'        => $id, // Optional: id to be excluded in check
         ),
     );
 
@@ -481,12 +505,13 @@ wholeNumber
 The rule checks the field is a positive integer starting from ``0``. No decimal is allowed. ::
 
     $validations = array(
-        'txtPrice' => array(
+        'price' => array(
             'caption'   => _t('Price');
             'value'     => $valueToCheck,
             'rules'     => array('mandatory', 'wholeNumber'),
         ),
     ); // The error message will be shown as "'Price' should be a positive integer.".
+
 
 Custom Validation Rules
 -----------------------
@@ -496,7 +521,7 @@ In addition to the core validation rules, you could also define your own custom 
 For example, ::
 
     $validations = array(
-        'txtUsername' => array(
+        'username' => array(
             'caption'   => _t('Username');
             'value'     => $valueToCheck,
             'rules'     => array('mandatory', 'username', 'validate_duplicateUsername'),
@@ -535,7 +560,7 @@ Then, you must define a function ``validate_duplicateUsername()`` in ``/app/help
 
 Alternatively, if you don't want to define a function, you could add it right in your form action handling as the code snippet below. In this case, you have to call ``Validation::addError('htmlIdOrName', 'Error message to be shown')``, but it is not recommended. ::
 
-    if (form_validate($validations) == true) {
+    if (form_validate($validations)) {
         $qb = db_count('user')
             ->where()
             ->condition('LOWER(username)', strtolower($value));
