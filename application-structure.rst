@@ -118,17 +118,17 @@ Directory and File Precedence
 
 PHPLucidFrame has directory and file precedence to look for when a page request is made. For example, a request to ``http://www.example.com/post`` or ``http://localhost/acme/post`` will look for the directory and file as the following order:
 
-+----+--------------------------+-------------------------------------------------------------------------------------------+
-|    | File                     | Description                                                                               |
-+====+==========================+===========================================================================================+
-| 1. | /app/post/view.php       | when ``index.php`` doesn't exist in the ``post`` directory                                |
-+----+--------------------------+-------------------------------------------------------------------------------------------+
-| 2. | /app/post/index.php      | when ``index.php`` and ``view.php`` eixst in the post directory                           |
-+----+--------------------------+-------------------------------------------------------------------------------------------+
-| 3. | /app/post.php            | when there is no ``post`` directory with ``view.php``;                                    |
-|    |                          | It is good for implementation without view presentation such API response with json.      |
-|    |                          | ``post.php`` may end up with ``_json(array(...));``                                       |
-+----+--------------------------+-------------------------------------------------------------------------------------------+
++-------+--------------------------+-----------------------------------------------------------------------------------------+
+| Order | File                     | Description                                                                             |
++=======+==========================+=========================================================================================+
+|    1. | /app/post/view.php       | when ``index.php`` doesn't exist in the ``post`` directory                              |
++-------+--------------------------+-----------------------------------------------------------------------------------------+
+|    2. | /app/post/index.php      | when ``index.php`` and ``view.php`` eixst in the post directory                         |
++-------+--------------------------+-----------------------------------------------------------------------------------------+
+|    3. | /app/post.php            | when there is no ``post`` directory with ``view.php``;                                  |
+|       |                          | It is good for implementation without view presentation such as API response with json. |
+|       |                          | ``post.php`` may end up with ``_json(array(...));``                                     |
++-------+--------------------------+-----------------------------------------------------------------------------------------+
 
 Page Workflow
 -------------
