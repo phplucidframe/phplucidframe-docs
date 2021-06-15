@@ -146,7 +146,7 @@ The above two queries would generate the following same query: ::
 Complex condition using AND/OR
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can use ``db_and()`` and ``db_or()`` for complex conditions. Here is an exmaple: ::
+You can use the operator keys, ``$and`` and ``$or``, for complex conditions. Here is an exmaple: ::
 
     $result = db_select('post', 'p')
         ->fields('p')
@@ -155,10 +155,10 @@ You can use ``db_and()`` and ``db_or()`` for complex conditions. Here is an exma
         ->leftJoin('category', 'c', 'p.cat_id = c.id')
         ->where(array(
             'title like' => 'Sample project',
-            db_or(array(
+            '$or' => array(
                 'p.id' => array(1, 2, 3),
                 'u.id' => 1
-            ))
+            )
         ))
         ->orderBy('p.created', 'desc')
         ->limit(0, 20)
@@ -187,14 +187,14 @@ The following is an example for complex nested conditions using AND/OR: ::
         ->leftJoin('category', 'c', 'p.cat_id = c.id')
         ->orWhere(array(
             'p.title nlike' => 'Sample project',
-            db_and(array(
+            '$and' => array(
                 'p.id' => array(1, 2, 3),
                 'p.status <=' => 10,
-                db_or(array(
-                    'p.created >' => '2017-12-31',
+                '$or' => array(
+                    'p.created >' => '2020-12-31',
                     'p.deleted' => null
-                ))
-            ))
+                )
+            )
         ))
         ->orderBy('p.created', 'desc')
         ->limit(5)
@@ -210,7 +210,7 @@ It generates the following query: ::
     OR (
         `p`.`id` IN (1, 2, 3)
         AND `p`.`status` <= 10
-        AND ( `p`.`created` > "2017-12-31" OR `p`.`deleted` IS NULL )
+        AND ( `p`.`created` > "2020-12-31" OR `p`.`deleted` IS NULL )
     )
     ORDER BY `p`.`created` DESC
     LIMIT 5
@@ -366,8 +366,7 @@ You can use aggregate function together like below: ::
 
 This generates: ::
 
-    SELECT MAX(`view_count`) max, MIN(`view_count`) min
-    FROM `post` `p`
+    SELECT MAX(`view_count`) max, MIN(`view_count`) min FROM `post` `p`
 
 .. note::
     - More complex query examples can be found in `https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php <https://github.com/phplucidframe/phplucidframe/blob/master/tests/lib/query_builder.test.php>`_.
