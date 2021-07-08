@@ -6,16 +6,17 @@ PHPLucidFrame provides a basic file upload handling using generic form and AsynF
 File Upload Form and File Handling
 ----------------------------------
 
-PHPLucidFrame provides a basic file upload handling using generic form. First of all, you could define maximum file upload size, upload directory and required dimension (if image upload) in ``/inc/site.config.php``. ::
+PHPLucidFrame provides a basic file upload handling using generic form. First of all, you could define maximum file upload size, upload directory and required dimension (if image upload). ::
 
+    # /inc/constants.php
     define('MAX_FILE_UPLOAD_SIZE', 20); // in MB
 
     define('PHOTO_DIR', FILE . 'photos/'); // assuming that you have this directory
     define('WEB_PHOTO_DIR', WEB_ROOT . 'files/photos/');
 
+    # /app/inc/site.config.php
     // $lc_photoDimensions - desired width and height for the uploaded photos
-    // 3 photos will be uploaded according to the defined dimensions
-    $lc_photoDimensions = array('400x300', '200x150');
+    $lc_photoDimensions = array('400x300', '200x150'); // 3 photos will be uploaded according to the defined dimensions
 
 Since 1.6, a new configuration variable ``$lc_imageFilterSet`` is added. ::
 
@@ -40,6 +41,9 @@ The uploaded images will be stored under the following directories according to 
 .. note::
     - The upload directory must be writable.
 
+Generic File Upload
+-------------------
+
 According to the framework-recommended page structure, you could have the following structure for your file uploading page: ::
 
     /path_to_webserver_document_root
@@ -52,27 +56,23 @@ According to the framework-recommended page structure, you could have the follow
 Your ``/app/photo/index.php`` will look like this: ::
 
     <?php
-    /** app/post/index.php */
+    /** app/photo/index.php */
+
+    $view = _app('view');
 
     $pageTitle = _t('Photo Uploader');
+    _app('title', $pageTitle);
 
-    include('action.php'); // include action.php explicitly
-    ?>
-    <!DOCTYPE html>
-    <html lang="<?php echo _lang(); ?>">
-    <head>
-        <title><?php echo _title($pageTitle); ?></title>
-        <?php include( _i('inc/head.php') ); ?>
-    </head>
-    <body>
-        <?php include('view.php'); ?>
-    </body>
-    </html>
+    // You could have query here to retrieve the existing file upload data from db
+
+    $view->data = array(
+        'pageTitle' => $pageTitle
+    );
 
 Here is how your ``/app/photo/view.php`` will go: ::
 
     <!-- app/photo/view.php -->
-    <form method="post" name="frmPhoto" id="frmPhoto" enctype="multipart/form-data" class="no-ajax">
+    <form method="post" name="form-upload" id="form-upload" enctype="multipart/form-data" class="no-ajax">
         <?php if ($msg = flash_get()) { ?>
             <?php echo $msg; ?>
         <?php } else { ?>
@@ -83,17 +83,17 @@ Here is how your ``/app/photo/view.php`` will go: ::
                 <td class="label"><?php echo _t('Photo'); ?></td>
                 <td class="labelSeparator">:</td>
                 <td class="entry">
-                    <input type="file" name="filPhoto" id="filPhoto" />
+                    <input type="file" name="photo" id="photo" />
                 </td>
             </tr>
             <tr>
                 <td colspan="2"></td>
                 <td class="entry">
-                    <button type="submit" id="btnUpload" name="btnUpload"><?php echo _t('Upload'); ?></button>
+                    <button type="submit" id="btn-upload" name="btn-upload"><?php echo _t('Upload'); ?></button>
                 </td>
             </tr>
         </table>
-        <?php form_respond('frmPhoto', validation_get('errors')); ?>
+        <?php form_respond('form-upload', validation_get('errors')); ?>
     </form>
 
 .. note::
@@ -104,17 +104,12 @@ Finally, you need the form upload process handling in ``/app/photo/action.php`` 
 
     <?php
     /** app/photo/action.php */
-    $success = false;
 
-    if (sizeof($_POST)) {
-        $post = _post($_POST);
-        extract($post);
-
-        # UPLOAD
-        $photo = $_FILES['filPhoto'];
+    if (_isHttpPost()) {
+        $photo = $_FILES['photo'];
 
         $validations = array(
-            'filPhoto' => array(
+            'photo' => array(
                 'caption'       => _t('Photo'),
                 'value'         => $photo,
                 'rules'         => array('mandatory', 'fileExtension', 'fileMaxSize'),
@@ -126,13 +121,15 @@ Finally, you need the form upload process handling in ``/app/photo/action.php`` 
             ),
         ),
 
-        if (Validation::check($validations) == true) {
+        if (form_validate($validations)) {
             $file = _fileHelper();
+
             // set image dimension to resize
             $file->set('dimensions', _cfg('photoDimension'));
-            // set file upload directory; default to `/files/tmp/`
-            // this should be defined in site.config.php
-            $file->set('uploadDir', PHOTO_DIR); // optional
+
+            // set file upload directory; this should be defined in /inc/constants.php
+            $file->set('uploadDir', PHOTO_DIR); // optional; default to `/files/tmp/`
+
             // image resize mode:
             // FILE_RESIZE_BOTH (by default) - resize to the fitted dimension to the given dimension
             // FILE_RESIZE_WIDTH - resize to the given width, but height is aspect ratio of the width
@@ -152,20 +149,21 @@ Finally, you need the form upload process handling in ``/app/photo/action.php`` 
             */
             if ($uploads) {
                 $data = array(
-                    'filename' => $uploads['fileName'];
+                    'image' => $uploads['fileName'];
                 );
 
-                if (db_insert('your_table', $data, false)) {
-                    $success = true;
+                if (db_save('your_table', $data)) {
                     form_set('success', true);
                     flash_set(_t('The photo has been uploaded.'));
+
                     _redirect(); // or _redirect('self')
                     // redirect to the current page itself
                     // and will show the flash message set above.
                 }
             } else {
                 $error = $file->getError();
-                Validation::addError('filPhoto', $error['message']);
+                Validation::addError('photo', $error['message']);
+
                 form_set('error', validation_get('errors'));
             }
         } else {
@@ -178,92 +176,102 @@ AsynFileUploader (Asynchronous File Uploader)
 
 The file helper in the previous section is not compatible with AJAX form. Since version 1.3, PHPLucidFrame added a new feature "**AsynFileUploader**" that helps you to upload a file in smarter way with instant preview and that is compatible with AJAX form.
 
-Firstly, you can have a few image-related configurations in ``/inc/site.config.php`` or ``/app/inc/site.config.php`` as described in the previous section `File Upload Form and File Handling <#file-upload-form-and-file-handling>`_.
+Firstly, you can have a few image-related configurations in ``/app/inc/site.config.php`` as described in the previous section `File Upload Form and File Handling <#file-upload-form-and-file-handling>`_.
 
-Create an instance of the class **AsynFileUploader** and call its method ``html()`` at where you want to display the file uploader. Normally it is in your view layer, for example, `/app/example/asyn-file-uploader/view.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/view.php>`_. ::
+Create an instance of the class **AsynFileUploader** in ``/app/photo/index.php`` and pass it to view. For example, see `/app/example/asyn-file-uploader/index.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/index.php>`_.::
 
-    <form id="frmAsynFileUpload" method="post">
+    <?php
+    /** app/photo/index.php */
+
+    $view = _app('view');
+
+    $pageTitle = _t('AsynFileUploader');
+    _app('title', $pageTitle);
+
+    # The constructor argument
+    # string/array The input file name or The array of property/value pairs
+    $photo = _asynFileUploader('photo');
+
+    # Button caption; default to "Choose File"
+    $photo->setCaption('Choose Image');
+
+    # Max file upload size; default to 10MB
+    $photo->setMaxSize(MAX_FILE_UPLOAD_SIZE);
+
+    # Image dimension to resize
+    # $lc_photoDimensions could be defined in /app/inc/site.config.php (see in the previous section).
+    # This is not required for the non-image file uploads
+    $photo->setDimensions($lc_photoDimensions);
+
+    # Allowed file extensions; default to any file
+    $photo->setExtensions(array('jpg', 'jpeg', 'png', 'gif'));
+
+    # The file uploaded directory; default to /files/tmp
+    # PHOTO_DIR could be defined in /app/inc/site.config.php (see in the previous section).
+    $photo->setUploadDir(PHOTO_DIR);
+
+    # The button #btnSubmit will be disabled while the upload is in progress
+    $photo->setButtons('btn-upload');
+
+    # The uploaded file name is displayed or not below the file upload button; default is true
+    $photo->isFileNameDisplayed(false);
+
+    # The uploaded file name is allowed to delete or not; default is true;
+    # The delete icon will be displayed when it is true
+    $photo->isDeletable(false);
+
+    # The OnUpload hook which could be defined in /app/helpers/file_helper.php
+    # This hook runs when the file is uploaded (See The onUpload hook section)
+    $photo->setOnUpload('example_photoUpload');
+
+    # The OnDelete hook which could be defined in /app/helpers/file_helper.php
+    # This hook runs when the file is delete (See The onDelete hook section)
+    $photo->setOnDelete('example_photoDelete');
+
+    // You could have query here to retrieve the existing file upload data from db
+
+    # If there is any previously uploaded file, set it using setValue()
+    # @see /app/example/asyn-file-uploader/index.php
+    # @see /app/example/asyn-file-uploader/view.php
+    if (!empty($image)) {
+        $photo->setValue($image->pimgFileName, $image->pimgId);
+    }
+
+    $view->data = array(
+        'pageTitle' => $pageTitle,
+        'photo' => $photo
+    );
+
+Call the instance method ``html()`` at where you want to display the file uploader. Normally it is in your view layer, for example, `/app/example/asyn-file-uploader/view.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/view.php>`_. ::
+
+    <form id="form-async-upload" method="post">
         <div class="message error"></div>
         <div class="table">
             <div class="row">
-                <?php
-                # The constructor argument
-                # string/array The input file name or The array of property/value pairs
-                $file = _asynFileUploader('photo');
-
-                # Button caption; default to "Choose File"
-                $file->setCaption('Choose Image');
-
-                # Max file upload size; default to 10MB
-                $file->setMaxSize(MAX_FILE_UPLOAD_SIZE);
-
-                # Image dimension to resize
-                # $lc_photoDimensions could be defined in /inc/site.config.php (see in the previous section).
-                # This is not required for the non-image file uploads
-                $file->setDimensions($lc_photoDimensions);
-
-                # Allowed file extensions; default to any file
-                $file->setExtensions(array('jpg', 'jpeg', 'png', 'gif'));
-
-                # The file uploaded directory; default to /files/tmp
-                # PHOTO_DIR could be defined in /inc/site.config.php (see in the previous section).
-                $file->setUploadDir(PHOTO_DIR);
-
-                # The button #btnSubmit will be disabled while the upload is in progress
-                $file->setButtons('btnSubmit');
-
-                # The uploaded file name is displayed or not below the file upload button; default is true
-                $file->isFileNameDisplayed(false);
-
-                # The uploaded file name is allowed to delete or not; default is true;
-                # The delete icon will be displayed when it is true
-                $file->isDeletable(false);
-
-                # The OnUpload hook which could be defined in /app/helpers/file_helper.php
-                # This hook runs when the file is uploaded
-                $file->setOnUpload('example_photoUpload');
-
-                # The OnDelete hook which could be defined in /app/helpers/file_helper.php
-                # This hook runs when the file is delete
-                $file->setOnDelete('example_photoDelete');
-
-                # If there is any previously uploaded files, set them using setValue()
-                # $images could be retrieved in query.php
-                # @see /app/example/asyn-file-uploader/query.php
-                # @see /app/example/asyn-file-uploader/view.php
-                if (isset($images) && $images) {
-                    # $image is retrieved in query.php
-                    $file->setValue($image->pimgFileName, $image->pimgId);
-                }
-
-                $file->html();
-                ?>
+                <?php $photo->html() ?>
             </div>
             <div class="row">
-                <input type="submit" id="btnSubmit" name="btnSubmit" value="<?php echo _t('Submit'); ?>" class="button green" />
+                <input type="submit" id="btn-upload" name="btn-upload" value="<?php echo _t('Submit'); ?>" class="button green" />
             </div>
         </div>
         <?php form_token(); ?>
     </form>
 
-As the form In the above coding is attached to AJAX and the form action attribute is not explicitly defined, it will submit to action.php in the same level directory when the button ``#btnSubmit`` is clicked, for example, `/app/example/asyn-file-uploader/action.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/action.php>`_.
+As the form In the above coding is attached to AJAX and the form action attribute is not explicitly defined, it will submit to action.php in the same level directory when the button ``#btn-upload`` is clicked, for example, `/app/example/asyn-file-uploader/action.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/example/asyn-file-uploader/action.php>`_.
 
 The following is an example code for the possible ``action.php`` where you will have to use the name which you provided to the **AsynFileUploader** constructor in the previous code example, i.e., photo. LucidFrame automatically adds some  additional file upload information upon form submission that you can get them from the ``POST`` array. See the code below. ::
 
     <?php
-    $success = false;
+    /** app/photo/action.php */
 
-    if (sizeof($_POST)) {
-        $post = _post($_POST);
+    if (_isHttpPost()) {
+        $post = _post();
 
         $validations = array(
             'photo' => array(
                 'caption' => _t('Image') ,
                 'value' => $post['photo'],
-                'rules' => array(
-                    'mandatory'
-
-                ) ,
+                'rules' => array('mandatory') ,
             )
         );
 
@@ -276,10 +284,13 @@ The following is an example code for the possible ``action.php`` where you will 
             // $post['photo-dir']        = The directory where the file(s) are saved, encoded by base64_encode()
             // $post['photo-fileName']   = The same value of $post['photo']
             // $post['photo-anyKey']     = if you set it using AsynFileUploader->setHidden('anyKey', 'anyValue')
-            // ## Do database operation here ###
 
-            $success = true;
-            if ($success) {
+            // ## Do database operation here ###
+            $data = array(
+                'image' => $post['photo'];
+            );
+
+            if (db_save('your_table', $data)) {
                 form_set('success', true);
                 form_set('message', _t('The photo has been saved.'));
             }
@@ -288,7 +299,7 @@ The following is an example code for the possible ``action.php`` where you will 
         }
     }
 
-    form_respond('frmAsynFileUpload');
+    form_respond('form-async-upload');
 
 PHP Hooks for AsynFileUploader
 ------------------------------
@@ -324,6 +335,34 @@ The hook is to do database operation regarding to the uploaded files and it runs
 
 The hook must return an array of IDs.
 
+For example, assuming that ``post`` table has ``image`` field which stores an uploaded image file name, that field will be updated when a new image is uploaded for an existing post by using ``onUpload`` hook as below: ::
+
+    // app/post/index.php
+    $post = db_find('post', $id);
+
+    $image = _asynFileUploader('image');
+    $image->setOnUpload('post_imageUpload');
+    $image->setHidden('postId', $post->id); // This will be available to the second argument (array) to post_imageUpload() as key "image-postId"
+    if ($post->image) {
+        $image->setValue($post->image, $post->id);
+    }
+
+    // app/helpers/file_helper.php
+    function post_imageUpload($file, $post)
+    {
+        if (isset($post['image-postId']) && $post['image-postId']) {
+            # Save new file names in db
+            db_update('post', array(
+                'id' => $post['image-postId'],
+                'image' => $file['fileName']
+            ), $useSlug = false);
+
+            return $post['photo-postId'];
+        }
+
+        return 0;
+    }
+
 The onDelete hook
 ^^^^^^^^^^^^^^^^^
 
@@ -334,6 +373,31 @@ This hook is to do database operation regarding to the deleted files. It runs wh
 +===============+===========+===============================================================================================================================+
 | Argument 1    | mixed     | The ID related to the file deleted to delete from the database table.                                                         |
 +---------------+-----------+-------------------------------------------------------------------------------------------------------------------------------+
+
+For example, assuming that ``post`` table has ``image`` field which stores an uploaded image file name, that field will be nulled when the image is deleted by using ``onDelete`` hook as below: ::
+
+    // app/post/index.php
+    $post = db_find('post', $id);
+
+    $image = _asynFileUploader('image');
+    $image->setOnDelete('post_imageDelete');
+    if ($post->image) {
+        $image->setValue($post->image, $post->id);
+        // The second arugment to setValue() will be avaialble to the onDelete hook post_imageDelete()
+    }
+
+    // app/helpers/file_helper.php
+    function post_imageDelete($id)
+    {
+        if ($id) {
+            return db_update('post', array(
+                'id' => $id,
+                'image' => null,
+            ));
+        }
+
+        return false;
+    }
 
 .. note::
     - See `the example code at /app/helpers/file-helper.php <https://github.com/phplucidframe/phplucidframe/blob/master/app/helpers/file_helper.php>`_.
