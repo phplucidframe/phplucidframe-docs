@@ -188,4 +188,4 @@ Then, you can include header and footer files by using ``_app('view')->block('fi
 If you want to disable layout mode for a particular page only. You can add ``_cfg('layoutMode', false);`` at the top of ``index.php`` of the page folder.
 
 .. note::
-    - Layout mode disabled is a legacy way and not recommended since version 3.0. You can check the version 2 documentation about application structure at `<https://phplucidframe.readthedocs.io/en/v2.2.0/application-structure.html>`_
+    - The disabled layout mode is a legacy way and not recommended since version 3.0. You can check the version 2 documentation about application structure at `<https://phplucidframe.readthedocs.io/en/v2.2.0/application-structure.html>`_

@@ -35,8 +35,6 @@ User authentication is one of the critical parts of almost every web application
         */
     );
 
-You can update it in ``config.php`` (copy of ``config.default.php``) or you can copy it to ``/inc/site.config.php`` (copy of ``site.config.default.php``) and override it.
-
 Hashing Passwords
 -----------------
 
@@ -49,29 +47,34 @@ When validating user input password in log-in process, you should also use ``_en
 Logging In and Logging Out
 --------------------------
 
-Upon user login form handling of the user inputs, you could query and get the authenticate user id and then you could pass it to ``auth_create()``. You are suggested to check the example codes (``/app/admin/login``) in the release. ::
+Upon user login form handling of the user inputs, you could query and get the authenticate user id and then you could pass it to ``auth_create()``. ::
 
     auth_create($theUserID);
 
-It will load all of data from the table configured in ``$lc_auth`` for the given authenticated user and make it available in the global object ``$_auth``. You can also get it from ``auth_get()``.
+It will load all of data from the table configured in ``$lc_auth`` for the given authenticated user and make it available as an object accessible from ``_app('auth')``. You can also get it from ``auth_get()``.
 
 If you already have all of your user data, you can pass it to ``auth_create()`` as second argument. It is useful for multiple table joined result of your user data. The configuration in ``$lc_auth`` works only for one table. ::
 
     auth_create($theUserID, $theUserDataObject);
 
-Besides the user data result available as properties in the returning ``$_auth`` object, it also contains session id, timestamp and permissions:
+Besides the user data result available as properties in the returning auth object from ``_app('auth')``, it also contains session id, token and permissions:
 
-- ``$_auth->sessId`` - The session id for the current session returning from ``session_id()``.
-- ``$_auth->timestamp`` - The created date/time of this authentication object
-- ``$_auth->permissions`` - The permissions allowed according to the defined role and perms in ``$lc_auth``.
-- ``$_auth->blocks`` - The permissions blocked according to the defined role and block in ``$lc_auth``.
+- ``_app('auth')->sessId`` - The session id for the current session returning from ``session_id()``.
+- ``_app('auth')->token`` - The generated token of the authentication object
+- ``_app('auth')->permissions`` - The permissions allowed according to the defined role and perms in ``$lc_auth``.
+- ``_app('auth')->blocks`` - The permissions blocked according to the defined role and block in ``$lc_auth``.
 
-Sometimes, you may need to update the ``$_auth`` object for the user data changes, for example, user’s name changed. For that case, you can use ``auth_set()`` by passing the updated user data object. ::
+Sometimes, you may need to update the auth object for the user data changes, for example, user’s name changed. For that case, you can use ``auth_set()`` by passing the updated user data object. ::
 
-    $_auth->fullname = $theUpdatedFullName;
-    auth_set($_auth);
+    $auth = _app('auth');
+    $auth->fullname = $theUpdatedFullName;
+    auth_set($auth);
 
-The function ``auth_clear()`` is available for use to destroy the current session and to allow user signed out. You can check the sample code ``/app/admin/logout`` in the release.
+The function ``auth_clear()`` is available for use to destroy the current session and to allow user signed out.
+
+.. note::
+    - For login sample code, see `https://github.com/phplucidframe/admin-boilerplate/tree/master/login <https://github.com/phplucidframe/admin-boilerplate/tree/master/login>`_.
+    - For logout sample code, see `https://github.com/phplucidframe/admin-boilerplate/blob/master/logout/index.php <https://github.com/phplucidframe/admin-boilerplate/blob/master/logout/index.php>`_.
 
 Checking Anonymous User or Logged-in User
 -----------------------------------------
@@ -93,13 +96,21 @@ Access Control with Permissions and User Roles
 
 You might assign specific permissions to each user role in the configuration ``$lc_auth['fields']['role']`` and ``$lc_auth['perms']`` to fine tune the security, use and administration of the site.
 
-PHPLucidFrame allows you to check the authenticate user is belong to a particular user role by using ``auth_role()`` and allows you to check the user is accessible to a particular page or section by using ``auth_access()``, for example, ::
+PHPLucidFrame allows you to check the authenticate user is belong to a particular user role by using ``auth_role()`` or multiple user roles by using ``auth_roles()``, for example, ::
 
     if (auth_role('editor')) {
         // if user is editor, do something
     } else {
         // redirect to the access-denied page
     }
+
+    if (auth_roles('admin', 'editor')) {
+        // if user is admin or editor, do something
+    } else {
+        // redirect to the access-denied page
+    }
+
+And it also allows you to check the user is accessible to a particular page or section by using ``auth_access()``, for example, ::
 
     if (auth_access('content-delete')) {
         // if user has permission to delete content, do content delete
@@ -125,10 +136,40 @@ You could define custom wrapper functions in ``/app/helpers/auth_helper.php`` fo
         return auth_role('editor');
     }
 
-You can also check the URL routing path to not allow user access to a page. You are suggested to check the code sample /app/admin/inc/authenticate.php in the release. ::
+You can also check the URL route path or name to prevent the user from being accessed to a page or a function. You can implement this as middleware. The following middleware will be invoked in all routes under ``/admin`` except ``/admin/login`` and ``/admin/logout`` ::
 
-    // Let's say the current URL is http://www.example.com/admin/post/edit/99
-    if (auth_role('editor') && _arg(1) == 'post' && _arg(2) == 'edit') {
-        // redirect to the access-denied page
-        // the editor is not allowed to access this page.
+    // app/middleware/auth.php
+
+    $baseDir = _cfg('baseDir'); // Let says _cfg('baseDir') is '/admin'
+
+    if (route_start($baseDir, array($baseDir . 'login', $baseDir . 'logout'))) {
+        _middleware(function () {
+            if (auth_isAnonymous()) {
+                flash_set('You are not authenticated. Please log in.', '', 'error');
+                _redirect$baseDir . '/login');
+            }
+        });
+    }
+
+The following example is to allow post delection for admin only. ::
+
+    // app/middleware/auth.php
+
+    if (route_name() == 'post_delete') {
+        _middleware(function () {
+            if (!auth_role('admin')) {
+                _page403();
+            }
+        });
+    }
+
+
+The following example is to allow users section (all routes containing a URI segment "users") for admin only. ::
+
+    if (route_contain('users')) {
+        _middleware(function () {
+            if (!auth_role('admin')) {
+                _page403();
+            }
+        });
     }
