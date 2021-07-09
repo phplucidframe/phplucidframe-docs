@@ -16,11 +16,11 @@ This produces this help message: ::
 
     PHPLucidFrame 3.0.0 by Sithu K.
 
-    2.2.0
-    PHP Version: 5.6.23
+    3.0.0
+    PHP Version: 7.3.5
     The MIT License
     Simple, lightweight & yet powerful PHP Application Framework
-    Copyright (c) 2014-2017, phplucidframe.com
+    Copyright (c) 2014-2021, phplucidframe.com
 
 Running a Built-in Command
 --------------------------
