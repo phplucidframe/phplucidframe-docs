@@ -1,7 +1,7 @@
 Pagination
 ==========
 
-Listings with pagination are required in most of applications. PHPLucidFrame provides two ways of creating listings - with AJAX and without AJAX. There are two configuration variables in ``/inc/site.config.php`` which will be used here. ::
+Listings with pagination are required in most of applications. PHPLucidFrame provides two ways of creating listings - with AJAX and without AJAX. There are two configuration variables in ``/app/inc/site.config.php`` which will be used here. ::
 
     # $lc_pageNumLimit: number of page numbers to be shown in pager
     $lc_pageNumLimit = 10;
@@ -17,20 +17,25 @@ We start by getting the number of total records which is expected by the class P
         ->where()->condition('deleted', null)
         ->fetch();
 
-Once we retrieved the number of total records, we can create an instance from the Pager class. By default, the helper uses the query string for the current page number page. We can customize it by passing the name to the constructor like new ``Pager('pg')``.
+Once we retrieved the number of total records, we can create an instance from the Pager class. There is a helper function `_pager()` to create a Pager instance. By default, the field name ``page`` is used in query string for the current page number. We can customize it by passing the name to the function such as ``_pager('p')``.
 
 The instance looks for the number of records per page ``$lc_itemsPerPage`` and the number of page limit ``$lc_pageNumLimit``. The total number of records has to be set to the instance as well. If we use images for navigation arrows, we can set the image directory path to the ``imagePath`` property of the instance, but we can also make them from CSS.
 
 To incorporate AJAX functionality into pagination, you can make it easily by setting the ajax property to true. The ``calculate()`` method has to be invoked to calculate offset. ::
 
     # Prerequisite for the Pager
-    $pager = _pager();
-    $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
-    $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
-    $pager->set('total', $totalCount);                 // the total record count
-    $pager->set('imagePath', WEB_ROOT.'images/pager/');// optional; if you use images for pagination
-    $pager->set('ajax', true);                         // flag this is AJAX-enabled list
-    $pager->calculate();                               // required to calculate offset
+    $pager = _pager()
+        ->set('itemsPerPage', _cfg('itemsPerPage'))     // $lc_itemsPerPage
+        ->set('pageNumLimit', _cfg('pageNumLimit'))     // $lc_pageNumLimit
+        ->set('total', $totalCount)                     // the total record count fetched earlier
+        ->set('ajax', true)                             // flag as AJAX-enabled list
+        ->set('imagePath', WEB_ROOT . 'images/pager/')  // optional; if you use images for pagination
+        ->calculate()                                   // required to calculate offset
+
+However, you can minimize your code when you don't need to customize your pagination settings. The following one-line is equivalent to a couple of lines aforementioned. ::
+
+    # Prerequisite for the Pager
+    $pager = pager_ajax($totalCount);
 
 Then, we can use ``$pager->get('offset')`` and ``$pager->get('itemsPerPage')`` in our query ``LIMIT`` clause. ::
 
@@ -162,41 +167,30 @@ According to the framework-recommended page structure, you could have the follow
                 |-- list.php
                 |-- view.php
 
-In you ``/app/post/view.php`` you need to create an empty HTML container which AJAX will respond HTML to. ::
-
-    <!-- app/post/view.php -->
-    <?php include( _i('inc/header.php') ); ?>
-
-    <h3><?php echo $pageTitle; ?></h3>
+In you ``/app/post/view.php`` you need to add an empty HTML container which AJAX will respond HTML to. ::
 
     <div id="list"></div> <!-- #list will be a first parameter to Page.request(). See later -->
-
-    <?php include( _i('inc/footer.php') ); ?>
 
 Create a small javascript snippet in your ``/app/js/app.js``. ::
 
     /** app/js/app.js */
     LC.Page.Post = {
-        url : LC.Page.url('post'), /* mapping directory */
+        url : LC.Page.url(LC.vars.baseDir + '/post'), /* mapping directory */
+
         /* Initialization of the Post page */
         init : function() {
             LC.Page.Post.list();
         },
+
         list : function() {
             /* LC.Page.request('HTML container ID', 'Requested URL', 'Optional Parameter in JSON {}'); */
-            LC.Page.request('list', Page.Post.url + 'list.php');
+            LC.Page.request('list', Page.Post.url);
         }
     }
 
 Call the script at the end of ``/app/post/view.php`` ::
 
-    <?php include( _i('inc/header.php') ); ?>
-
-    <h3><?php echo $pageTitle; ?></h3>
-
-    <div id="list"></div> <!-- #list will be a first parameter to Page.request(). See later -->
-
-    <?php include( _i('inc/footer.php') ); ?>
+    <div id="list"></div>
 
     <script type="text/javascript">
         $(function() {
@@ -209,7 +203,7 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
     <?php
     /** app/post/list.php */
 
-    $get = _get($_GET);
+    $get = _get();
 
     # Count query for the pager
     $totalCount = db_count('post')
@@ -217,13 +211,7 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
         ->fetch();
 
     # Prerequisite for the Pager
-    $pager = _pager();
-    $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
-    $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
-    $pager->set('total', $totalCount);                 // the total record count
-    $pager->set('imagePath', WEB_ROOT.'images/pager/');// optional; if you use images for pagination
-    $pager->set('ajax', true);                         // flag this is AJAX-enabled list
-    $pager->calculate();                               // required to calculate offset
+    $pager = pager_ajax();
 
     $qb = db_select('post', 'p')
         ->where()->condition('p.deleted', null)
@@ -244,50 +232,31 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
             </p>
         <?php } // while end ?>
         <!-- display the pager where you want to appear -->
-        <div class="pager clearfix">
-            <?php echo $pager->display(); ?>
-            <div class="pagerRecords"><?php echo _t('Total %d records', $totalCount); ?></div>
-        </div>
+        <div class="pager-container"><?php echo $pager->display() ?></div>
     <?php } else { ?>
-        <div class="noRecord"><?php echo _t('There is no record.'); ?></div>
+        <div class="no-record"><?php echo _t('There is no record.') ?></div>
     <?php } ?>
 
 Create a Generic Listing Page without AJAX
 ------------------------------------------
 
-Sometimes, you may not want to use AJAX list. You can easily disable LucidFrame pagination helper for AJAX. In this case, you don’t need to have ``/app/post/list.php`` like in the above example. Instead, you should have ``/app/post/query.php``. Retrieve your data in ``query.php`` and then render your HTML in ``/app/post/view.php``. ::
+Sometimes, you may not want to use AJAX list. You can easily disable LucidFrame AJAX pagination option. In this case, you don’t need to have ``/app/post/list.php`` like in the above example. ::
 
     /path_to_webserver_document_root
         /app
             /post
                 |-- index.php
-                |-- query.php
                 |-- view.php
 
-Include ``query.php`` in your ``/app/post/index.php`` like below. You don’t need to write Javascript in this case. ::
+Retrieve your data in ``index.php`` and then render your HTML in ``/app/post/view.php``. You don’t need to write Javascript in this case. ::
 
     <?php
     /** app/post/index.php */
 
     $pageTitle = _t('Latest Posts');
+    $view = _app('view');
 
-    include('query.php');
-    ?>
-    <!DOCTYPE html>
-    <html lang="<?php echo _lang(); ?>">
-    <head>
-        <title><?php echo _title($pageTitle); ?></title>
-        <?php include( _i('inc/head.php') ); ?>
-    </head>
-    <body>
-        <?php include('view.php'); ?>
-    </body>
-    </html>
-
-In ``query.php``, retrieve and paginate your data. ::
-
-    <?php
-    /** app/post/query.php */
+    _app('title', $pageTitle);
 
     # Count query for the pager
     $totalCount = db_count('post')
@@ -295,46 +264,89 @@ In ``query.php``, retrieve and paginate your data. ::
         ->fetch();
 
     # Prerequisite for the Pager
-    $pager = _pager();
-    $pager->set('itemsPerPage', _cfg('itemsPerPage')); // $lc_itemsPerPage
-    $pager->set('pageNumLimit', _cfg('pageNumLimit')); // $lc_pageNumLimit
-    $pager->set('total', $totalCount);                 // the total record count
-    $pager->set('imagePath', WEB_ROOT.'images/pager/');// optional; if you use images for pagination
-    $pager->set('ajax', false);                        // trun off AJAX
-    $pager->calculate();                               // required to calculate offset
+    $pager = _pager()
+        ->set('itemsPerPage', _cfg('itemsPerPage'))     // $lc_itemsPerPage
+        ->set('pageNumLimit', _cfg('pageNumLimit'))     // $lc_pageNumLimit
+        ->set('total', $totalCount)                     // the total record count fetched earlier
+        ->set('ajax', false);                           // optional; trun off AJAX (it is default)
+        ->set('imagePath', WEB_ROOT . 'images/pager/')  // optional; if you use images for pagination
+        ->calculate()                                   // required to calculate offset
+
+    # OR just one-line
+    // $pager = pager_ordinary();
 
     $qb = db_select('post', 'p')
         ->where()->condition('p.deleted', null)
         ->orderBy('p.created', 'DESC')
         ->limit($pager->get('offset'), $pager->get('itemsPerPage'));
 
+    # Pass data to the view layer
+    $view->data = array(
+        'pageTitle'     => $pageTitle,
+        'totalCount'    => totalCount
+        'pager'         => $pager,
+        'qb'            => $qb,
+    );
+
 Finally, your ``view.php`` will look like this: ::
 
     <!-- app/post/view.php -->
-    <?php include( _i('inc/header.php') ); ?>
 
     <h3><?php echo $pageTitle; ?></h3>
     <div id="list">
-    <?php if ($totalCount) { ?>
-        <?php while ($row = $qb->fetchRow()) { ?>
-            <p class="post">
-                <h5>
-                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>"><?php echo $row->title; ?></a>
-                </h5>
-                <p><?php echo $b->body; ?></p>
-                <p>
-                    <a href="<?php echo _url('post', array($row->id, $row->slug)); ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
+        <?php if ($totalCount) { ?>
+            <?php while ($row = $qb->fetchRow()) { ?>
+                <p class="post">
+                    <h5>
+                        <a href="<?php echo _url('post', array($row->id, $row->slug)) ?>"><?php echo $row->title; ?></a>
+                    </h5>
+                    <p><?php echo $b->body; ?></p>
+                    <p>
+                        <a href="<?php echo _url('post', array($row->id, $row->slug)) ?>" class="button mini green"><?php echo _t('Read More'); ?></a>
+                    </p>
                 </p>
-            </p>
-        <?php } // while end ?>
-        <!-- display the pager where you want to appear -->
-        <div class="pager clearfix">
-            <?php echo $pager->display(); ?>
-            <div class="pagerRecords"><?php echo _t('Total %d records', $totalCount); ?></div>
-        </div>
-    <?php } else { ?>
-        <div class="noRecord"><?php echo _t('There is no record.'); ?></div>
-    <?php } ?>
+            <?php } // while end ?>
+            <!-- display the pager where you want to appear -->
+            <div class="pager-container clearfix">
+                <?php echo $pager->display(); ?>
+                <div class="pager-records"><?php echo _t('Total %d records', $totalCount); ?></div>
+            </div>
+        <?php } else { ?>
+            <div class="no-record"><?php echo _t('There is no record.'); ?></div>
+        <?php } ?>
     </div>
 
-    <?php include( _i('inc/footer.php') ); ?>
+Customize Pagination Display
+----------------------------
+
+As of version 3.0, you can pass a callack function name to the ``display()`` method of Pager instance, for example, ::
+
+    <?php echo $pager->display('pager_custom') ?>
+
+You need to define your custom pager function ``pager_custom()`` in ``/app/helpers/pager_helper.php``. The function will receive an array parameter. ::
+
+    function pager_custom($result)
+    {
+        # The outermost container must have "lc-pager" class for AJAX pagination
+        // return HTML output for your custom pagination
+    }
+
+The parameter to ``pager_custom()`` will have this array structure: ::
+
+    Array(
+        [offset] => xx
+        [thisPage] => xx
+        [beforePages] => Array()
+        [afterPages] => Array()
+        [firstPageEnable] => xx
+        [prePageEnable] => xx
+        [nextPageNo] => xx
+        [nextPageEnable] => xx
+        [lastPageNo] => xx
+        [lastPageEnable] => xx
+        [url] => xx
+        [ajax] => 1 or 0
+    )
+
+.. note::
+    - PHPLucidFrame 3.0 included a pagination helper ``pager_bootstrap()`` in ``/app/helpers/pager_helper.php``. You can use it to display boostrap-styled pagination or you can see the code as reference for your custom pagination callback function.
