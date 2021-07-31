@@ -142,34 +142,28 @@ You can also check the URL route path or name to prevent the user from being acc
 
     $baseDir = _cfg('baseDir'); // Let says _cfg('baseDir') is '/admin'
 
-    if (route_start($baseDir, array($baseDir . 'login', $baseDir . 'logout'))) {
-        _middleware(function () {
-            if (auth_isAnonymous()) {
-                flash_set('You are not authenticated. Please log in.', '', 'error');
-                _redirect$baseDir . '/login');
-            }
-        });
-    }
+    _middleware(function () {
+        if (auth_isAnonymous()) {
+            flash_set('You are not authenticated. Please log in.', '', 'error');
+            _redirect$baseDir . '/login');
+        }
+    })->on('startWith', $baseDir)
+        ->on('except', array($baseDir . 'login', $baseDir . 'logout'));
 
 The following example is to allow post delection for admin only. ::
 
     // app/middleware/auth.php
 
-    if (route_name() == 'post_delete') {
-        _middleware(function () {
-            if (!auth_role('admin')) {
-                _page403();
-            }
-        });
-    }
-
+    _middleware(function () {
+        if (!auth_role('admin')) {
+            _page403();
+        }
+    })->on('equal', 'post_delete');
 
 The following example is to allow users section (all routes containing a URI segment "users") for admin only. ::
 
-    if (route_contain('users')) {
-        _middleware(function () {
-            if (!auth_role('admin')) {
-                _page403();
-            }
-        });
-    }
+    _middleware(function () {
+        if (!auth_role('admin')) {
+            _page403();
+        }
+    })->on('contain', 'users');

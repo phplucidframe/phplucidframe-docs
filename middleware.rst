@@ -27,6 +27,23 @@ An `after` middleware is an event executed after a request. Here is its definiti
         // Do something at the end of the page request
     }, 'after');
 
+Assigning Middleware to Routes
+------------------------------
+
+A middleware is run during every HTTP request to your application by default. However, you can assign middleware to specific routes using the ``on()`` method. The first parameter to the ``on()`` method is filter name and the second parameter is any route paths or route names.
+
++-------------+--------------------------------------------------------------------------+----------------------------------+
+| Filter Name | Description                                                              | Example                          |
++=============+==========================================================================+==================================+
+| startWith   | To run the middleware on the route starting with the given URI           |``->on('startWith', 'api')``      |
++-------------+--------------------------------------------------------------------------+----------------------------------+
+| contain     | To run the middleware on the route containing the given URI              |``->on('contain', 'api/posts')``  |
++-------------+--------------------------------------------------------------------------+----------------------------------+
+| equal       | To run the middleware on the route equal to the given route name or path |``->on('equal', 'lc_blog_show')`` |
++-------------+--------------------------------------------------------------------------+----------------------------------+
+| except      | To run the middleware on the routes except the given list                |``->on('except', 'login')``       |
++-------------+--------------------------------------------------------------------------+----------------------------------+
+
 .. note::
     - You can check some example middlewares at `<https://github.com/phplucidframe/phplucidframe/blob/master/app/middleware/example.php>`_
 
@@ -34,20 +51,20 @@ Let's create a middleware ``/app/middleware/auth.php`` that contains the followi
 
     <?php
 
-    if (route_start('admin')) {
-        /**
-         * This is an example middleware running before every page request
-         * that route starts with "admin"
-         */
-        _middleware(function () {
-            // set flash message and redirect to the login page if user is anonymous
-            if (auth_isAnonymous()) {
-                flash_set('You are not authenticated. Please log in.', '', 'error');
-                _redirect('login');
-            }
+    /**
+      * This is an example middleware running before every page request
+      * that route starts with "admin"
+      */
+    _middleware(function () {
+        // set flash message and redirect to the login page if user is anonymous
+        if (auth_isAnonymous()) {
+            flash_set('You are not authenticated. Please log in.', '', 'error');
+            _redirect('admin/login');
+        }
 
-            // otherwise, it will proceed the request
-        });
-    }
+        // otherwise, it will proceed the request
 
-It will be executed on every page that URI starts with "admin" and it verifies the user is authenticated. If the user is not authenticated, it will redirect to the login page.
+    })->on('startWith', 'admin') // executed on every page that URI starts with /admin
+        ->on('except', array('admin/login')); // not be executed on /admin/login
+
+It will be executed on every page that URI starts with ``/admin`` and it verifies the user is authenticated. It will not be executed on ``/admin/login``. If the user is not authenticated, it will redirect to the login page.
