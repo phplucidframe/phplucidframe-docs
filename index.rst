@@ -30,5 +30,6 @@ Welcome to PHPLucidFrame's documentation!
    user-authentication
    creating-a-multilingual-site
    the-lucidframe-console
+   helpers
    ajax-and-javascript-api
    hooks-and-overrides
