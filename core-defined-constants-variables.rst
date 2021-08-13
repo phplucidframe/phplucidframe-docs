@@ -27,6 +27,8 @@ The following PHP constants are available across PHPLucidFrame.
 +-------------------+------------------------------------------------------------------------------------------+
 | ``I18N``          | File system path to the directory ``i18n`` in the root directory                         |
 +-------------------+------------------------------------------------------------------------------------------+
+| ``THIRD_PARTY``   | File system path to the directory ``third-party`` in the root directory                  |
++-------------------+------------------------------------------------------------------------------------------+
 | ``VENDOR``        | File system path to the directory ``vendors`` in the root directory                      |
 +-------------------+------------------------------------------------------------------------------------------+
 | ``FILE``          | File system path to the directory ``files`` in the root directory                        |

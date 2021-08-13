@@ -17,6 +17,7 @@ Welcome to PHPLucidFrame's documentation!
    core-defined-constants-variables
    url-routing
    file-inclusion
+   auto-loading-libraries
    database-configuration
    data-manipulation
    query-builder
