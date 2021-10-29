@@ -54,6 +54,9 @@ The following PHP constants are available across PHPLucidFrame.
 | ``HOME``          | The home page URL                                                                        |
 +-------------------+------------------------------------------------------------------------------------------+
 
+.. note::
+    - You can also define your own constants in ``/inc/constants.php`` or ``/app/inc/constants.php``.
+
 PHPLucidFrame has a global object in Javascript – ``LC``. The following Javascript global variables of ``LC`` are available to use.
 
 +-------------------+------------------------------------------------------------------------------------------+
