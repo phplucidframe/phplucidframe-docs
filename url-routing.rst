@@ -31,11 +31,11 @@ If you are not enough with PHPLucidFrame basic routing and if you need your own 
         'slug'  => '[a-zA-Z\-_]+' # {slug} must only contain alphabets, dashes and underscores
     ));
 
-Then you can get the argument values from ``_arg('id')`` and ``_arg('slug')`` in ``/app/blog/show/index.php``. ::
+Then you can get the argument values from ``_get('id')`` and ``_get('slug')`` in ``/app/blog/show/index.php``. ::
 
     // app/blog/show/index.php
-    $id   = _arg('id');
-    $slug = _arg('slug');
+    $id   = _get('id');
+    $slug = _get('slug');
 
 Here is the custom routing configuration syntax: ::
 
@@ -118,6 +118,11 @@ You can use the function ``_url()`` or ``route_url()`` to make an absolute URL. 
     echo _url(); // same as echo _self();
     // it would return the current URL
 
+When you have a custom route defined in ``/inc/route.config.php`` as described above at :ref:`Custom Routes`, you can use the route name as below: ::
+
+    _url('lc_blog_show', array('id' => 1, 'slug' => 'hello-world'))
+    // http://www.example.com/blog/1/hello-world
+
 Redirecting URL
 ---------------
 
@@ -167,7 +172,7 @@ You may also write RewriteRule in ``.htaccess`` of the root directory, but by no
     # www.example.com/zh-CN/99/foo-bar to ~/app/post/?lang=zh-CN&id=99&slug=foo-bar
     RewriteRule ^(([a-z]{2}|[a-z]{2}-[A-Z]{2})/)?([0-9]+)/(.*)$ app/index.php?lang=$1&id=$3&slug=$4&route=post [NC,L]
 
-As the default routing name of LucidFrame is **route** and according to the RewriteRule above, ``route=post`` will map to the file ``/app/post/index.php`` or ``/app/post.php`` given the three URI components – ``lang``, ``id`` and ``slug``. For example, if the requested URL is ``www.example.com/en/99/foo-bar``, this will be rewritten to ``/app/post/index.php?lang=en&id=99&slug=foo-bar`` or ``/app/post.php?lang=en&id=99&slug=foo-bar``. In this case you can get the **id** and **slug** using ``_arg()``: ::
+As the default routing name of LucidFrame is **route** and according to the RewriteRule above, ``route=post`` will map to the file ``/app/post/index.php`` or ``/app/post.php`` given the three URI components – ``lang``, ``id`` and ``slug``. For example, if the requested URL is ``www.example.com/en/99/foo-bar``, this will be rewritten to ``/app/post/index.php?lang=en&id=99&slug=foo-bar`` or ``/app/post.php?lang=en&id=99&slug=foo-bar``. In this case you can get the **id** and **slug** using ``_get()`` or ``_arg()``: ::
 
-    $id = _arg('id');
-    $slug = _arg('slug');
+    $id = _get('id'); // or _arg('id')
+    $slug = _get('slug'); // or _arg('slug')

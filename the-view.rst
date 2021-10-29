@@ -20,7 +20,7 @@ Passing Data To view
 
 You can pass data to your view by using the ``addData()`` method of the View object. You can get the View object using ``$view = _app('view')`` and set data using ``$view->addData('name', $value)`` in a particular ``index.php``. For example, ``/app/post/index.php`` may look like this ::
 
-    $id = _arg('id');
+    $id = _get('id');
     $view = _app('view');
 
     $post = db_findOrFail('post', $id);
