@@ -73,6 +73,9 @@ The above route groups definition is equal to these individual route definitions
     route('lc_post_update')->map('/api/posts/{id}', '/example/api/post/update', 'PUT', array('id' => '\d+'));
     route('lc_post_delete')->map('/api/posts/{id}', '/example/api/post/delete', 'DELETE', array('id' => '\d+'));
 
+.. note::
+    - You can define your custom routes in ``/inc/route.config.php`` or ``/app/inc/route.config.php``
+
 Accessing URL
 -------------
 
