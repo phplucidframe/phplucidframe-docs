@@ -1,5 +1,5 @@
-User Authentication
-===================
+Authentication & Authorization
+==============================
 
 User authentication is one of the critical parts of almost every web application. PHPLucidFrame provides a flexible way of identifying and checking user authentication. There is a configuration variable available in ``/inc/config.php`` - ``$lc_auth``. You can set up your authentication components corresponding to your user data table to load it. ::
 

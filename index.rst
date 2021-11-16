@@ -29,7 +29,7 @@ Welcome to PHPLucidFrame's documentation!
    forms
    file-helper
    pagination
-   user-authentication
+   authentication-and-authorization
    creating-a-multilingual-site
    the-lucidframe-console
    helpers
