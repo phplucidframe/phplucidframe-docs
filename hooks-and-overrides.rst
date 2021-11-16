@@ -67,23 +67,32 @@ auth_create($id, $data = null)
 
 Overrides the function ``auth_create()`` in ``/lib/helpers/auth_helper.php``. Create user authentication object. It can be defined ``/app/helpers/auth_helper.php``.
 
+auth_getUserInfo($id)
+^^^^^^^^^^^^^^^^^^^^^
+
+Overrides the function ``auth_getUserInfo()`` in ``/lib/helpers/auth_helper.php``. Get user record from db to create auth session. It can be defined ``/app/helpers/auth_helper.php``.
 
 auth_role($role)
 ^^^^^^^^^^^^^^^^
 
 Overrides the function ``auth_role()`` in ``/lib/helpers/auth_helper.php``. Check if the authenticate user has the specific user role. It can be defined in ``/app/helpers/auth_helper.php``.
 
+auth_roles($role, ....)
+^^^^^^^^^^^^^^^^^^^^^^^
 
-auth_permissions($id, $data = null)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Overrides the function ``auth_roles()`` in ``/lib/helpers/auth_helper.php``. Check if the authenticated user has the specific user role(s). It can be defined in ``/app/helpers/auth_helper.php``.
+
+
+auth_permissions($role)
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Overrides the function ``auth_permissions()`` in ``/lib/helpers/auth_helper.php``. Get the permissions of a particular role. It can be defined in ``/app/helpers/auth_helper.php``.
 
 
-auth_access($perm)
+auth_can($perm)
 ^^^^^^^^^^^^^^^^^^
 
-Overrides the function ``auth_access()`` in ``/lib/helpers/auth_helper.php``. Check if the authenticate uses has a particular permission. It can be defined in ``/app/helpers/auth_helper.php``.
+Overrides the function ``auth_can()`` in ``/lib/helpers/auth_helper.php``. Check if the authenticate uses has a particular permission. It can be defined in ``/app/helpers/auth_helper.php``.
 
 flash_set($msg, $name = '', $class = 'success')
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
