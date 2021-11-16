@@ -9,31 +9,25 @@ User authentication is one of the critical parts of almost every web application
     # $lc_auth: configuration for the user authentication
     # This can be overidden by defining $lc_auth in /inc/site.config.php
     $lc_auth = array(
-        'table' => '',  // table name, for example, user
+        'table' => '', // table name, for example, user
         'fields' => array(
-            'id' => '',     // PK field name, for example, user_id
-            'role' => '',    // User role field name, for example, user_role
+            'id'    => '',  // PK field name, for example, user_id
+            'role'  => ''   // User role field name, for example, user_role
         ),
-        'perms' => array(
-            // allowed permissions
+        'permissions'  => array(
+            // permissions allowed
+            // role name => array of permission names
+            // For example,
+            // 'admin' => array('post-list', 'post-add', 'post-edit', 'post-delete'),
+            // 'editor' => array('post-list', 'post-add', 'post-edit') // editor is not allowed for post deletion
         ),
-        'block' => array(
-            // blocked permissions
-        ),
-        /* // for example
-            'perms' => array( // editor is not allowed for post deletion
-                'editor' => array('post-list', post-add', 'post-edit'),
-                'admin' => array('post-list', post-add', 'post-edit', 'post-delete')
-            ),
-            'block' => array( // editor is denied for post deletion
-                'editor' => array('post-delete'),
-                'admin' => array() // no action is blocked for admin
-            )
-            // you don't have to use both - "perms" and "block",
-            // according to the above configuration, both are same concept
-            // just pick up the one that suits to your need
-        */
     );
+
+According to the sample database ``/db/schema.sample.php``,
+
+1. ``$lc_auth['table']`` would be ``user``.
+2. ``$lc_auth['fields']['id']`` would be ``id`` (i.e., ``user.id``).
+3. ``$lc_auth['fields']['role']`` would be ``role`` (i.e., ``user.role``).
 
 Hashing Passwords
 -----------------
@@ -62,7 +56,6 @@ Besides the user data result available as properties in the returning auth objec
 - ``_app('auth')->sessId`` - The session id for the current session returning from ``session_id()``.
 - ``_app('auth')->token`` - The generated token of the authentication object
 - ``_app('auth')->permissions`` - The permissions allowed according to the defined role and perms in ``$lc_auth``.
-- ``_app('auth')->blocks`` - The permissions blocked according to the defined role and block in ``$lc_auth``.
 
 Sometimes, you may need to update the auth object for the user data changes, for example, user’s name changed. For that case, you can use ``auth_set()`` by passing the updated user data object. ::
 
@@ -110,13 +103,13 @@ PHPLucidFrame allows you to check the authenticate user is belong to a particula
         // redirect to the access-denied page
     }
 
-And it also allows you to check the user is accessible to a particular page or section by using ``auth_access()``, for example, ::
+And it also allows you to check the user is accessible to a particular page or section by using ``auth_can()``, for example, ::
 
-    if (auth_access('content-delete')) {
+    if (auth_can('content-delete')) {
         // if user has permission to delete content, do content delete
     }
 
-    if (auth_block('content-delete')) {
+    if (auth_can('content-delete')) {
         // if user is denied to delete content
     }
 
