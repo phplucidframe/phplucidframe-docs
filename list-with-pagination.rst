@@ -1,5 +1,5 @@
-Pagination
-==========
+List with Pagination
+====================
 
 Listings with pagination are required in most of applications. PHPLucidFrame provides two ways of creating listings - with AJAX and without AJAX. There are two configuration variables in ``/app/inc/site.config.php`` which will be used here. ::
 

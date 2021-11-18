@@ -28,7 +28,7 @@ Welcome to PHPLucidFrame's documentation!
    middleware
    forms
    file-helper
-   pagination
+   list-with-pagination
    authentication-and-authorization
    creating-a-multilingual-site
    the-lucidframe-console
