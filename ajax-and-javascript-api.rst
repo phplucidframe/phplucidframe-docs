@@ -50,11 +50,11 @@ The helper callback for `language switch <#switching-the-site-language>`_ requir
 
 **Parameters**:
 
-+---------------+-------------+-------------------------------------------------------------------------+
-| Name          | Type        | Description                                                             |
-+===============+=============+=========================================================================+
-| ``lng``       | string      | The language code to be switched                                        |
-+---------------+-------------+-------------------------------------------------------------------------+
++---------+--------+----------------------------------+
+| Name    | Type   | Description                      |
++=========+========+==================================+
+| ``lng`` | string | The language code to be switched |
++---------+--------+----------------------------------+
 
 LC.Page.request(id, url, params, callback)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -84,13 +84,13 @@ Register a custom throbber for ajax requests by overriding the default throbber 
 
 **Parameters**:
 
-+---------------+-------------+--------------------------------------------------------------------------------------+
-| Name          | Type        | Description                                                                          |
-+===============+=============+======================================================================================+
-| ``id``        | string      | An HTML element id to attach Ajax pager.                                             |
-+---------------+-------------+--------------------------------------------------------------------------------------+
-| ``callback``  | function    | The functional object like ``{ start: function() { .. }, stop: function() { .. } }`` |
-+---------------+-------------+--------------------------------------------------------------------------------------+
++--------------+----------+--------------------------------------------------------------------------------------+
+| Name         | Type     | Description                                                                          |
++==============+==========+======================================================================================+
+| ``id``       | string   | An HTML element id to attach Ajax pager.                                             |
++--------------+----------+--------------------------------------------------------------------------------------+
+| ``callback`` | function | The functional object like ``{ start: function() { .. }, stop: function() { .. } }`` |
++--------------+----------+--------------------------------------------------------------------------------------+
 
 LC.Page.pager(id)
 ^^^^^^^^^^^^^^^^^
@@ -99,11 +99,11 @@ Attach ajax to the pager element. Internal call after ``LC.Page.request()``. You
 
 **Parameters**:
 
-+---------------+-------------+-------------------------------------------------------------------------+
-| Name          | Type        | Description                                                             |
-+===============+=============+=========================================================================+
-| ``id``        | string      | An HTML element id to attach Ajax pager.                                |
-+---------------+-------------+-------------------------------------------------------------------------+
++--------+--------+------------------------------------------+
+| Name   | Type   | Description                              |
++========+========+==========================================+
+| ``id`` | string | An HTML element id to attach Ajax pager. |
++--------+--------+------------------------------------------+
 
 LC.Page.url(path)
 ^^^^^^^^^^^^^^^^^
@@ -112,11 +112,11 @@ Get the absolute URL corresponding to the given route path.
 
 **Parameters**:
 
-+---------------+-------------+-------------------------------------------------------------------------+
-| Name          | Type        | Description                                                             |
-+===============+=============+=========================================================================+
-| ``path``      | string      | The route path.                                                         |
-+---------------+-------------+-------------------------------------------------------------------------+
++----------+--------+-----------------+
+| Name     | Type   | Description     |
++==========+========+=================+
+| ``path`` | string | The route path. |
++----------+--------+-----------------+
 
 **Returns**:
 
@@ -129,11 +129,11 @@ Check to see if CSS support is available in the browser.
 
 **Parameters**:
 
-+-------------------+-------------+-------------------------------------------------------------------------+
-| Name              | Type        | Description                                                             |
-+===================+=============+=========================================================================+
-| ``featureName``   | string      | The CSS feature/property name in camel case                             |
-+-------------------+-------------+-------------------------------------------------------------------------+
++-----------------+--------+---------------------------------------------+
+| Name            | Type   | Description                                 |
++=================+========+=============================================+
+| ``featureName`` | string | The CSS feature/property name in camel case |
++-----------------+--------+---------------------------------------------+
 
 **Returns**:
 
@@ -166,11 +166,11 @@ Clear the form element values and form messages.
 
 **Parameters**:
 
-+-------------------+-------------+-------------------------------------------------------------------------+
-| Name              | Type        | Description                                                             |
-+===================+=============+=========================================================================+
-| ``formId``        | string      | HTML element id set to ``<form>`` tag                                   |
-+-------------------+-------------+-------------------------------------------------------------------------+
++------------+--------+---------------------------------------+
+| Name       | Type   | Description                           |
++============+========+=======================================+
+| ``formId`` | string | HTML element id set to ``<form>`` tag |
++------------+--------+---------------------------------------+
 
 LC.Form.getFormData(formId, id)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -179,127 +179,196 @@ Get the embedded JSON form data.
 
 **Parameters**:
 
-+-------------------+-------------+-------------------------------------------------------------------------+
-| Name              | Type        | Description                                                             |
-+===================+=============+=========================================================================+
-| ``formId``        | integer     | HTML Form ID                                                            |
-+-------------------+-------------+-------------------------------------------------------------------------+
-| ``id``            | integer     | The data row unique id                                                  |
-+-------------------+-------------+-------------------------------------------------------------------------+
++------------+---------+------------------------+
+| Name       | Type    | Description            |
++============+=========+========================+
+| ``formId`` | integer | HTML Form ID           |
++------------+---------+------------------------+
+| ``id``     | integer | The data row unique id |
++------------+---------+------------------------+
 
-This function is useful when passing data from PHP to Javascript in the form of JSON and get them in JS for further usage such as loading data into the form elements of the jQuery dialog. Here is an example snippet: ::
-
-    <table cellpadding="0" cellspacing="0" border="0" class="list">
-        <tr class="label">
-            <td class="tableLeft" colspan="2"><?php echo _t('Actions'); ?></td>
-            <td>
-                <span>Name</span>
-                <label class="lang">(<?php echo _langName(); ?>)</label>
-            </td>
-            <?php if ($langs) { ?>
-                <?php foreach ($langs as $lcode => $lname) { ?>
-                <td>
-                    <span>Name</span>
-                    <?php if (_langName($lcode)) { ?>
-                    <label class="lang">(<?php echo _langName($lcode); ?>)</label>
-                    <?php } ?>
-                </td>
-                <?php } ?>
-            <?php } ?>
-        </tr>
-        <?php
-        $data = array();
-        while ($row = $qb->fetchRow()) {
-            $data[$row->cat_id] = (array) _getTranslationStrings($row, 'catName'); // <== prepare data for js
-            ?>
-            <tr>
-                <td class="tableLeft colAction">
-                    <a href="#" class="edit" title="Edit" rel="<?php echo $row->cat_id; ?>">
-                        <span><?php echo _t('Edit'); ?></span>
-                    </a>
-                </td>
-                <td class="colAction">
-                    <a href="#" class="delete" title="Delete" rel="<?php echo $row->cat_id; ?>">
-                        <span><?php echo _t('Delete'); ?></span>
-                    </a>
-                </td>
-                <td class="colName">
-                    <?php echo $row->catName; ?>
-                </td>
-                <?php if ($langs) { ?>
-                    <?php foreach ($langs as $lcode => $lname) { ?>
-                    <td class="colName <?php echo $lcode; ?>">
-                        <?php
-                        $lcode = _queryLang($lcode);
-                        if (isset($i18n['catName_i18n'][$lcode])) echo $i18n['catName_i18n'][$lcode];
-                        else echo '&nbsp;';
-                        ?>
-                    </td>
-                    <?php } ?>
-                <?php } ?>
-            </tr>
-        <?php
-        }
-        ?>
-    </table>
-    <div class="pager-container"><?php echo $pager->display(); ?></div>
-    <?php _addFormData('frmCategory', $data); // <== you need to call this to pass data to js ?>
-
-Note that you must call ``_addFormData('frmCategory', $data);`` and you also need to call ``LC.Form.getFormData('frmCategory', id)`` in js like below: ::
-
-    LC.Page.Category = {
-        url : LC.Page.url('admin/category'), /* mapping directory */
-        /* Initialize the Category page */
-        init : function() {
-            // some codes here ....
-
-            /* Add/Edit area */
-            $('#dialog-category').dialog({
-                modal: true,
-                autoOpen: false,
-                resizable: false,
-                width: 390,
-                minHeight: 120
-            });
-
-            // some codes here ....
-        },
-        /* Load the list */
-        list : function(param) {
-            // some codes here ....
-        },
-        /* Launch the dialog to create a new entry */
-        create : function() {
-            // some codes here ....
-        },
-        /* Launch the dialog to edit an existing entry */
-        edit : function(id) {
-            LC.Form.clear('frmCategory');
-            var $data = LC.Form.getFormData('frmCategory', id); // <== you need to call this to load data in dialog
-            if ($data) {
-                var $form = $('#frmCategory');
-                $form.find('#hidEditId').val( id );
-                $form.find('input[name=txtName]').val($data.catName);
-                // load data for the other translation text boxes
-                if (typeof $data.catName_i18n !== 'undefined') {
-                    for (var c in $data.catName_i18n) {
-                        if ($data.catName_i18n.hasOwnProperty(c)) {
-                            $form.find('input[name=txtName_'+c+']').val($data.catName_i18n[c]);
-                        }
-                    }
-                }
-                $('#dialog-category').dialog( 'open' );
-            }
-        },
-        /* Launch the dialog to confirm an entry delete */
-        remove : function( id ) {
-            // some codes here ....
-        },
-        /* Do delete action upon confirm OK */
-        doDelete : function() {
-            // some codes here ....
-        }
-    };
+This function is useful when passing data from PHP to Javascript in the form of JSON and get them in JS for further usage such as loading data into the form elements of the jQuery dialog
 
 .. note::
     - You can check the completed example source code at `<https://github.com/phplucidframe/admin-boilerplate>`_
+
+LC.Form.slug(str)
+^^^^^^^^^^^^^^^^^
+
+Generate slug value from the given string
+
+**Parameters**:
+
++----------------+-------------+-------------------------------------+
+| Name           | Type        | Description                         |
++===================+=============+==================================+
+| ``str``        | string      | The string to generate slug         |
++----------------+-------------+-------------------------------------+
+
+**Returns**:
+
+``<string>`` The slug value
+
+The List
+--------
+
+As of PHPLucidFrame 3.0, ``LC.List`` is added to help AJAX list create easily.
+
+LC.List.init(options)
+^^^^^^^^^^^^^^^^^^^^^
+
+Initialize an AJAX list
+
+**Parameters**:
+
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| Name                              | Type   | Default                          | Description                                                                      |
++===================================+========+==================================+==================================================================================+
+| ``options``                       | object |                                  | The object with the following properties                                         |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.url``                   | string | ``LC.Page.url(LC.vars.baseDir)`` | The URL for AJAX request to render the list                                      |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.params``                | string | ``{}``                           | Optional parameters to ``options.url``                                           |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.id``                    | string | ``list``                         | HTML id for the list container element                                           |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.formModal``             | string | ``#dialog-item``                 | HTML id of jQuery dialog modal to create/edit an entity                          |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.formModalCancelButton`` | string | ``#btn-cancel``                  | HTML id of the button to close the dialog modal                                  |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.formId``                | string | ``dialog-form``                  | HTML id of the form in the dialog modal                                          |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.confirmModal``          | string | ``#dialog-confirm``              | HTML id of the confirm modal to delete an entity                                 |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.confirmModalTitle``     | string | Confirm Delete                   | Title of the confirm modal to delete an entity                                   |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.confirmModalMessage``   | string | Are you sure you want to delete? | Message of the confirm modal to delete an entity                                 |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.createButton``          | string | ``#btn-new``                     | HTML id of the button to launch the dialog modal to create a new entry           |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.editButton``            | string | ``.table .actions .edit``        | HTML id of the button to launch the dialog modal to edit an entry                |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.createCallback``        | string | null                             | A callback function to be invoked before the dialog modal is opened for creation |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.editCallback``          | string | null                             | A callback function to be invoked before the dialog modal is opened for editing  |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.deleteCallback``        | string | null                             | A callback function to be invoked after the entry is deleted                     |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+
+LC.List.list([arg1, arg2])
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Load the list by AJAX
+
+**Parameters**:
+
+When two parameters provided,
+
++----------+--------+-------------------+
+| Name     | Type   | Description       |
++==========+========+===================+
+| ``arg1`` | string | URL to request    |
++----------+--------+-------------------+
+| ``arg2`` | object | Parameters to URL |
++----------+--------+-------------------+
+
+When one parameter (``string``) is provided,
+
++----------+--------+----------------+
+| Name     | Type   | Description    |
++==========+========+================+
+| ``arg1`` | string | URL to request |
++----------+--------+----------------+
+
+When one parameter (``object``) is provided,
+
++----------+--------+-----------------------------+
+| Name     | Type   | Description                 |
++==========+========+=============================+
+| ``arg1`` | object | Parameter to URL to request |
++----------+--------+-----------------------------+
+
+LC.List.create()
+^^^^^^^^^^^^^^^^
+
+Launch the dialog to create a new entity
+
+LC.List.edit()
+^^^^^^^^^^^^^^
+
+Launch the dialog to edit an existing entity
+
+LC.List.remove()
+^^^^^^^^^^^^^^^^
+
+Launch the dialog to confirm for deleting an entity
+
+LC.List.doDelete()
+^^^^^^^^^^^^^^^^^^
+
+Do delete action upon confirm OK
+
+LC.DependentUpdater
+-------------------
+
+Change another select dropdown (child) upon one select dropdown (parent) change using AJAX request.
+
+**HTML Attributes for The Parent <select> Element**:
+
++---------------------+----------+--------------------------------------------------------------------------------+
+| Name                | Required | Description                                                                    |
++=====================+==========+================================================================================+
+| ``data-dependency`` | Yes      | The HTML element (``select``) ID of the child element                          |
++---------------------+----------+--------------------------------------------------------------------------------+
+| ``data-url``        | Yes      | URL for AJAX request to retrieve data by the selected id of the parent element |
++---------------------+----------+--------------------------------------------------------------------------------+
+| ``data-callback``   | No       | A js callback function to invoke after the AJAX request is completed.          |
++---------------------+----------+--------------------------------------------------------------------------------+
+
+**HTML Attributes for The Child <select> Element**:
+
++----------------+----------+---------------------------------------------------------------+
+| Name           | Required | Description                                                   |
++================+==========+===============================================================+
+| ``data-value`` | No       | The value to be selected after the AJAX request is completed. |
++----------------+----------+---------------------------------------------------------------+
+
+The example scenario is to generate townships by a region selected. Here is an example code: ::
+
+    <!-- parent element -->
+    <select class="form-control" id="region" name="region"
+            data-dependency="#township"
+            data-url="<?php echo _url('api/townships') ?>">
+        <option value=""><?php echo _t('Select Region') ?></option>
+        <option value="1">Yangon</option>
+        <option value="2">Mandalay</option>
+    </select>
+
+    <!-- child element -->
+    <select class="form-control" id="township" name="township">
+        <option value=""><?php echo _t('Select Township') ?></option>
+    </select>
+
+You need to create ``/app/api/townships.php`` (the URL you would provide in the ``data-url`` attribute) with the following similar code to return a json response. ::
+
+    $regionId = _arg('parentId');
+
+    $qb = db_select('town', 't')
+        ->fields('t', array('id', 'name'))
+        ->where()
+            ->condition('region_id', $regionId)
+        ->orderBy('name');
+
+    $result = array();
+    while ($row = $qb->fetchRow()) {
+        $result[$row->id] = $row->name;
+    }
+
+    _json($result);
+
+Then, the township dropdown will be re-generated whenever the region dropdown is changed.
+
+LC.eval
+-------
+
+Evaluates JavaScript code represented as a string.
