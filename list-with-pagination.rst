@@ -167,34 +167,47 @@ According to the framework-recommended page structure, you could have the follow
                 |-- list.php
                 |-- view.php
 
-In you ``/app/post/view.php`` you need to add an empty HTML container which AJAX will respond HTML to. ::
+In ``/app/post/index.php``, ::
 
-    <div id="list"></div> <!-- #list will be a first parameter to Page.request(). See later -->
+    $pageTitle = _t('Posts');
+
+    _app('title', $pageTitle);
+    _app('view')->addData('pageTitle', $pageTitle);
+
+In your ``/app/post/view.php`` you need to add an empty HTML container which AJAX will respond HTML to. ::
+
+    <p>
+        <a href="<?php echo _url(_cfg('baseDir') . '/post/setup') ?>" class="button mini green"><?php echo _t('Add New Post'); ?></a>
+    <p>
+
+    <div id="list"></div> <!-- The list will be displayed here -->
 
 Create a small javascript snippet in your ``/app/js/app.js``. ::
 
     /** app/js/app.js */
     LC.Page.Post = {
-        url : LC.Page.url(LC.vars.baseDir + '/post'), /* mapping directory */
-
-        /* Initialization of the Post page */
-        init : function() {
-            LC.Page.Post.list();
-        },
-
-        list : function() {
-            /* LC.Page.request('HTML container ID', 'Requested URL', 'Optional Parameter in JSON {}'); */
-            LC.Page.request('list', Page.Post.url);
+        List : {
+            url : LC.Page.url(LC.vars.baseDir + '/post'), /* mapping directory */
+            /* Initialize the post listing page */
+            init : function() {
+                LC.List.init({
+                    url: LC.Page.Post.List.url,
+                });
+            },
         }
-    }
+    };
 
 Call the script at the end of ``/app/post/view.php`` ::
+
+    <p>
+        <a href="<?php echo _url(_cfg('baseDir') . '/post/setup') ?>" class="button mini green"><?php echo _t('Add New Post'); ?></a>
+    <p>
 
     <div id="list"></div>
 
     <script type="text/javascript">
         $(function() {
-            LC.Page.Post.init();
+            LC.Page.Post.List.init();
         });
     </script>
 
@@ -206,15 +219,16 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
     $get = _get();
 
     # Count query for the pager
-    $totalCount = db_count('post')
+    $rowCount = db_count('post')
         ->where()->condition('deleted', null)
         ->fetch();
 
     # Prerequisite for the Pager
-    $pager = pager_ajax();
+    $pager = pager_ajax($rowCount);
 
     $qb = db_select('post', 'p')
-        ->where()->condition('p.deleted', null)
+        ->where()
+            ->condition('p.deleted', null)
         ->orderBy('p.created', 'DESC')
         ->limit($pager->get('offset'), $pager->get('itemsPerPage'));
     ?>
@@ -231,11 +245,203 @@ Finally you have to write ``/app/post/list.php`` to request and respond by AJAX.
                 </p>
             </p>
         <?php } // while end ?>
+
         <!-- display the pager where you want to appear -->
-        <div class="pager-container"><?php echo $pager->display() ?></div>
+        <div class="pager-container"><?php $pager->display() ?></div>
+
     <?php } else { ?>
         <div class="no-record"><?php echo _t('There is no record.') ?></div>
     <?php } ?>
+
+Create an AJAX Listing Page with jQuery Dialog Form
+---------------------------------------------------
+
+Sometimes you need to add/edit an entity in a list page. PHPLucidFrame provides a convenient way to integrate a modal dialog with a form for adding or editing an entity of the list. The following would be the page structure. ::
+
+    /path_to_webserver_document_root
+        /app
+            /category
+                |-- action.php
+                |-- index.php
+                |-- list.php
+                |-- view.php
+
+In ``/app/category/index.php`` ::
+
+    $pageTitle = _t('Categories');
+
+    _app('title', $pageTitle);
+    _app('view')->addData('pageTitle', $pageTitle);
+
+In ``/app/category/view.php`` you need to add an empty HTML container which AJAX will respond HTML to. ::
+
+    <h4><?php echo $pageTitle; ?></h4>
+
+    <p>
+        <button type="button" class="button mini green" id="btn-new">
+            <?php echo _t('Add New Category'); ?>
+        </button> <!-- #btn-new is a default button ID to launch the modal; you can change to any ID but require to configure LC.List.init() in js -->
+    </p>
+
+    <div id="list"></div>
+
+After then, you need to add HTML for jQuery modal dialog. ::
+
+    <!-- Category Entry Form -->
+    <div id="dialog-category" class="dialog" title="<?php echo _t('Category'); ?>">
+        <form method="post" id="form-category"> <!-- form id is required to make it working -->
+            <div class="message error"></div>
+            <input type="hidden" id="id" name="id" />
+            <table class="form fluid">
+                <tr>
+                    <td class="label">
+                        <?php echo _t('Name'); ?>
+                        <span class="required">*</span>
+                    </td>
+                    <td class="label-separator">:</td>
+                    <td class="entry">
+                        <input type="text" name="name" id="name" class="lc-form-input fluid-100" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    <td class="entry">
+                        <button type="submit" class="button jqbutton submit large green" id="btn-save" name="btn-save">
+                            <?php echo _t('Save') ?>
+                        </button>
+                        <button type="button" class="button jqbutton large" id="btn-cancel" name="btn-cancel">
+                            <?php echo _t('Cancel') ?>
+                        </button> <!-- #btn-cancel is a default button ID to close the modal dialog -->
+                    </td>
+                </tr>
+            </table>
+            <?php form_token(); ?>
+        </form>
+    </div>
+
+Create a small javascript snippet in your ``/app/js/app.js``. ::
+
+    LC.Page.Category = {
+        url : LC.Page.url(LC.vars.baseDir + '/category'), /* mapping directory */
+
+        /* Initialize the Category page */
+        init : function() {
+            LC.List.init({
+                url: LC.Page.Category.url, // This will call /app/category/list.php
+                formModal: '#dialog-category', // HTML id for the modal used in the view
+                formId: 'form-category', // HTML id for the form used in the view
+                editCallback: LC.Page.Category.edit, // define below
+                // see more options at https://phplucidframe.readthedocs.io/en/latest/ajax-and-javascript-api.html#lc-list-init-options
+            });
+        },
+
+        /* Initialize the list */
+        list: function() {
+            LC.List.list();
+        },
+
+        /* Callback to set values when the dialog is open to edit an existing entry */
+        edit : function($form, $data) {
+            $form.find('input[name=name]').val($data.name);
+        }
+    };
+
+Call the script at the end of ``/app/category/view.php`` ::
+
+    <script>
+        $(function() {
+            LC.Page.Category.init();
+        });
+    </script>
+
+In ``/app/category/list.php``, ::
+
+    <?php
+
+    list($qb, $pager, $total) = db_findWithPager('category', array('deleted' => null), array('name' => 'asc'));
+
+    if ($qb->getNumRows()): ?>
+        <table class="list table">
+            <tr class="label">
+                <td class="table-left" colspan="2"><?php echo _t('Actions'); ?></td>
+                <td>Name</td>
+            </tr>
+            <?php
+            $data = array();
+            while ($row = $qb->fetchRow()):
+            ?>
+                <?php $data[$row->id] = $row; # data for the modal dialog form ?>
+                <tr>
+                    <td class="table-left actions col-action">
+                        <a href="#" class="edit edit-ico" title="Edit" rel="<?php echo $row->id; ?>">
+                            <span><?php echo _t('Edit'); ?></span>
+                        </a> <!-- ".table .actions .edit" is a default class hierarchy for edit button action -->
+                    </td>
+                    <td class="col-action">
+                        <a href="#" class="delete delete-ico" title="Delete" rel="<?php echo $row->id; ?>">
+                            <span><?php echo _t('Delete'); ?></span>
+                        </a> <!-- ".table .actions .default" is a default class hierarchy for delete button action -->
+                    </td>
+                    <td class="colName">
+                        <?php echo $row->name; ?>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+
+        <div class="pager-container"><?php $pager->display(); ?></div>
+
+        <?php _addFormData('form-category', $data); # the first parameter is the form ID for the form in the modal dialog defined in the view ?>
+    <?php else: ?>
+        <div class="no-record"><?php echo _t('There is no item found. Click "Add New Category" to add a new category.'); ?></div>
+    <?php endif;
+
+Lastly, add create/edit/delete handling code in  ``/app/category/action.php`` because, by default, the form in the modal will be submitted to it. ::
+
+    <?php
+
+    $table = 'category';
+    $success = false;
+
+    if (_isHttpPost()) {
+        $post = _post();
+
+        if (isset($post['action']) && $post['action'] == 'delete' && !empty($post['id'])) {
+            # DELETE category
+            if (db_delete($table, array('id' => $post['id']))) {
+                $success = true;
+            }
+        } else {
+            # NEW/EDIT
+            $validations = array(
+                'name' => array(
+                    'caption'       => _t('Name'),
+                    'value'         => $post['name'],
+                    'rules'         => array('mandatory'),
+                    'parameters'    => array($post['id'])
+                )
+            );
+
+            if (form_validate($validations)) {
+                $data = array(
+                    'name' => $post['name']
+                );
+
+                if (db_save($table, $data, $post['id'])) {
+                    $success = true;
+                }
+            } else {
+                form_set('error', validation_get('errors'));
+            }
+        }
+
+        if ($success) {
+            form_set('success', true);
+            form_set('callback', 'LC.Page.Category.list()'); # Ajax callback
+        }
+    }
+
+    form_respond('form-category');
 
 Create a Generic Listing Page without AJAX
 ------------------------------------------
@@ -276,7 +482,8 @@ Retrieve your data in ``index.php`` and then render your HTML in ``/app/post/vie
     // $pager = pager_ordinary();
 
     $qb = db_select('post', 'p')
-        ->where()->condition('p.deleted', null)
+        ->where()
+            ->condition('p.deleted', null)
         ->orderBy('p.created', 'DESC')
         ->limit($pager->get('offset'), $pager->get('itemsPerPage'));
 
@@ -308,7 +515,7 @@ Finally, your ``view.php`` will look like this: ::
             <?php } // while end ?>
             <!-- display the pager where you want to appear -->
             <div class="pager-container clearfix">
-                <?php echo $pager->display(); ?>
+                <?php $pager->display(); ?>
                 <div class="pager-records"><?php echo _t('Total %d records', $totalCount); ?></div>
             </div>
         <?php } else { ?>
@@ -321,14 +528,14 @@ Customize Pagination Display
 
 As of version 3.0, you can pass a callack function name to the ``display()`` method of Pager instance, for example, ::
 
-    <?php echo $pager->display('pager_custom') ?>
+    <?php $pager->display('pager_custom') ?>
 
 You need to define your custom pager function ``pager_custom()`` in ``/app/helpers/pager_helper.php``. The function will receive an array parameter. ::
 
     function pager_custom($result)
     {
         # The outermost container must have "lc-pager" class for AJAX pagination
-        // return HTML output for your custom pagination
+        // render HTML output for your custom pagination
     }
 
 The parameter to ``pager_custom()`` will have this array structure: ::
@@ -347,6 +554,76 @@ The parameter to ``pager_custom()`` will have this array structure: ::
         [url] => xx
         [ajax] => 1 or 0
     )
+
+Here is an example to render boostrap-styled pagination: ::
+
+    function pager_bootstrap($result)
+    {
+        # The outermost container must have "lc-pager" class for AJAX pagination
+        ?>
+        <ul class="pagination lc-pager">
+            <li class="first">
+                <?php if ($result['firstPageEnable']): ?>
+                    <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $result['firstPageNo'] ?>"><?php echo _t('First') ?></a>
+                <?php else: ?>
+                    <span><?php echo _t('First') ?></span>
+                <?php endif ?>
+            </li>
+
+            <li class="prev">
+                <?php if ($result['prePageEnable']): ?>
+                    <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $result['prePageNo'] ?>">«</a>
+                <?php else: ?>
+                    <span>«</span>
+                <?php endif ?>
+            </li>
+
+            <?php if (!empty($result['beforePages'])): ?>
+                <?php foreach ($result['beforePages'] as $pg): ?>
+                    <li>
+                        <?php if ($result['ajax']): ?>
+                            <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $pg ?>"><?php echo $pg ?></a>
+                        <?php else: ?>
+                            <a href="<?php echo _url($result['url'], array($this->pageQueryStr => $pg)) ?>" rel="<?php echo $pg ?>"><?php echo $pg ?></a>
+                        <?php endif ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif ?>
+
+            <li class="active">
+                <a href="#"><?php echo $result['thisPage'] ?></a>
+            </li>
+
+            <?php if (!empty($result['afterPages'])): ?>
+                <?php foreach ($result['afterPages'] as $pg): ?>
+                    <li>
+                        <?php if ($result['ajax']): ?>
+                            <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $pg ?>"><?php echo $pg ?></a>
+                        <?php else: ?>
+                            <a href="<?php echo _url($result['url'], array($this->pageQueryStr => $pg)) ?>" rel="<?php echo $pg ?>"><?php echo $pg ?></a>
+                        <?php endif ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif ?>
+
+            <li class="next">
+                <?php if ($result['nextPageEnable']): ?>
+                    <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $result['nextPageNo'] ?>">»</a>
+                <?php else: ?>
+                    <span>»</span>
+                <?php endif ?>
+            </li>
+
+            <li class="last">
+                <?php if ($result['lastPageEnable']): ?>
+                    <a href="<?php echo _url($result['url']) ?>" rel="<?php echo $result['lastPageNo'] ?>"><?php echo _t('Last') ?></a>
+                <?php else: ?>
+                    <span><?php echo _t('Last') ?></span>
+                <?php endif ?>
+            </li>
+        </ul>
+        <?php
+    }
 
 .. note::
     - PHPLucidFrame 3.0 included a pagination helper ``pager_bootstrap()`` in ``/app/helpers/pager_helper.php``. You can use it to display boostrap-styled pagination or you can see the code as reference for your custom pagination callback function.
