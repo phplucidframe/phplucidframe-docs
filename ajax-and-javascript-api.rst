@@ -3,7 +3,7 @@ Ajax and Javascript API
 
 PHPLucidFrame makes use of `jQuery <http://jquery.com/>`_ to take advantage of the increased interest in developing Web 2.0 rich media applications. There are a wide range of built-in Javascript API functions provided.
 
-The framework has a Javascript object declared LC and it has some global variables available to use. You can check  them in the section `Core Defined Constants & Variables <core-defined-constants-variables.html>`_. ``LC`` has two core objects - ``LC.Page`` and ``LC.Form``. Both provides utilities to make your pages and forms easier.
+The framework has a Javascript object declared LC and it has some global variables available to use. You can check  them in the section `Core Defined Constants & Variables <core-defined-constants-variables.html>`_. Moreover, ``LC`` has there core objects - ``LC.Page``, ``LC.Form`` and ``LC.List``. They all provide utilities to make your pages, forms and lists easier.
 
 PHPLucidFrame recommends the code organization in a Javascript file so-called ``app.js``, but it is by no means required and you are free to use your prefer file name. You can extend the global Javascript object ``LC.Page`` and you can create namespace for each page in your application. You are suggested to check the sample example code ``/app/js/app.js`` in the release. ::
 
@@ -212,7 +212,7 @@ Generate slug value from the given string
 The List
 --------
 
-As of PHPLucidFrame 3.0, ``LC.List`` is added to help AJAX list create easily.
+As of PHPLucidFrame 3.0, ``LC.List`` is added to help create AJAX list easily.
 
 LC.List.init(options)
 ^^^^^^^^^^^^^^^^^^^^^
