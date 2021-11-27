@@ -20,6 +20,8 @@ User authentication is one of the critical parts of almost every web application
             // For example,
             // 'admin' => array('post-list', 'post-add', 'post-edit', 'post-delete'),
             // 'editor' => array('post-list', 'post-add', 'post-edit') // editor is not allowed for post deletion
+            // If you store permissions in your db, implement auth_permissions($role) in /app/helpers/auth_helper.php
+            // to return the permission list from your db
         ),
     );
 
@@ -160,3 +162,81 @@ The following example is to allow users section (all routes containing a URI seg
             _page403();
         }
     })->on('contain', 'users');
+
+Working with Permissions in Your Database
+-----------------------------------------
+
+Sometimes, you may have user roles and permissions (ACL) in your database. Let's say for example, you have the following data structure in your database.
+
+role
+
++-----+--------+
+| id  | name   |
++=====+========+
+| 1   | Admin  |
++-----+--------+
+| 2   | Editor |
++-----+--------+
+
+role_permission
+
++-----+---------+-------------+
+| id  | role_id | name        |
++=====+=========+=============+
+| 1   | 1       | post-create |
++-----+---------+-------------+
+| 2   | 1       | post-update |
++-----+---------+-------------+
+| 3   | 1       | post-delete |
++-----+---------+-------------+
+| 4   | 2       | post-create |
++-----+---------+-------------+
+| 5   | 2       | post-update |
++-----+---------+-------------+
+
+user
+
++-----+---------+----------+
+| id  | role_id | username |
++=====+=========+==========+
+| 1   | 1       | admin    |
++-----+---------+----------+
+| 2   | 2       | dummy    |
++-----+---------+----------+
+
+You would need to add this function in ``/app/helpers/auth_helper.php`` to override ``auth_permissions()`` in ``/lib/helpers/auth_helper.php``. The function should return the list of permissions by the given role id. ::
+
+    /**
+    * Get the permissions of a particular role
+    * @param string|int $role The user role name or id
+    * @return array|null Array of permissions of the role
+    */
+    function auth_permissions($role)
+    {
+        $result = db_select('role_permission')
+            ->where()->condition('role_id', $role)
+            ->getResult();
+
+        return array_column($result, 'name');
+    }
+
+Set ``role_id`` to ``$lc_auth['fields']['role']`` in ``/inc/config.php``. ::
+
+    # $lc_auth: configuration for the user authentication
+    # This can be overidden by defining $lc_auth in /inc/site.config.php
+    $lc_auth = array(
+        'table' => '', // table name, for example, user
+        'fields' => array(
+            'id'    => 'id',  // PK field name, for example, user_id
+            'role'  => 'role_id'   // User role field name, for example, user_role
+        ),
+        'permissions'  => array(
+            // permissions allowed
+            // role name => array of permission names
+            // For example,
+            // 'admin' => array('post-list', 'post-add', 'post-edit', 'post-delete'),
+            // 'editor' => array('post-list', 'post-add', 'post-edit') // editor is not allowed for post deletion
+            // If you store permissions in your db, implement auth_permissions($role) in /app/helpers/auth_helper.php
+            // to return the permission list from your db
+        ),
+    );
