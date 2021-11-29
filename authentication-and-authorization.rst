@@ -220,7 +220,7 @@ You would need to add this function in ``/app/helpers/auth_helper.php`` to overr
         return array_column($result, 'name');
     }
 
-Set ``role_id`` to ``$lc_auth['fields']['role']`` in ``/inc/config.php``. ::
+Then, set ``role_id`` to ``$lc_auth['fields']['role']`` in ``/inc/config.php``. ::
 
     # $lc_auth: configuration for the user authentication
     # This can be overidden by defining $lc_auth in /inc/site.config.php
@@ -240,3 +240,17 @@ Set ``role_id`` to ``$lc_auth['fields']['role']`` in ``/inc/config.php``. ::
             // to return the permission list from your db
         ),
     );
+
+Since you use the ``role_id`` field for ``$lc_auth['fields']['role']``, you will have to use role id when calling ``auth_role()`` or ``auth_roles()`` ::
+
+    if (auth_role(2)) {
+        // if user is editor, do something
+    } else {
+        // redirect to the access-denied page
+    }
+
+    if (auth_roles(1, 2)) {
+        // if user is admin or editor, do something
+    } else {
+        // redirect to the access-denied page
+    }
