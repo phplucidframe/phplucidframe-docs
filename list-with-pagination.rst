@@ -75,14 +75,14 @@ Finally, we call ``$pager->display()`` where we want to appear the pager. By def
 
 If we use ``imagePath``, the output HTML will be generated with ``<img />`` tag. The following images have to be available in our ``imagePath``:
 
-- end.png
-- end_disabled.png
-- next.png
-- next_disabled.png
-- previous.png
-- previous_disabled.png
-- start.png
-- start_disabled.png ::
+#. end.png
+#. end_disabled.png
+#. next.png
+#. next_disabled.png
+#. previous.png
+#. previous_disabled.png
+#. start.png
+#. start_disabled.png ::
 
     <table cellspacing="0" cellpadding="0" border="0" class="pager">
         <tbody>
