@@ -73,71 +73,35 @@ then, you can call those parameters from ``/inc/parameter/production.php`` using
 Connecting to Multiple Databases
 --------------------------------
 
-Sometimes, we need to connect multiple databases in our app. . In ``/inc/config.php`` (copy of ``/inc/config.default.php``), ``$lc_databases`` is an array composed of multiple database connection strings. Here’s the default syntax, specifying a single connection: ::
-
-    $lc_databases = array(
-        'default' => array( // default database; you could also have other database settings here
-                'engine'    => _p('db.default.engine'),
-                'host'      => _p('db.default.host'),
-                'port'      => _p('db.default.port'),
-                'database'  => _p('db.default.database'),
-                'username'  => _p('db.default.username'),
-                'password'  => _p('db.default.password'),
-                'prefix'    => _p('db.default.prefix'),
-                'collation' => _p('db.default.collation')
-        )
-    );
-
-As an example, you might have two databases, the default database and a legacy database and the syntax would be as below: ::
-
-    $lc_databases = array(
-        'default' => array( // default database; you could also have other database settings here
-                'engine'    => _p('db.default.engine'),
-                'host'      => _p('db.default.host'),
-                'port'      => _p('db.default.port'),
-                'database'  => _p('db.default.database'),
-                'username'  => _p('db.default.username'),
-                'password'  => _p('db.default.password'),
-                'prefix'    => _p('db.default.prefix'),
-                'collation' => _p('db.default.collation')
-        )
-        'legacy' => array(
-                'engine'    => _p('db.legacy.engine'),
-                'host'      => _p('db.legacy.host'),
-                'port'      => _p('db.legacy.port'),
-                'database'  => _p('db.legacy.database'),
-                'username'  => _p('db.legacy.username'),
-                'password'  => _p('db.legacy.password'),
-                'prefix'    => _p('db.legacy.prefix'),
-                'collation' => _p('db.legacy.collation')
-        )
-    );
-
-The next step is to define the parameters in ``/inc/parameter/development.php`` or ``/inc/parameter/production.php`` for your two databases in the configuration db. Here is any example. ::
+Sometimes, we need to connect multiple databases in our app. As an example, you might have two databases, the default database and a legacy database. The configuration in ``/inc/parameter/development.php`` or ``/inc/parameter/production.php`` for your two databases would be as below: ::
 
     return array(
         // ...
         # Database connection information
         'db' => array(
             'default' => array(
-                'engine'    => 'mysql', // database engine
-                'host'      => 'localhost', // database host
-                'port'      => '', // database port
-                'database'  => 'lucid_blog', // database name
-                'username'  => 'yourusername', // database username
-                'password'  => 'yourpassword', // database password
-                'prefix'    => '', // table name prefix
-                'collation' => 'utf8_general_ci' // database collation
-            ),
-            'legacy' => array(
-                'engine'    => 'mysql',
+                'driver'    => 'mysql',
                 'host'      => 'localhost',
                 'port'      => '',
-                'database'  => 'legacy_db',
-                'username'  => 'legacyusername',
-                'password'  => 'legacypassword',
-                'prefix'    => '', // table name prefix
-                'collation' => 'utf8_general_ci'
+                'database'  => 'your_db_name',
+                'username'  => 'your_db_username',
+                'password'  => 'your_db_pwd',
+                'prefix'    => '',
+                'charset'   => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'engine'    => 'InnoDB',
+            ),
+            'legacy' => array(
+                'driver'    => 'mysql',
+                'host'      => 'localhost',
+                'port'      => '',
+                'database'  => 'legacy_db_name',
+                'username'  => 'legacy_db_username',
+                'password'  => 'legacy_db_pwd',
+                'prefix'    => '',
+                'charset'   => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'engine'    => 'InnoDB',
             )
         ),
         // ...
@@ -147,6 +111,7 @@ When you need to connect to one of the other databases, you activate it by its k
 
     # Get some information from the legacy database.
     db_switch('legacy');
+
     # Fetching data from the `user` table of the legacy database
     $result = db_select('user')
         ->where('uid', $uid)
