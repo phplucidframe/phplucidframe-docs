@@ -31,10 +31,10 @@ According to the sample database ``/db/schema.sample.php``,
 2. ``$lc_auth['fields']['id']`` would be ``id`` (i.e., ``user.id``).
 3. ``$lc_auth['fields']['role']`` would be ``role`` (i.e., ``user.role``).
 
-Hashing Passwords
------------------
+Encrypting Passwords
+--------------------
 
-Hashing passwords are always required in every secured web application. When user data are inserted in user registration process, it is advisable to hash user input password using the core function ``_encrypt()``. ::
+Encrypting passwords are always required in every secured web application. When user data are inserted in user registration process, it is advisable to encrypt user input password using the core function ``_encrypt()``. ::
 
     $theEncryptedPassword = _encrypt($theUserInputPassword);
 
