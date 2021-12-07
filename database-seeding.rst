@@ -11,7 +11,7 @@ Seeding Syntax
 The following is seeding file syntax. ::
 
     <?php
-    use LucidFrame\Core\Seeder; // required ony if you have any reference field to insert and to use Seeder::setReference()
+    use LucidFrame\Core\Seeder; // required ony if you have any reference field to insert and to use Seeder::getReference()
 
     // Must return the array
     return array(
@@ -21,12 +21,12 @@ The following is seeding file syntax. ::
             // field  => value
             'field1'  => 'value2',
             'field2'  => 'value2',
-            'field3'  => Seeder::setReference('record-key-from-previously-executed-seed'),
+            'field3'  => Seeder::getReference('record-key-from-previously-executed-seed'),
         ),
         'record-2' => array(
             'field1'  => 'value2',
             'field2'  => 'value2',
-            'field3'  => Seeder::setReference('record-key-from-previously-executed-seed'),
+            'field3'  => Seeder::getReference('record-key-from-previously-executed-seed'),
         ),
     );
 
@@ -72,7 +72,7 @@ The followings are example contents for each seeding file.
     return array(
         'order' => 2, // this file will be executed after seeding is executed for the table "category"
         'post-1' => array(
-            'cat_id'    => Seeder::setReference('category-1'), // reference field that will be inserted with category id that will be created by the previous category seeding execution
+            'cat_id'    => Seeder::getReference('category-1'), // reference field that will be inserted with category id that will be created by the previous category seeding execution
             'slug'      => 'welcome-to-the-lucidframe-blog',
             'title'     => 'Welcome to the LucidFrame Blog',
             'body'      => 'LucidFrame is a mini application development framework - a toolkit for PHP developers. It provides logical structure and several helper utilities for web application development. It uses a module architecture to make the development of complex applications simplified.',
@@ -104,12 +104,12 @@ The followings are example contents for each seeding file.
     return array(
         'order' => 4, // this file will be executed lastly in all of four files
         'post-to-tag-1' => array(
-            'post_id'   => Seeder::setReference('post-1'), // reference field to the table "post"
-            'tag_id'    => Seeder::setReference('tag-1'),  // reference field to the table "tag"
+            'post_id'   => Seeder::getReference('post-1'), // reference field to the table "post"
+            'tag_id'    => Seeder::getReference('tag-1'),  // reference field to the table "tag"
         ),
         'post-to-tag-2' => array(
-            'post_id'   => Seeder::setReference('post-1'),
-            'tag_id'    => Seeder::setReference('tag-2'),
+            'post_id'   => Seeder::getReference('post-1'),
+            'tag_id'    => Seeder::getReference('tag-2'),
         ),
     );
 
