@@ -3,10 +3,10 @@ Database Configuration
 
 You can configure your database settings in three files according to your deployment environments:
 
-- ``/inc/parameter/development.php`` for development environment
-- ``/inc/parameter/staging.php`` for staging environment
-- ``/inc/parameter/production.php`` for production environment
-- ``/inc/parameter/test.php`` for test environment
+#. ``/inc/parameter/development.php`` for development environment
+#. ``/inc/parameter/staging.php`` for staging environment
+#. ``/inc/parameter/production.php`` for production environment
+#. ``/inc/parameter/test.php`` for test environment
 
 ::
 
@@ -48,9 +48,7 @@ As of version 2.0, PHPLucidFrame includes a file ``/inc/parameter/parameter.env.
         )
     );
 
-then, you can call those parameters from ``/inc/parameter/production.php`` using ``_env()``.
-
-::
+then, you can call those parameters from ``/inc/parameter/production.php`` using ``_env('prod.db.default.xxxx')`` ::
 
     return array(
         // ...
