@@ -13,6 +13,7 @@ Welcome to PHPLucidFrame's documentation!
    about
    installation
    application-structure
+   configuration-and-parameters
    the-view
    bootstrapping
    core-defined-constants-variables
