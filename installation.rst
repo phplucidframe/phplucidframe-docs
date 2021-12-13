@@ -76,7 +76,8 @@ By default, development environment is active. You can make production environme
 If you don't want to use or can't use command line, you can save the file ``.lcenv`` (in the project root) with the content ``production``.
 
 .. note::
-    You can check the currently active environment by running the command ``php lucidframe env --show``.
+    #. ``.lcenv`` should have writtable permission.
+    #. You can check the currently active environment by running the command ``php lucidframe env --show``.
 
 Secret key
 ----------
