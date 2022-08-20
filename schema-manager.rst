@@ -197,65 +197,79 @@ Data Type Mapping Matrix
 
 The following table shows the matrix that contains the mapping information for how a specific type is mapped to the database.
 
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| Type Name          | MySQL Data Type         | Explanation                                                                            |
-+====================+=========================+========================================================================================+
-| smallint           | SMALLINT                | Maps and converts 2-byte integer values.                                               |
-|                    |                         |                                                                                        |
-|                    |                         | - Unsigned integer with a range of **0** to **65535**                                  |
-|                    |                         | - Signed integer with a range of **−32768** to **32767**                               |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| int/integer        | INT                     | Maps and converts 4-byte integer values.                                               |
-|                    |                         |                                                                                        |
-|                    |                         | - Unsigned integer with a range of **0** to **4294967295**                             |
-|                    |                         | - Signed integer with a range of **−2147483648** to **2147483647**                     |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| bigint             | BIGINT                  | Maps and converts 8-byte integer values.                                               |
-|                    |                         |                                                                                        |
-|                    |                         | - Unsigned integer with a range of **0** to **18446744073709551615**                   |
-|                    |                         | - Signed integer with a range of **−9223372036854775808** to **9223372036854775807**   |
-|                    |                         |                                                                                        |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| decimal            | NUMERIC(p,s)            | Maps and converts numeric data with fixed (exact) point precision.                     |
-|                    |                         | The precision (p) represents the number of significant digits that                     |
-|                    |                         | are stored for values. The scale (s) represents the number of digits                   |
-|                    |                         | that can be stored following the decimal point.                                        |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| float              | DOUBLE(p,s)             | Maps and converts numeric data with floating (approximate) point                       |
-|                    |                         | precision. The precision (p) represents the number of significant                      |
-|                    |                         | digits that are stored for values. The scale (s) represents the                        |
-|                    |                         | number of digits that can be stored following the decimal point.                       |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| string             | VARCHAR                 | Maps and converts string data with a maximum length.                                   |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| char               | CHAR                    | Maps and converts string data with a fixed length.                                     |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| binary             | VARBINARY               | Maps and converts binary string data with a maximum length.                            |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| text               | TEXT                    | Maps and converts string data without a maximum length.                                |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| blob               | BLOB                    | Maps and converts binary string data withou a maximum length.                          |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| array              | TEXT                    | Maps and converts array data based on PHP serialization. It uses                       |
-|                    |                         | serialization to represent an exact copy of your array as string                       |
-|                    |                         | the database and values retrieved from the database are always                         |
-|                    |                         | converted to PHP’s array type using deserialization.                                   |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| json               | TEXT                    | Maps and converts array data based on PHP's JSON encoding functions.                   |
-|                    |                         | It stores a valid UTF8 encoded JSON format string and values received                  |
-|                    |                         | from the database are always the return value from PHP's                               |
-|                    |                         | ``json_decode()`` function.                                                            |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| boolean            | TINYINT(1)              | Maps and converts boolean data. If you know that the data to be stored                 |
-|                    |                         | always is a boolean (``true`` or ``false``), you should consider                       |
-|                    |                         | using this type.                                                                       |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| date               | DATE                    | Maps and converts date data without time and timezone information                      |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| datetime           | DATETIME                | Maps and converts date and time data without timezone information                      |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
-| time               | TIME                    | Maps and converts time data without date and timezone information                      |
-+--------------------+-------------------------+----------------------------------------------------------------------------------------+
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| Type Name    | MySQL Data Type | Explanation                                                                            |
++==============+=================+========================================================================================+
+| smallint     | SMALLINT        | 2-byte integer values:                                                                 |
+|              |                 |                                                                                        |
+|              |                 | - Unsigned integer with a range of **0** to **65535**                                  |
+|              |                 | - Signed integer with a range of **−32768** to **32767**                               |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| mediumint    | MEDIUMINT       | 3-byte integer values:                                                                 |
+|              |                 |                                                                                        |
+|              |                 | - Unsigned integer with a range of **0** to **16777215**                               |
+|              |                 | - Signed integer with a range of **−8388608** to **8388607**                           |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| int/integer  | INT             | 4-byte integer values:                                                                 |
+|              |                 |                                                                                        |
+|              |                 | - Unsigned integer with a range of **0** to **4294967295**                             |
+|              |                 | - Signed integer with a range of **−2147483648** to **2147483647**                     |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| bigint       | BIGINT          | 8-byte integer values:                                                                 |
+|              |                 |                                                                                        |
+|              |                 | - Unsigned integer with a range of **0** to **18446744073709551615**                   |
+|              |                 | - Signed integer with a range of **−9223372036854775808** to **9223372036854775807**   |
+|              |                 |                                                                                        |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| decimal      | NUMERIC(p,s)    | A numeric data with fixed (exact) point precision.                                     |
+|              |                 | The precision (p) represents the number of significant digits that                     |
+|              |                 | are stored for values. The scale (s) represents the number of digits                   |
+|              |                 | that can be stored following the decimal point.                                        |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| float        | DOUBLE(p,s)     | A numeric data with floating (approximate) point                                       |
+|              |                 | precision. The precision (p) represents the number of significant                      |
+|              |                 | digits that are stored for values. The scale (s) represents the                        |
+|              |                 | number of digits that can be stored following the decimal point.                       |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| string       | VARCHAR         | String data with a maximum length specified                                            |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| char         | CHAR            | String data with a fixed length specified                                              |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| binary       | VARBINARY       | Binary string data with a maximum length specified                                     |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| tinytext     | TINYTEXT        | String data with a maximum length of 255 characters.                                   |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| text         | TEXT            | String data with a maximum length of 6,553 characters.                                 |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| mediumtext   | MEDIUMTEXT      | String data with a maximum length of 16,777,215 characters.                            |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| longtext     | LONGTEXT        | String data with a maximum length of 4,294,967,295 characters.                         |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| tinyblob     | TINYBLOB        | String data with a maximum length of 6,553 characters.                                 |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| blob         | BLOB            | Binary string data with a maximum length of 6,553 characters.                          |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| mediumblob   | MEDIUMBLOB      | Binary string data with a maximum length of 16,777,215 characters.                     |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| longblob     | LONGBLOB        | Binary string data with a maximum length of 4,294,967,295 characters.                  |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| array        | TEXT            | An array data based on PHP serialization. It uses serialization to represent           |
+|              |                 | an exact copy of your array as string. The database and values retrieved               |
+|              |                 | from the database are always converted to PHP’s array type using deserialization.      |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+|  json        | TEXT            | An array data based on PHP's JSON encoding functions. It stores a valid UTF8 encoded   |
+|              |                 | JSON format string and values received from the database are always the return value   |
+|              |                 | from PHP's ``json_decode()`` function.                                                 |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| boolean      | TINYINT(1)      | A boolean data. If you know that the data to be stored always is a boolean             |
+|              |                 | (``true`` or ``false``), you should consider using this type.                          |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| date         | DATE            | A date data with format ``YYYY-MM-DD``                                                 |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| datetime     | DATETIME        | A date and time with format ``YYYY-MM-DD HH:MM:SS``                                    |
++--------------+-----------------+----------------------------------------------------------------------------------------+
+| time         | TIME            | A time data with format ``HH:MM:SS``                                                   |
++--------------+-----------------+----------------------------------------------------------------------------------------+
 
 Loading Your Schema
 -------------------
