@@ -328,3 +328,165 @@ Condition Operators
 +---------------+-------------------------------------------+-----------------------------------------+
 | ``nlike~%``   | ``array('title nlike~%' => 'a project')`` | ``WHERE title NOT LIKE "a project%"``   |
 +---------------+-------------------------------------------+-----------------------------------------+
+
+Finding Data
+------------
+
+A couple of quick helpful functions are provided for fetching data from tables.
+
+db_find()
+^^^^^^^^^
+
+Returns a single entity result where the primary key matches the value passed in as the second parameter for the table name in the first parameter.
+
+**Parameters**:
+
++-----------+----------+-------------------------------------------------------------------------+
+| Name      | Type     | Description                                                             |
++===========+==========+=========================================================================+
+| ``table`` | string   | The table name to fetch data from                                       |
++-----------+----------+-------------------------------------------------------------------------+
+| ``id``    | int      | The value of the primary key to match                                   |
++-----------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_find('post', 1);
+
+db_findOrFail()
+^^^^^^^^^^^^^^^
+
+Returns a single entity result where the primary key matches the value passed in as the second parameter for the table name in the first parameter OR throws 404 if any result is not found.
+
+**Parameters**:
+
++-----------+----------+-------------------------------------------------------------------------+
+| Name      | Type     | Description                                                             |
++===========+==========+=========================================================================+
+| ``table`` | string   | The table name to fetch data from                                       |
++-----------+----------+-------------------------------------------------------------------------+
+| ``id``    | int      | The value of the primary key to match                                   |
++-----------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_findOrFail('post', 1);
+
+db_findAll()
+^^^^^^^^^^^^
+
+Returns all rows from the given table.
+
+**Parameters**:
+
++-----------------+----------+-------------------------------------------------------------------------+
+| Name            | Type     | Description                                                             |
++=================+==========+=========================================================================+
+| ``table``       | string   | The table name to fetch data from                                       |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``fields``      | array    | The list of the field names to select (optional)                        |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``orderBy``     | array    | The order by clause for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_findAll('post', array('id', 'cat_id', 'title'));
+
+db_findBy()
+^^^^^^^^^^^
+
+Returns array of data row objects of a table by condition.
+
+**Parameters**:
+
++-----------------+----------+-------------------------------------------------------------------------+
+| Name            | Type     | Description                                                             |
++=================+==========+=========================================================================+
+| ``table``       | string   | The table name to fetch data from                                       |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``condition``   | array    | The condition array for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``orderBy``     | array    | The order by clause for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``limit``       | int      | The number of records to return; No limit by default                    |
++-----------------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_findBy('post', array('cat_id' => 1), array('created' => 'desc'), 3);
+
+db_findOneBy()
+^^^^^^^^^^^^^^
+
+Returns a single entity result of a table by condition
+
+**Parameters**:
+
++-----------------+----------+-------------------------------------------------------------------------+
+| Name            | Type     | Description                                                             |
++=================+==========+=========================================================================+
+| ``table``       | string   | The table name to fetch data from                                       |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``condition``   | array    | The condition array for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``orderBy``     | array    | The order by clause for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_findOneBy('post', array('cat_id' => 1), array('created' => 'desc'));
+
+db_findOneByOrFail()
+^^^^^^^^^^^^^^^^^^^^
+
+Returns a single entiry result of a table by condition or throw 404 if not found
+
+**Parameters**:
+
++-----------------+----------+-------------------------------------------------------------------------+
+| Name            | Type     | Description                                                             |
++=================+==========+=========================================================================+
+| ``table``       | string   | The table name to fetch data from                                       |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``condition``   | array    | The condition array for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``orderBy``     | array    | The order by clause for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+
+**Example**: ::
+
+    $result = db_findOneBy('post', array('cat_id' => 1), array('created' => 'desc'));
+
+
+db_findWithPager()
+^^^^^^^^^^^^^^^^^^
+
+Returns array of data row objects with pagination result.
+
+**Parameters**:
+
++-----------------+----------+-------------------------------------------------------------------------+
+| Name            | Type     | Description                                                             |
++=================+==========+=========================================================================+
+| ``table``       | string   | The table name to fetch data from                                       |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``condition``   | array    | The condition array for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``orderBy``     | array    | The order by clause for query (optional)                                |
++-----------------+----------+-------------------------------------------------------------------------+
+| ``pagerOption`` | array    | Array of key/value pairs to Pager options (optional)                    |
++-----------------+----------+-------------------------------------------------------------------------+
+
+**Return**:
+
+Array of three items:
+
+#. QueryBuilder - An instance of ``LucidFrame\Core\QueryBuilder``
+#. Pager - An instance of ``LucidFrame\Core\Pager``
+#. int - The total number of records
+
+
+**Example**: ::
+
+    list($qb, $pager, $total) = db_findWithPager('post', array('cat_id' => 1), array('created' => 'desc'));
