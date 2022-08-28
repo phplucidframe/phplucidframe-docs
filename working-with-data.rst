@@ -353,6 +353,8 @@ Returns a single entity result where the primary key matches the value passed in
 
     $result = db_find('post', 1);
 
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_find.html.
+
 db_findOrFail()
 ^^^^^^^^^^^^^^^
 
@@ -371,6 +373,8 @@ Returns a single entity result where the primary key matches the value passed in
 **Example**: ::
 
     $result = db_findOrFail('post', 1);
+
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findOrFail.html.
 
 db_findAll()
 ^^^^^^^^^^^^
@@ -392,6 +396,8 @@ Returns all rows from the given table.
 **Example**: ::
 
     $result = db_findAll('post', array('id', 'cat_id', 'title'));
+
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findAll.html.
 
 db_findBy()
 ^^^^^^^^^^^
@@ -416,6 +422,8 @@ Returns array of data row objects of a table by condition.
 
     $result = db_findBy('post', array('cat_id' => 1), array('created' => 'desc'), 3);
 
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findBy.html.
+
 db_findOneBy()
 ^^^^^^^^^^^^^^
 
@@ -436,6 +444,8 @@ Returns a single entity result of a table by condition
 **Example**: ::
 
     $result = db_findOneBy('post', array('cat_id' => 1), array('created' => 'desc'));
+
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findOneBy.html.
 
 db_findOneByOrFail()
 ^^^^^^^^^^^^^^^^^^^^
@@ -458,6 +468,7 @@ Returns a single entiry result of a table by condition or throw 404 if not found
 
     $result = db_findOneBy('post', array('cat_id' => 1), array('created' => 'desc'));
 
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findOneByOrFail.html.
 
 db_findWithPager()
 ^^^^^^^^^^^^^^^^^^
@@ -490,3 +501,5 @@ Array of three items:
 **Example**: ::
 
     list($qb, $pager, $total) = db_findWithPager('post', array('cat_id' => 1), array('created' => 'desc'));
+
+See more at http://www.phplucidframe.com/api-doc/latest/function-db_findWithPager.html.
