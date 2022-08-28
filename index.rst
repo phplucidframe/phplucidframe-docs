@@ -21,7 +21,7 @@ Welcome to PHPLucidFrame's documentation!
    file-inclusion
    auto-loading-libraries
    database-configuration
-   data-manipulation
+   working-with-data
    query-builder
    native-queries
    schema-manager

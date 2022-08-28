@@ -1,4 +1,4 @@
-Data Manipulation
+Working With Data
 =================
 
 To insert, update, delete data, PHPLucidFrame provides the helper functions - ``db_insert()``, ``db_update()``, ``db_delete()`` and ``db_delete_multi()``.
