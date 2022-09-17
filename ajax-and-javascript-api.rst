@@ -449,3 +449,26 @@ LC.eval
 -------
 
 Evaluates JavaScript code represented as a string.
+
+**Parameters**
+
++---------------+--------+-------------------------------------------------+
+| Name          | Type   | Description                                     |
++===============+========+=================================================+
+| ``statement`` | string | The javascript expression as string to evaluate |
++---------------+--------+-------------------------------------------------+
+
+LC.getKeyByValue
+----------------
+
+Get a key in an object by its value
+
+**Parameters**
+
++------------+--------+---------------------------------------------------+
+| Name       | Type   | Description                                       |
++============+========+===================================================+
+| ``object`` | object | The object to search in                           |
++------------+--------+---------------------------------------------------+
+| ``value``  | mixed  | The value to search in the first parameter object |
++------------+--------+---------------------------------------------------+
