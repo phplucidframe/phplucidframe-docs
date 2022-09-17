@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PHPLucidFrame'
-copyright = '2022, Sithu K.'
+copyright = '2022, PHPLucidFrame'
 author = 'Sithu K.'
 
 # The version info for the project you're documenting, acts as replacement for
