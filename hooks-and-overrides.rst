@@ -20,6 +20,24 @@ Get the language to process. Read ``lang`` from query string. Basically, it is u
 
 It can be defined in ``/app/helpers/utility_helper.php`` and executed after the core function ``_getLang()`` in ``/lib/helpers/utility_helpers.php`` runs.
 
+__validation_messages()
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Define customer validation messages by rule as key. It can be defined in ``/app/helpers/validatio_helper.php``. For example, ::
+
+    /**
+    * Hook for custom validation messages
+    * @return string[]
+    */
+    function __validation_messages()
+    {
+        return array(
+            # rule => message
+            'validate_emailRetyped'     => 'Your re-typed email address does not match.',
+            'validate_confirmPassword'  => '"%s" does not match.',
+        );
+    }
+
 db_insert_<table_name>($table, $data=array(), $useSlug=true)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
