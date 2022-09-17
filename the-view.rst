@@ -54,6 +54,13 @@ You can include ``recent-posts.php`` in ``view.php`` like this ::
 
 If ``recent-posts.php`` is needed to include in more than one page, you can move the file into ``/app/inc/tpl/`` and ``_app('view')->block('recent-posts')`` will automatically look for the file in that directory when it is not found in the current directory.
 
+A new option to return html from the ``block()`` method is added since version 3.1. You can provide thrid parameter to the method. ::
+
+    <?php
+    $html = _app('view')->block('recent-posts', $data, true)
+    echo $html;
+    ?>
+
 Layout File
 -----------
 
