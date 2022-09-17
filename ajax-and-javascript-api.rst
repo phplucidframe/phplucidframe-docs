@@ -276,7 +276,9 @@ Initialize an AJAX list
 +-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
 | ``options.createButton``          | string | ``#btn-new``                     | HTML id of the button to launch the dialog modal to create a new entry           |
 +-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
-| ``options.editButton``            | string | ``.table .actions .edit``        | HTML id of the button to launch the dialog modal to edit an entry                |
+| ``options.editButtonClass``       | string | ``.table .actions .edit``        | HTML id/class of the button to launch the dialog modal to edit an entry          |
++-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
+| ``options.deleteButtonClass``     | string | ``.table .actions .delete``      | HTML id/class of the button to delete an entry                                   |
 +-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
 | ``options.createCallback``        | string | null                             | A callback function to be invoked before the dialog modal is opened for creation |
 +-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
@@ -285,58 +287,103 @@ Initialize an AJAX list
 | ``options.deleteCallback``        | string | null                             | A callback function to be invoked after the entry is deleted                     |
 +-----------------------------------+--------+----------------------------------+----------------------------------------------------------------------------------+
 
-LC.List.list([arg1, arg2])
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+LC.List.list(listId, [arg1, arg2])
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Load the list by AJAX
 
 **Parameters**:
 
-When two parameters provided,
+When three parameters are provided,
 
-+----------+--------+-------------------+
-| Name     | Type   | Description       |
-+==========+========+===================+
-| ``arg1`` | string | URL to request    |
-+----------+--------+-------------------+
-| ``arg2`` | object | Parameters to URL |
-+----------+--------+-------------------+
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
+| ``arg1``   | string | URL to request                                     |
++------------+--------+----------------------------------------------------+
+| ``arg2``   | object | Parameters to URL                                  |
++------------+--------+----------------------------------------------------+
 
-When one parameter (``string``) is provided,
+When two parameters are provided and the second parameter is string,
 
-+----------+--------+----------------+
-| Name     | Type   | Description    |
-+==========+========+================+
-| ``arg1`` | string | URL to request |
-+----------+--------+----------------+
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
+| ``arg1``   | string | URL to request                                     |
++------------+--------+----------------------------------------------------+
 
-When one parameter (``object``) is provided,
+When two parameters are provided and the second parameter is object,
 
-+----------+--------+-----------------------------+
-| Name     | Type   | Description                 |
-+==========+========+=============================+
-| ``arg1`` | object | Parameter to URL to request |
-+----------+--------+-----------------------------+
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
+| ``arg1``   | object | Parameter to URL to request                        |
++------------+--------+----------------------------------------------------+
 
-LC.List.create()
-^^^^^^^^^^^^^^^^
+.. note::
+    When no parameter is provided to the function, the first parameter ``listId`` would be ``list`` by default.
+
+LC.List.create(listId)
+^^^^^^^^^^^^^^^^^^^^^^
 
 Launch the dialog to create a new entity
 
-LC.List.edit()
-^^^^^^^^^^^^^^
+**Parameters**
+
++------------+--------+------------------------------------------------------+
+| Name       | Type   | Description                                          |
++============+========+======================================================+
+| ``listId`` | string | HTML id of the list container; default is ``list``   |
++------------+--------+------------------------------------------------------+
+
+LC.List.edit(id, listId)
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Launch the dialog to edit an existing entity
 
-LC.List.remove()
-^^^^^^^^^^^^^^^^
+**Parameters**
+
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``id``     | mixed  | ID (from db) to edit (required)                    |
++------------+--------+----------------------------------------------------+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
+
+LC.List.remove(id, listId)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Launch the dialog to confirm for deleting an entity
 
-LC.List.doDelete()
-^^^^^^^^^^^^^^^^^^
+**Parameters**
 
-Do delete action upon confirm OK
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``id``     | mixed  | ID (from db) to edit (required)                    |
++------------+--------+----------------------------------------------------+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
+
+LC.List.doDelete(listId)
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Do delete action upon confirmation (after approval of the dialog launched by ``LC.List.remove()``)
+
+**Parameters**
+
++------------+--------+----------------------------------------------------+
+| Name       | Type   | Description                                        |
++============+========+====================================================+
+| ``listId`` | string | HTML id of the list container; default is ``list`` |
++------------+--------+----------------------------------------------------+
 
 LC.DependentUpdater
 -------------------
