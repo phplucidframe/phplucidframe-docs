@@ -107,7 +107,7 @@ There are some methods available to create query conditions - ``where()``, ``and
 Simple condition
 ^^^^^^^^^^^^^^^^
 
-For array parameter, it accepts all `conditional operators described in the previous section <database-configuration-and-data-manipulation.html#condition-operators>`_, for example, ::
+For array parameter, it accepts all `conditional operators described in the previous section <working-with-data.html#condition-operators>`_, for example, ::
 
     $result = db_select('post', 'p')
         ->fields('p', array('id', 'title'))
@@ -215,6 +215,45 @@ It generates the following query: ::
     ORDER BY `p`.`created` DESC
     LIMIT 5
 
+EXITS and NOT EXISTS
+^^^^^^^^^^^^^^^^^^^^
+
+As of version 3.2, PHPLucidFrame added support for ``EXISTS`` and ``NOT EXISTS`` conditions. Here is an example. ::
+
+    $subquery = db_select('post_to_tag', 'pt')
+        ->where()
+        ->condition('post_id', db_raw('p.id'))
+        ->condition('tag_id', 1)
+        ->getReadySQL();
+
+    $qb = db_select('post', 'p')
+        ->where()
+        ->condition('deleted', null)
+        ->exists($subquery);
+
+    $result = $qb->getResult();
+
+It generates the following query: ::
+
+    SELECT `p`.* FROM `post` `p` WHERE `deleted` IS NULL
+    AND EXISTS (SELECT `pt`.* FROM `post_to_tag` `pt` WHERE `post_id` = `p`.`id` AND `tag_id` = 1)
+
+You can also use ``notExists()`` for ``NOT EXISTS``. ::
+
+    $subquery = db_select('post_to_tag', 'pt')
+        ->where()
+        ->condition('post_id', db_raw('p.id'))
+        ->condition('tag_id', 1)
+        ->getReadySQL();
+
+    $qb = db_select('post', 'p')
+        ->where()
+        ->condition('deleted', null)
+        ->notExists($subquery);
+
+    $result = $qb->getResult();
+
+``orExists()`` and ``orNotExists()`` are also available to add multiple ``OR EXISTS`` or ``OR NOT EXISTS`` statements to your query.
 
 Grouping Results
 ----------------
