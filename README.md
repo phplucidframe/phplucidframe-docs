@@ -15,7 +15,9 @@ Install Sphinx rtd theme with:
 
     pip install sphinx_rtd_theme
 
-Generate HTML from rst files with:
+And then try `sphinx-build --version`. If it doesn't work, add `sphinx-build.exe` path to the environment variables.
+
+Generate HTML from **rst** files with:
 
     make html
 
