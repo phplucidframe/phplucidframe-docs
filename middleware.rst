@@ -27,6 +27,21 @@ An `after` middleware is an event executed after a request. Here is its definiti
         // Do something at the end of the page request
     }, 'after');
 
+Order/Precedence for Middlewares
+--------------------------------
+
+You can register precedence of the middleware execution by using the method ``order()``, for example, ::
+
+    _middleware(function () {
+        // ...
+    })->order(2);
+
+    _middleware(function () {
+        // ...
+    })->order(1);
+
+The middlewares will be executed in ascending order, so the second middleware will be executed first.
+
 Assigning Middleware to Routes
 ------------------------------
 
