@@ -26,6 +26,10 @@ You can also provide the ``action`` attribute for your desired form handling fil
         <?php form_token(); ?>
     </form>
 
+If you don't want to clear data in form inputs after submit, you can set ``data-clear="off"`` to the form tag. ::
+
+    <form name="your-form-name" id="your-form-id" data-clear="off" method="post">
+
 One of the following two button implementation should be made to your AJAX form.
 
 1. ``<input type="submit" /> or <button type="submit">..</button>``
