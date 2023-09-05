@@ -64,23 +64,21 @@ The following is a scaffold of AJAX form handling and validation. You can check 
     $success = false;
 
     if (_isHttpPost()) {
-        $post = _post(); // Sanitize your inputs
+        $data = _post(); // Sanitize your inputs
 
         /** Form validation prerequisites here, for example */
         $validations = array(
             'title' => array(
                 'caption'   => _t('Title'),
-                'value'     => $post['title'],
                 'rules'     => array('mandatory'),
             ),
             'body' => array(
                 'caption'   => _t('Body'),
-                'value'     => $post['body'],
                 'rules'     => array('mandatory'),
             ),
         );
 
-        if (form_validate($validations)) {
+        if (form_validate($validations, $data)) {
             /**
             Database operations here
             */
@@ -117,7 +115,7 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
     $validations = array(
         'htmlIdOrName' => array( // The HTML id or name of the input element
             'caption'    => _t('Your Element Caption'); // The caption to show in the error message
-            'value'      => $value, // The value to be validated
+            'value'      => $value, // The value to be validated. If it is not provided, you need to provide all POST data to form_validate(). 
             'rules'      => array(), // Array of validation rules defined, e.g., array('mandatory', 'email')
             'min'        => '', // The required property for the rule 'min', 'minLength', 'between'
             'max'        => '', // The required property for the rule 'max', 'maxLength', 'between'
@@ -153,6 +151,18 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
 The validation array should be passed to ``form_validate()`` to be processed. ::
 
     if (form_validate($validations)) { // or validation_check($validations)
+        // ...
+    }
+
+You can also add POST data to the second parameter. ::
+    
+    $data = _post();
+
+    $validations = array(
+        // ...    
+    );
+
+    if (form_validate($validations, $data)) {
         // ...
     }
 
@@ -360,7 +370,7 @@ This checks at least one field of the field group is required. ::
     <div>
 
     ### PHP ###
-    $post = _post($_POST);
+    $post = _post();
 
     $validations = array(
         'phones[]' => array( // HTML id of the group element
@@ -577,7 +587,8 @@ Then, you must define a function ``validate_duplicateUsername()`` in ``/app/help
      * @param integer $id The edit id if any
      * @return boolean TRUE for no duplicate; FALSE for duplicate
      */
-    function validate_duplicateUsername($value, $id = 0) {
+    function validate_duplicateUsername($value, $id = 0) 
+    {
         $value = strtolower($value);
         if (empty($value)) {
             return true;
