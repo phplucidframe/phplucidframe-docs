@@ -442,6 +442,19 @@ This rule checks the field string length is greater than a specific length. The 
         ),
     );
 
+exactLength
+^^^^^^^^^^^
+This rule checks that a string/array's length is equal to the specific length. The required option - ``length``. ::
+
+    $validations = array(
+        'code' => array(
+            'caption'   => _t('Code'),
+            'value'     => $valueToCheck,
+            'rules'     => array('mandatory', 'exactLength'),
+            'length'    => 6,
+        ),
+    );
+
 naturalNumber
 ^^^^^^^^^^^^^
 The rule checks the field is a positive integer starting from 1. No decimal is allowed.
