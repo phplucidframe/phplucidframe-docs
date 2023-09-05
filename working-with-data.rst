@@ -343,17 +343,21 @@ Returns a single entity result where the primary key matches the value passed in
 
 **Parameters**:
 
-+-----------+----------+-------------------------------------------------------------------------+
-| Name      | Type     | Description                                                             |
-+===========+==========+=========================================================================+
-| ``table`` | string   | The table name to fetch data from                                       |
-+-----------+----------+-------------------------------------------------------------------------+
-| ``id``    | int      | The value of the primary key to match                                   |
-+-----------+----------+-------------------------------------------------------------------------+
++-----------+--------+---------------------------------------+
+| Name      | Type   | Description                           |
++===========+========+=======================================+
+| ``table`` | string | The table name to fetch data from     |
++-----------+--------+---------------------------------------+
+| ``id``    | int    | The value of the primary key to match |
++-----------+--------+---------------------------------------+
+| ``fields` | array  | The array of fields to select         |
++-----------+--------+---------------------------------------+
 
 **Example**: ::
 
     $result = db_find('post', 1);
+    // or
+    $result = db_find('post', 1, ['id', 'title']);
 
 .. note::
     See more at http://www.phplucidframe.com/api-doc/latest/function-db_find.html.
@@ -365,17 +369,21 @@ Returns a single entity result where the primary key matches the value passed in
 
 **Parameters**:
 
-+-----------+----------+-------------------------------------------------------------------------+
-| Name      | Type     | Description                                                             |
-+===========+==========+=========================================================================+
-| ``table`` | string   | The table name to fetch data from                                       |
-+-----------+----------+-------------------------------------------------------------------------+
-| ``id``    | int      | The value of the primary key to match                                   |
-+-----------+----------+-------------------------------------------------------------------------+
++-----------+--------+---------------------------------------+
+| Name      | Type   | Description                           |
++===========+========+=======================================+
+| ``table`` | string | The table name to fetch data from     |
++-----------+--------+---------------------------------------+
+| ``id``    | int    | The value of the primary key to match |
++-----------+--------+---------------------------------------+
+| ``fields` | array  | The array of fields to select         |
++-----------+--------+---------------------------------------+
 
 **Example**: ::
 
     $result = db_findOrFail('post', 1);
+    // or
+    $result = db_findOrFail('post', 1, ['id', 'title']);
 
 .. note::
     See more at http://www.phplucidframe.com/api-doc/latest/function-db_findOrFail.html.
