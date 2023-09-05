@@ -41,16 +41,14 @@ That produces the help message for the command ``secret:generate`` as below: ::
       secret:generate [options]
 
     Options:
-      -h, --help     Display the help message
-      -m, --method   The hashing algorithm method (e.g. "md5", "sha256", etc..) [default: "md5"]
-      -d, --data     Secret text to be hashed.
+      -h, --help     Display the help message                       
 
     Help:
-      Generate a secret hash key
+      Generate a secret key
 
-Any secret text can be given to the command using the option ``-d`` or ``--data``, and the hash method using the option ``-m`` or ``--method``, for example, ::
+If you want to generate a new secret key, run, ::
 
-    $ php lucidframe secret:generate --data=any_scret_string --method=sha256
+    $ php lucidframe secret:generate
 
 You can check all available command list by running ::
 
