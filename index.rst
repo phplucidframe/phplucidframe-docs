@@ -27,7 +27,7 @@ Welcome to PHPLucidFrame's documentation!
    schema-manager
    database-seeding
    middleware
-   forms
+   form-and-validation
    file-helper
    list-with-pagination
    authentication-and-authorization

@@ -1,5 +1,5 @@
-Forms
-=====
+Form & Validation
+=================
 
 You can implement a form in two ways – using AJAX and without using AJAX. PHPLucidFrame provides AJAX form submission by default.
 
