@@ -24,7 +24,7 @@ Application Structure
 |                | auto-loaded. For example, if you implement a custom command file ``GreetCommand.php``    |
 |                | it should be placed in this directory and it is auto-loaded across the site.             |
 +----------------+------------------------------------------------------------------------------------------+
-| app/entity     | This directory should be used to place the files which contains the business log         |
+| app/services   | This directory should be used to place the files which contains the business log         |
 |                | functions or classes. They usually do the direct operations to the database layer.       |
 +----------------+------------------------------------------------------------------------------------------+
 | app/middleware | This directory should contain the files used for middleware.                             |
