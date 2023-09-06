@@ -437,5 +437,14 @@ Generate a slug of human-readable keywords
 
 The generated slug
 
+_isHttpPost()
+-------------
+
+Check if HTTP request method is POST and has request data
+
+**Return Values**:
+
+``TRUE`` if HTTP request method is POST and it has request data, otherwise ``FALSE``
+
 .. note::
     - See more helper functions at `<http://www.phplucidframe.com/api-doc/latest/>`_
