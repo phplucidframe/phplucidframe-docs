@@ -318,7 +318,7 @@ Let’s say an example, we use the sample database as our default and we are add
 Then, run ``schema:diff sample`` and it will generate a file with extension **sqlc** in ``/db/version/sample`` ::
 
     $ php lucidframe schema:diff sample
-    PHPLucidFrame 3.0.0 by Sithu K.
+    PHPLucidFrame 3.3.0 by Sithu K.
 
     ./db/version/sample/20170406223436.sqlc is exported.
     Check the file and run `php lucidframe schema:update sample`
@@ -327,7 +327,7 @@ Then, run ``schema:diff sample`` and it will generate a file with extension **sq
 You can open that **sqlc** file and check its content. Finally, you can run ``schema:update sample`` to apply this changes in your underlying database. ::
 
     $ php lucidframe schema:update sample
-    PHPLucidFrame 3.0.0 by Sithu K.
+    PHPLucidFrame 3.3.0 by Sithu K.
 
     IMPORTANT! Backup your database before executing this command.
     Some of your data may be lost. Type "y" or "yes" to continue: y
@@ -357,7 +357,7 @@ The following example will show you in another scenario where renaming the field
 Again, run ``schema:diff sample`` and you will be confirmed for renaming fields. ::
 
     $ php lucidframe schema:diff sample
-    PHPLucidFrame 3.0.0 by Sithu K.
+    PHPLucidFrame 3.3.0 by Sithu K.
 
 
     Type "y" to rename or type "n" to drop/create for the following fields:
@@ -374,7 +374,7 @@ Again, run ``schema:diff sample`` and you will be confirmed for renaming fields.
 Now you can see there are two **sqlc** files in the directory ``/db/version/sample``. Then, as suggested above, you just need to run ``schema:update sample`` to update your database schema. ::
 
     $ php lucidframe schema:update sample
-    PHPLucidFrame 3.0.0 by Sithu K.
+    PHPLucidFrame 3.3.0 by Sithu K.
 
     IMPORTANT! Backup your database before executing this command.
     Some of your data may be lost. Type "y" or "yes" to continue: y
