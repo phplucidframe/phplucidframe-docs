@@ -7,7 +7,7 @@ Prerequisites
 -------------
 
 * Web Server (Apache with ``mod_rewrite`` enabled)
-* PHP version 5.6 or newer is recommended. It should work on 5.3 as well, but we strongly advise you NOT to run such old versions of PHP.
+* PHP version 5.6 or newer is recommended, but we strongly advise you to use one of the currently supported versions.
 * MySQL 5.0 or newer
 
 License
