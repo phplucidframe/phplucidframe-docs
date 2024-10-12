@@ -20,8 +20,8 @@ There are a couple of configuration files in PHPLucidFrame. These configuration 
 +-----+----------------------------------+------------------------------------------------------------------------------+
 | 7   | /inc/parameter/test.php          | The configuration settings for testing environment                           |
 +-----+----------------------------------+------------------------------------------------------------------------------+
-| 8   | /inc/parameter/parameter.env.inc | The configuration settings what would be excluded from your version Control  |
-|     |                                  | (copy of ``/inc/parameter/parameter.env.example.inc``)                       |
+| 8   | /inc/parameter/.env.inc          | The configuration settings what would be excluded from your version Control  |
+|     |                                  | (copy of ``/inc/parameter/.env.example.inc``)                                |
 +-----+----------------------------------+------------------------------------------------------------------------------+
 | 9   | /app/inc/site.config.php         | The custom app-specific configuration settings and the configration settings |
 |     |                                  | from ``/inc/config.php`` can also be overidden here                          |

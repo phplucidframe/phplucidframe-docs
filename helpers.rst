@@ -216,10 +216,10 @@ Add JS file to be included in head section
 |               |             | The file name only will be prepended the folder name ``js/`` and it will be looked in every sub-sites ``js`` folder   |
 +---------------+-------------+-----------------------------------------------------------------------------------------------------------------------+
 
-_json(array $data, $status = 200)
----------------------------------
+_json(array $data, $status = 200, $return = false)
+--------------------------------------------------
 
-Header sent as text/json
+Header sent as content type ``application/json``
 
 **Parameters**:
 
@@ -229,6 +229,8 @@ Header sent as text/json
 | ``$data``     | array       | Array of data to be encoded as JSON |
 +---------------+-------------+-------------------------------------+
 | ``$status``   | int         | HTTP status code, default to 200    |
++---------------+-------------+-------------------------------------+
+| ``$return``   | boolean     | Return json data or not             |
 +---------------+-------------+-------------------------------------+
 
 
@@ -361,7 +363,7 @@ Format a date
 +---------------+-------------+-----------------------------------------------------------------------+
 | Name          | Type        | Description                                                           |
 +===============+=============+=======================================================================+
-| ``$date``     | string      | A date to be formatted                                                |
+| ``$date``     | string|int  | A date string or seconds to be formatted                              |
 +---------------+-------------+-----------------------------------------------------------------------+
 | ``$format``   | string      | The date format; The config variable will be used if it is not passed |
 +---------------+-------------+-----------------------------------------------------------------------+
@@ -383,7 +385,7 @@ Format a date/time
 +---------------+-------------+----------------------------------------------------------------------------+
 | Name          | Type        | Description                                                                |
 +===============+=============+============================================================================+
-| ``$dateTime`` | string      | A date/time to be formatted                                                |
+| ``$dateTime`` | string|int  | A date/time string or seconds to be formatted                              |
 +---------------+-------------+----------------------------------------------------------------------------+
 | ``$format``   | string      | The date/time format; The config variable will be used if it is not passed |
 +---------------+-------------+----------------------------------------------------------------------------+

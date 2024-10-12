@@ -6,12 +6,7 @@ PHPLucidFrame allows you to define hooks and overrides so that you can interact 
 Hooks
 -----
 
-**Hooks** allow you to interact with the LucidFrame core. A hook is a PHP function which has a defined set of parameters and a specified result type. It is executed upono certain condition. It is very similar to event observers. The available hooks to implement are explained here.
-
-__script()
-^^^^^^^^^^
-
-It can be defined in ``/app/helpers/utility_helper.php`` and executed after the core function ``_script()`` in ``/lib/helpers/utility_helpers.php`` runs. Use this to make global PHP variables available to the global Javascript variable ``LC``.
+**Hooks** allow you to interact with the LucidFrame core. A hook is a PHP function which has a defined set of parameters and a specified result type. It is executed upon a certain condition. It is very similar to event observers. The available hooks to implement are explained here.
 
 __getLang()
 ^^^^^^^^^^^

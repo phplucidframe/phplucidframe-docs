@@ -14,7 +14,7 @@ Before get started, make sure you can run the LucidFrame console. Assuming that 
 
 This produces this help message: ::
 
-    PHPLucidFrame 3.3.0 by Sithu K.
+    PHPLucidFrame 3.4.0 by Sithu K.
 
     3.0.0
     PHP Version: 7.3.5
@@ -35,13 +35,13 @@ You can check the help for the command using an option ``-h`` or ``--help`` whic
 
 That produces the help message for the command ``secret:generate`` as below: ::
 
-    PHPLucidFrame 3.3.0 by Sithu K.
+    PHPLucidFrame 3.4.0 by Sithu K.
 
     Usage:
       secret:generate [options]
 
     Options:
-      -h, --help     Display the help message                       
+      -h, --help     Display the help message
 
     Help:
       Generate a secret key

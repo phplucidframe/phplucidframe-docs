@@ -70,6 +70,11 @@ This generates the following query: ::
 
     SELECT `p`.`title` FROM `post`
 
+As of version 3.4.0, you can also use `db_findColumn() <http://www.phplucidframe.com/api-doc/latest/function-db_findColumn.html>`_: ::
+
+    $title = db_findColumn('post', 'title');
+    echo $title;
+
 Joining Tables
 --------------
 

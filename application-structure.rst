@@ -118,7 +118,7 @@ As an example, you can see the directory ``/app/home/`` and the directories unde
 Directory and File Precedence
 -----------------------------
 
-PHPLucidFrame has directory and file precedence to look for when a page request is made. For example, a request to ``http://www.example.com/post`` or ``http://localhost/acme/post`` will look for the directory and file as the following order:
+Basically PHPLucidFrame uses a file-system based router although it allows to define custom routing. It has directory and file precedence to look for when a page request is made. For example, a request to ``http://www.example.com/post`` or ``http://localhost/acme/post`` will look for the directory and file as the following order:
 
 +-------+--------------------------+-----------------------------------------------------------------------------------------+
 | Order | File                     | Description                                                                             |
