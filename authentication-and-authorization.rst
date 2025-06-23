@@ -31,14 +31,32 @@ According to the sample database ``/db/schema.sample.php``,
 2. ``$lc_auth['fields']['id']`` would be ``id`` (i.e., ``user.id``).
 3. ``$lc_auth['fields']['role']`` would be ``role`` (i.e., ``user.role``).
 
-Encrypting Passwords
---------------------
+Hashing & Verifying Password
+----------------------------
 
-Encrypting passwords are always required in every secured web application. When user data are inserted in user registration process, it is advisable to encrypt user input password using the core function ``_encrypt()``. ::
+Hashing passwords are always required in every secured web application. When user data are inserted in user registration process, it is advisable to use the PHP's built-in ``password_hash()`` function. ::
 
-    $theEncryptedPassword = _encrypt($theUserInputPassword);
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-When validating user input password in log-in process, you should also use ``_encrypt()`` to check it against the encrypted password stored in the database.
+When validating user input password in log-in process, you should also use ``password_verify()`` to check it against the hashed password stored in the database. ::
+
+    $user = db_select('user', 'u')
+        ->where()
+        ->condition('LOWER(username)', strtolower($post['username']))
+        ->getSingleResult();
+    if ($user) {
+        # verify the user-entered password with the hashed password
+        if (password_verify($post['pwd'], $user->password)) {
+            $success = true;
+            unset($user->password);
+            # Set the user data to the session
+            auth_create($user->id, $user);
+        } else {
+            validation_addError('Password', _t('Password does not match.'));
+        }
+    } else {
+        # User not found
+    }
 
 Logging In and Logging Out
 --------------------------
