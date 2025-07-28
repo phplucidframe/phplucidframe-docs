@@ -286,6 +286,19 @@ This checks the field is a valid email address. ::
         ),
     ); // The error message will be shown as "'Email' should be a valid format, e.g., username@example.com".
 
+exactLength
+^^^^^^^^^^^
+This rule checks that a string/array's length is equal to the specific length. The required option - ``length``. ::
+
+    $validations = array(
+        'code' => array(
+            'caption'   => _t('Code'),
+            'value'     => $valueToCheck,
+            'rules'     => array('mandatory', 'exactLength'),
+            'length'    => 6,
+        ),
+    );
+
 fileExtension
 ^^^^^^^^^^^^^
 This rule allows you to check the uploaded file extension. The required option is ``extension`` - array of extensions. See example at `fileMaxDimension <#id4>`_.
@@ -449,19 +462,6 @@ This rule checks the field string length is greater than a specific length. The 
             'value'   => $valueToCheck,
             'rules'   => array('mandatory', 'minLength'),
             'min'     => 8,
-        ),
-    );
-
-exactLength
-^^^^^^^^^^^
-This rule checks that a string/array's length is equal to the specific length. The required option - ``length``. ::
-
-    $validations = array(
-        'code' => array(
-            'caption'   => _t('Code'),
-            'value'     => $valueToCheck,
-            'rules'     => array('mandatory', 'exactLength'),
-            'length'    => 6,
         ),
     );
 
