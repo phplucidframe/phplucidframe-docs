@@ -321,6 +321,13 @@ This generates the following query: ::
     SELECT `p`.`id`, `p`.`title`, `p`.`created` FROM `post` `p`
     ORDER BY `p`.`title` ASC, `p`.`created` DESC
 
+As of version 3.5.0, you can also use ``orderRand``, which will order the results randomly, to get a random record: ::
+
+    $result = db_select('post', 'p')
+        ->fields('p', array('id', 'title', 'created'))
+        ->orderRand()
+        ->getSingleResult();
+
 Counting Results
 ----------------
 
