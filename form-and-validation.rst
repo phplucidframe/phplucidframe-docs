@@ -115,7 +115,7 @@ PHPLucidFrame provides a number of functions that aid in form validation. There 
     $validations = array(
         'htmlIdOrName' => array( // The HTML id or name of the input element
             'caption'    => _t('Your Element Caption'); // The caption to show in the error message
-            'value'      => $value, // The value to be validated. If it is not provided, you need to provide all POST data to form_validate(). 
+            'value'      => $value, // The value to be validated. If it is not provided, you need to provide all POST data to form_validate().
             'rules'      => array(), // Array of validation rules defined, e.g., array('mandatory', 'email')
             'min'        => '', // The required property for the rule 'min', 'minLength', 'between'
             'max'        => '', // The required property for the rule 'max', 'maxLength', 'between'
@@ -155,11 +155,11 @@ The validation array should be passed to ``form_validate()`` to be processed. ::
     }
 
 You can also add POST data to the second parameter. ::
-    
+
     $data = _post();
 
     $validations = array(
-        // ...    
+        // ...
     );
 
     if (form_validate($validations, $data)) {
@@ -465,6 +465,10 @@ This rule checks that a string/array's length is equal to the specific length. T
         ),
     );
 
+mmPhone
+^^^^^^^
+This rule checks the field is a valid phone number in Myanmar format. It allows ``+`` sign, ``-``, spaces and numbers (integers). ::
+
 naturalNumber
 ^^^^^^^^^^^^^
 The rule checks the field is a positive integer starting from 1. No decimal is allowed.
@@ -587,7 +591,7 @@ Then, you must define a function ``validate_duplicateUsername()`` in ``/app/help
      * @param integer $id The edit id if any
      * @return boolean TRUE for no duplicate; FALSE for duplicate
      */
-    function validate_duplicateUsername($value, $id = 0) 
+    function validate_duplicateUsername($value, $id = 0)
     {
         $value = strtolower($value);
         if (empty($value)) {
